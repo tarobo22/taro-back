@@ -7,14 +7,14 @@ from uuid import UUID
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
-from api.domain.journal import JournalEntry, JournalRequestConflict
+from api.domain.journal import JournalEntry, JournalRequestConflict, JournalVersionConflict
 
 
 def entry_from_row(row):
     return JournalEntry(**row) if row else None
 
 
-FIELDS = 'id, session_id AS owner_id, day, mood, body, created_at, updated_at'
+FIELDS = 'id, session_id AS owner_id, day, mood, body, created_at, updated_at, version'
 
 
 class PostgresJournalRepository:
@@ -63,10 +63,12 @@ class PostgresJournalRepository:
 
     def update(self, entry):
         row = self.connection.execute(
-            f'UPDATE journal_entries SET mood=%s,body=%s,updated_at=now() WHERE session_id=%s AND id=%s RETURNING {FIELDS}',
-            (entry.mood, entry.body, entry.owner_id, entry.id)).fetchone()
+            f'UPDATE journal_entries SET mood=%s,body=%s,updated_at=now(),version=version+1 WHERE session_id=%s AND id=%s AND version=%s RETURNING {FIELDS}',
+            (entry.mood, entry.body, entry.owner_id, entry.id, entry.version)).fetchone()
         if row is None:
             from api.application.journal import JournalNotFound
+            if self.get(entry.owner_id, entry.id) is not None:
+                raise JournalVersionConflict('stale_entry')
             raise JournalNotFound(entry.id)
         return entry_from_row(row)
 

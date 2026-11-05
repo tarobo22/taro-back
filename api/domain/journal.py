@@ -14,6 +14,10 @@ class JournalRequestConflict(JournalRuleViolation):
     """One client request identity must describe one logical create."""
 
 
+class JournalVersionConflict(JournalRuleViolation):
+    """An editor cannot replace a version it has not read."""
+
+
 @dataclass(frozen=True)
 class JournalPolicy:
     moods: frozenset[str]
@@ -29,6 +33,7 @@ class JournalEntry:
     body: str
     created_at: datetime | None = None
     updated_at: datetime | None = None
+    version: int = 1
 
     @classmethod
     def create(cls, *, entry_id: UUID, owner_id: UUID, day: date,

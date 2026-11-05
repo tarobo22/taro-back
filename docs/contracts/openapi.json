@@ -932,6 +932,11 @@
             "type": "string",
             "format": "date-time",
             "title": "Updated At"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version",
+            "default": 1
           }
         },
         "type": "object",
@@ -1203,6 +1208,18 @@
             "type": "string",
             "title": "Body",
             "default": ""
+          },
+          "expectedVersion": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expectedversion"
           }
         },
         "type": "object",

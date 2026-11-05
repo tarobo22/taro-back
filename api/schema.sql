@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS app_sessions(id uuid PRIMARY KEY, token_hash text NOT NULL UNIQUE, created_at timestamptz NOT NULL DEFAULT now());
-CREATE TABLE IF NOT EXISTS journal_entries(id uuid PRIMARY KEY, session_id uuid NOT NULL REFERENCES app_sessions(id), day date NOT NULL, mood text NOT NULL, body text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS journal_entries(id uuid PRIMARY KEY, session_id uuid NOT NULL REFERENCES app_sessions(id), day date NOT NULL, mood text NOT NULL, body text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(), version integer NOT NULL DEFAULT 1 CHECK(version>0));
 CREATE INDEX IF NOT EXISTS journal_session_day ON journal_entries(session_id,day DESC);
 CREATE TABLE IF NOT EXISTS tarot_readings(id uuid PRIMARY KEY, session_id uuid NOT NULL REFERENCES app_sessions(id), topic text NOT NULL, question text NOT NULL DEFAULT '', card_ids integer[] NOT NULL, result jsonb NOT NULL, created_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS daily_readings(session_id uuid NOT NULL REFERENCES app_sessions(id), day date NOT NULL, topic text NOT NULL, result jsonb NOT NULL, PRIMARY KEY(session_id,day,topic));

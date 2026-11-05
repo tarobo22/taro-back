@@ -4,7 +4,7 @@ from typing import Callable
 from uuid import UUID
 
 from api.application.ports import JournalUnitOfWork
-from api.domain.journal import JournalEntry, JournalPolicy
+from api.domain.journal import JournalEntry, JournalPolicy, JournalVersionConflict
 
 
 class JournalNotFound(LookupError):
@@ -28,15 +28,19 @@ class JournalUseCases:
             uow.commit()
             return saved
 
-    def update(self, owner_id: UUID, entry_id: UUID, mood: str, body: str) -> JournalEntry:
+    def update(self, owner_id: UUID, entry_id: UUID, mood: str, body: str,
+               expected_version: int | None = None) -> JournalEntry:
         with self._uow() as uow:
             current = uow.journals.get(owner_id, entry_id)
             if current is None:
                 raise JournalNotFound(entry_id)
+            if expected_version is not None and current.version != expected_version:
+                raise JournalVersionConflict('stale_entry')
             validated = JournalEntry.create(entry_id=current.id, owner_id=current.owner_id,
                                             day=current.day, mood=mood, body=body,
                                             policy=self._policy)
-            changed = replace(validated, created_at=current.created_at, updated_at=current.updated_at)
+            changed = replace(validated, created_at=current.created_at,
+                              updated_at=current.updated_at, version=current.version)
             saved = uow.journals.update(changed)
             uow.commit()
             return saved

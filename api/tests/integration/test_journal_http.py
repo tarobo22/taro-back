@@ -23,7 +23,8 @@ def test_http_contract_crud_validation_and_owner_scope(pg_pool, owners):
         response = client.post('/v1/entries', json={'day': '2026-11-06', 'mood': 'calm', 'body': '  hello  '})
         assert response.status_code == 201
         entry = response.json()
-        assert set(entry) == {'id', 'day', 'mood', 'body', 'created_at', 'updated_at'}
+        assert set(entry) == {'id', 'day', 'mood', 'body', 'created_at', 'updated_at', 'version'}
+        assert entry['version'] == 1
         assert entry['body'] == 'hello' and entry['day'] == '2026-11-06'
         assert client.get('/v1/entries').json() == [entry]
         path = '/v1/entries/' + entry['id']
