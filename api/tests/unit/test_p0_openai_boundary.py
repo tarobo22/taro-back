@@ -8,7 +8,7 @@ from api.adapters.ai_openai import OpenAIResultProvider, OpenAITranscriptionProv
 from api.domain.ai_jobs import AIError
 
 
-RESULT = {'kind': 'chat', 'empathy': '들었어요.', 'summary': '', 'card_insights': [],
+RESULT = {'kind': 'chat', 'empathy': '들었어요.', 'summary': '한 걸음씩 살펴봐요.', 'card_insights': [],
           'advice': '잠시 쉬어요.', 'actions': ['쉬어요.'], 'expression': 'listen',
           'follow_up_questions': [], 'safety_mode': 'standard'}
 
