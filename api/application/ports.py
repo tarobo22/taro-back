@@ -1,4 +1,4 @@
-from typing import Protocol, Self
+from typing import Callable, Protocol, Self
 from uuid import UUID
 
 from api.domain.journal import JournalEntry
@@ -15,6 +15,8 @@ class JournalRepository(Protocol):
 
 class JournalUnitOfWork(Protocol):
     journals: JournalRepository
+
+    def guard_owner(self, owner_id: UUID, callback: Callable[[object, UUID], bool | None] | None) -> None: ...
 
     def __enter__(self) -> Self: ...
     def __exit__(self, *exc: object) -> None: ...

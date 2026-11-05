@@ -4,6 +4,7 @@ from typing import Callable
 from uuid import UUID
 
 from api.application.ports import JournalUnitOfWork
+from api.domain.identity import InactiveOwnerError
 from api.domain.journal import JournalEntry, JournalPolicy, JournalVersionConflict
 
 
@@ -11,23 +12,15 @@ class JournalNotFound(LookupError):
     pass
 
 
-class InactiveOwnerError(PermissionError):
-    """A request authenticated earlier cannot access an inactive owner."""
-
-
 def guard_owner(uow, owner_id, callback):
-    """Serialize against erasure before any protected SQL, retaining the lock to UoW exit.
+    """Delegate lifecycle serialization to the transaction port.
 
     The optional callback accepts (connection, owner_id), returns True/None for active,
     False for inactive, or raises its own transport-mapped exception.
     """
     if callback is None:
         return
-    connection = uow.connection
-    connection.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))',
-                       (f'yeoun:owner:{owner_id}',))
-    if callback(connection, owner_id) is False:
-        raise InactiveOwnerError('owner_unavailable')
+    uow.guard_owner(owner_id, callback)
 
 
 class JournalUseCases:

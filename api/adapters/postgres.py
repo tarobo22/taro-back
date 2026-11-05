@@ -7,6 +7,8 @@ from uuid import UUID
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
+from api.adapters.owner_lifecycle import guard_owner as guard_transaction_owner
+
 from api.domain.journal import JournalEntry, JournalRequestConflict, JournalVersionConflict
 
 
@@ -81,6 +83,10 @@ class PostgresJournalRepository:
 class PostgresJournalUnitOfWork:
     def __init__(self, pool):
         self.pool = pool
+
+    def guard_owner(self, owner_id, callback):
+        if callback is not None:
+            guard_transaction_owner(self.connection, owner_id, callback)
 
     def __enter__(self):
         self.connection = self.pool.getconn()
