@@ -31,7 +31,7 @@ def fingerprint_of(payload):
 class ExperienceUseCases:
     def __init__(self, uow_factory: Callable[[], ExperienceUnitOfWork], policy: ExperiencePolicy,
                  local_guidance: Guidance, ai_guidance: Guidance | None = None, ai_daily_limit=20,
-                 ai_global_daily_limit=200, ai_lease_seconds=90):
+                 ai_global_daily_limit=200, ai_lease_seconds=90, ai_guard=None):
         self._uow = uow_factory
         self.policy = policy
         self.local = local_guidance
@@ -39,6 +39,7 @@ class ExperienceUseCases:
         self.ai_daily_limit = ai_daily_limit
         self.ai_global_daily_limit = ai_global_daily_limit
         self.ai_lease_seconds = ai_lease_seconds
+        self.ai_guard = ai_guard
 
     def _once(self, owner, kind, request_id, payload, execute):
         fingerprint = fingerprint_of(payload)
@@ -99,6 +100,7 @@ class ExperienceUseCases:
     def _ai_counsel(self, owner, topic, question, answers, tone, request_id, parent, payload):
         fingerprint = fingerprint_of(payload)
         lease_id = uuid4()
+        guard_stamp = None
         with self._uow() as uow:
             repo = uow.experiences
             repo.lock(owner, 'counsel', request_id)
@@ -118,6 +120,8 @@ class ExperienceUseCases:
                 raise ExperienceRuleViolation('conversation_not_found')
             if self.ai is None:
                 raise GuidanceUnavailable('AI 연결이 아직 준비되지 않았어요. 기본 가이드로 이어갈 수 있어요.')
+            if self.ai_guard is not None:
+                guard_stamp = self.ai_guard.capture(uow.connection, owner)
             repo.reserve_ai(owner, request_id, fingerprint, lease_id, self.ai_daily_limit,
                             self.ai_global_daily_limit, self.ai_lease_seconds)
             uow.commit()
@@ -146,6 +150,8 @@ class ExperienceUseCases:
             job = repo.ai_job(owner, request_id)
             if not job or job['lease_id'] != lease_id or job['state'] != 'pending':
                 raise OperationInProgress('요청 상태가 바뀌었어요. 같은 내용으로 다시 확인해 주세요.')
+            if self.ai_guard is not None:
+                self.ai_guard.validate(uow.connection, owner, guard_stamp)
             result = {**advice, 'topic': topic, 'question': question, 'tone': tone, 'source': 'openai',
                       'parentId': str(parent) if parent else None}
             saved = repo.save_counsel(owner, uuid4(), result, answers, parent)

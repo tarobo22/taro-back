@@ -733,4 +733,26 @@ class AIJobsService:
     def export_owner(self, connection, owner):
         return {'consents': [consent_view(r) for r in connection.execute('SELECT * FROM ai_consent_events WHERE owner_id=%s ORDER BY occurred_at,id', (owner,))],
                 'conversations': [conversation_view(r) for r in connection.execute('SELECT * FROM ai_conversations WHERE owner_id=%s ORDER BY created_at,id', (owner,))],
-                'turns': [turn_view(r) for r in connection.execute('SELECT * FROM ai_conversation_turns WHERE owner_id=%s ORDER BY conversation_id,turn_index', (owner,))]}
+                'turns': [turn_view(r) for r in connection.execute('SELECT * FROM ai_conversation_turns WHERE owner_id=%s ORDER BY conversation_id,turn_index', (owner,))],
+                'transcriptions': [_public(r, ('id', 'state', 'transcript', 'expires_at')) for r in connection.execute("SELECT * FROM p0_ai_transcriptions WHERE owner_id=%s AND expires_at>clock_timestamp() AND state!='deleted'", (owner,))]}
+
+    def legacy_guard(self):
+        """Opt-in production v1 checks; default legacy service behavior remains unchanged."""
+        service = self
+        class LegacyGuard:
+            def capture(self, connection, owner):
+                from api.application.experience import GuidanceUnavailable
+                try:
+                    service._owner(connection, owner)
+                    return service._require_consent(connection, owner, 'ai_processing')
+                except AIError:
+                    raise GuidanceUnavailable('현재 AI 처리 동의를 확인해 주세요.') from None
+
+            def validate(self, connection, owner, stamp):
+                from api.application.experience import GuidanceUnavailable
+                try:
+                    service._owner(connection, owner)
+                    service._require_consent(connection, owner, 'ai_processing', stamp)
+                except AIError:
+                    raise GuidanceUnavailable('동의나 계정 상태가 바뀌어 늦은 답변을 저장하지 않았어요.') from None
+        return LegacyGuard()

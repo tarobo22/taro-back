@@ -21,6 +21,12 @@ The erasure method also accepts callback arguments `(connection,owner)`. Usage a
 erasure without retaining an owner link. The owner lifecycle callback must reject missing owners and
 states other than active; absent privacy profile means active for an existing owner.
 
+For production v1, construct `ExperienceUseCases(..., ai_guard=service.legacy_guard())`. The optional
+guard captures the current persisted consent before external I/O and rechecks its exact event and
+the active owner under the shared owner lock in the final v1 save transaction. Isolated legacy
+callers that omit this hook retain their existing behavior. A revoke/regrant sequence still blocks
+the old answer because the exact consent event changed.
+
 All mutating POST routes require UUID `X-Idempotency-Key` (`Idempotency-Key` alias accepted).
 Conversation turns additionally deduplicate `client_message_id`. `TurnInput.use_ai=false` is an
 additive local-guide mode: no external request, AI consent or usage reservation. For `use_ai=true`,
