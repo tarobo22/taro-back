@@ -359,3 +359,20 @@ def test_insight_lease_heartbeat_and_competing_workers_generate_once(insight_env
             provider.release.set()
         assert future.result(timeout=5)
     assert len(provider.calls) == 1 and insights.get(owner, UUID(job['resource_id']))['state'] == 'ready'
+
+
+@pytest.mark.parametrize('summary', ['감정 점수는 98점입니다.', 'Your anxiety level is 80%.'])
+def test_worker_never_persists_a_definitive_emotional_score(summary, insight_env):
+    insights, jobs, provider, pool, (owner, _), _ = insight_env
+    job, _ = accepted(insight_env)
+    calls = []
+    def generate(payload):
+        calls.append(payload)
+        return {**RESULT, 'summary': summary}
+    provider.generate = generate
+    assert jobs.run_next() and len(calls) == 1
+    state = jobs.get_job(owner, UUID(job['job_id']))
+    assert state['state'] == 'failed' and state['error']['code'] == 'AI_OUTPUT_INVALID'
+    result = insights.get(owner, UUID(job['resource_id']))
+    assert result['state'] == 'failed' and result['result'] is None
+    assert jobs.run_next() is False
