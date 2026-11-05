@@ -1,11 +1,18 @@
 """Owner-scoped data operations. Constructors never acquire a database connection."""
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+import csv
 import hashlib
+import hmac
+import io
 import json
+import logging
+import re
+import secrets
 from uuid import uuid4
+from zipfile import ZIP_DEFLATED, ZipFile
 
-from api.domain.data_privacy import DataConflict, DataNotFound, DataRateLimited, InvalidDataInput
+from api.domain.data_privacy import DataConflict, DataExpired, DataNotFound, DataRateLimited, InvalidDataInput
 
 
 class DataPrivacyUseCases:
@@ -100,3 +107,189 @@ class DataPrivacyUseCases:
             saved = uow.data.add_feedback(owner, uuid4(), values, key_hash, fingerprint)
             uow.commit()
             return {'id': str(saved['id']), 'created_at': saved['created_at'].isoformat()}
+
+    def _receipt(self, owner, request_id, request_key, private_salt):
+        # Private random material prevents forgery even if ordinary request
+        # metadata is known. Raw receipts and raw request keys are never stored.
+        payload = f'yeoun:data-receipt:v1:{owner}:{request_id}:{request_key}'.encode()
+        return hmac.new(bytes(private_salt), payload, hashlib.sha256).hexdigest()
+
+    @staticmethod
+    def _accepted(row, receipt):
+        return {'id': str(row['id']), 'kind': row['kind'], 'state': row['state'],
+                'receipt': receipt, 'expires_at': row['expires_at'].isoformat()}
+
+    def create_data_request(self, owner, kind, confirmation, request_key):
+        self.policy.data_request(kind, confirmation)
+        key_hash = self._digest(str(request_key))
+        fingerprint = self._fingerprint({'kind': kind, 'confirmation': confirmation})
+        now = self.clock()
+        with self.uow_factory() as uow:
+            uow.data.lock(owner)
+            existing = uow.data.request_operation(owner, key_hash)
+            if existing:
+                if existing['fingerprint'] != fingerprint:
+                    raise DataConflict('idempotency_conflict')
+                return self._accepted(existing, self._receipt(owner, existing['id'], request_key, existing['receipt_salt']))
+            uow.data.active(owner)
+            uow.data.profile(owner, self.policy)
+            if uow.data.request_count(owner, now.replace(hour=0, minute=0, second=0, microsecond=0)) >= self.policy.data_request_daily_limit:
+                raise DataRateLimited('data_request_daily_limit')
+            request_id = uuid4()
+            private_salt = secrets.token_bytes(32)
+            receipt = self._receipt(owner, request_id, request_key, private_salt)
+            lifetime = timedelta(days=self.policy.receipt_days) if kind == 'erase' else timedelta(hours=self.policy.export_file_hours)
+            row = uow.data.add_request(request_id, owner, kind, key_hash, fingerprint,
+                                       self._digest(receipt), now + lifetime, private_salt)
+            if kind == 'erase':
+                uow.data.set_deleting(owner)
+            uow.commit()
+            return self._accepted(row, receipt)
+
+    def get_data_request(self, request_id, *, owner=None, receipt=None):
+        with self.uow_factory() as uow:
+            row = uow.data.request(request_id)
+            if row is None:
+                raise DataNotFound('data_request_not_found')
+            by_receipt = receipt is not None
+            if by_receipt:
+                if not isinstance(receipt, str) or len(receipt) != 64 or not hmac.compare_digest(self._digest(receipt), row['receipt_hash']):
+                    raise DataNotFound('data_request_not_found')
+            elif owner is None or row['owner_id'] != owner:
+                raise DataNotFound('data_request_not_found')
+            if row['expires_at'] <= self.clock():
+                uow.data.expire_export(request_id)
+                uow.commit()
+                raise DataExpired('data_request_expired')
+            return {'id': str(row['id']), 'kind': row['kind'], 'state': row['state'],
+                    'download_available': not by_receipt and row['kind'] == 'export'
+                        and row['state'] == 'completed' and row['export_bytes'] is not None,
+                    'expires_at': row['expires_at'].isoformat()}
+
+    def download_export(self, owner, request_id):
+        with self.uow_factory() as uow:
+            uow.data.lock(owner)
+            uow.data.active(owner)
+            row = uow.data.request(request_id)
+            if row is None or row['owner_id'] != owner or row['kind'] != 'export':
+                raise DataNotFound('export_not_found')
+            if row['expires_at'] <= self.clock():
+                uow.data.expire_export(request_id)
+                uow.commit()
+                raise DataExpired('export_expired')
+            if row['state'] != 'completed' or row['export_bytes'] is None:
+                raise DataConflict('export_not_ready')
+            return bytes(row['export_bytes'])
+
+    @classmethod
+    def _export_value(cls, value):
+        if isinstance(value, dict):
+            # Cross-context ports return a deliberate personal-data view. This
+            # additional filter rejects accidental credential/internal snapshots.
+            forbidden = ('token', 'secret', 'credential', 'password', 'authorization',
+                         'fingerprint', 'idempotency', 'receipt', 'lease_', 'snapshot',
+                         'storage_key', 'api_key', 'raw_audio', 'export_bytes')
+            return {str(key): cls._export_value(item) for key, item in value.items()
+                    if not any(word in str(key).lower() for word in forbidden)}
+        if isinstance(value, (list, tuple)):
+            return [cls._export_value(item) for item in value]
+        if isinstance(value, (bytes, bytearray, memoryview)):
+            raise InvalidDataInput('binary_data_not_exportable')
+        if value is None or isinstance(value, (str, bool, int, float)):
+            return value
+        return value.isoformat() if hasattr(value, 'isoformat') else str(value)
+
+    def _archive(self, collections):
+        collections = self._export_value(collections)
+        stream = io.BytesIO()
+        with ZipFile(stream, 'w', ZIP_DEFLATED) as archive:
+            archive.writestr('manifest.json', json.dumps({'format_version': 1,
+                'policy_version': self.policy.version, 'generated_at': self.clock().isoformat(),
+                'collections': list(collections)}, ensure_ascii=False, indent=2))
+            archive.writestr('data.json', json.dumps(collections, ensure_ascii=False, indent=2))
+            for name, data in collections.items():
+                if not re.fullmatch('[A-Za-z][A-Za-z0-9_-]*', name):
+                    raise InvalidDataInput('invalid_export_collection')
+                rows = data if isinstance(data, list) else [data]
+                if not rows:
+                    archive.writestr(name + '.csv', '\ufeff')
+                    continue
+                if not all(isinstance(row, dict) for row in rows):
+                    raise InvalidDataInput('invalid_export_rows')
+                columns = sorted({key for row in rows for key in row})
+                output = io.StringIO(newline='')
+                writer = csv.DictWriter(output, fieldnames=columns)
+                writer.writeheader()
+                for row in rows:
+                    cleaned = {}
+                    for key, value in row.items():
+                        cell = json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else '' if value is None else str(value)
+                        cleaned[key] = "'" + cell if cell.startswith(('=', '+', '-', '@', '\t', '\r')) else cell
+                    writer.writerow(cleaned)
+                archive.writestr(name + '.csv', '\ufeff' + output.getvalue())
+        return stream.getvalue()
+
+    def process_request(self, request_id):
+        """Durable worker entry point. Provider calls and public file URLs are absent."""
+        owner = None
+        try:
+            with self.uow_factory() as uow:
+                row = uow.data.request(request_id)
+                if row is None or row['state'] == 'completed' or row['owner_id'] is None:
+                    return False
+                owner = row['owner_id']
+                uow.data.lock(owner)
+                row = uow.data.request(request_id, for_update=True)
+                if row is None or row['state'] == 'completed':
+                    return False
+                uow.data.mark_running(request_id)
+                uow.commit()
+
+            with self.uow_factory() as uow:
+                uow.data.lock(owner)
+                row = uow.data.request(request_id, for_update=True)
+                if row is None or row['state'] == 'completed':
+                    return False
+                if row['kind'] == 'export':
+                    uow.data.active(owner)
+                    collections = {'profile': self._me(uow.data.profile(owner, self.policy)),
+                                   **uow.data.export_legacy(owner)}
+                    for callback in self.export_callbacks:
+                        addition = callback(uow.connection, owner)
+                        if not isinstance(addition, dict) or collections.keys() & addition.keys():
+                            raise DataConflict('export_collection_collision')
+                        collections.update(addition)
+                    archive = self._archive(collections)
+                    uow.data.complete_export(request_id, archive,
+                                             self.clock() + timedelta(hours=self.policy.export_file_hours))
+                else:
+                    for callback in self.erase_callbacks:
+                        callback(uow.connection, owner)
+                    uow.data.erase_legacy(owner)
+                    replacement_hash = hashlib.sha256(secrets.token_bytes(32)).hexdigest()
+                    uow.data.complete_erasure(request_id, owner, replacement_hash, self.policy,
+                                              self.clock() + timedelta(days=self.policy.receipt_days))
+                uow.commit()
+                return True
+        except Exception as error:
+            # Neither failure text nor personal input is persisted or logged.
+            logging.getLogger('yeoun').warning('Private data worker failed: %s', type(error).__name__)
+            if owner is not None:
+                with self.uow_factory() as uow:
+                    uow.data.lock(owner)
+                    uow.data.mark_failed(request_id)
+                    uow.commit()
+            return False
+
+    def process_pending(self, limit=20):
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise InvalidDataInput('invalid_worker_limit')
+        with self.uow_factory() as uow:
+            pending = uow.data.pending_requests(limit)
+        return sum(self.process_request(request_id) for request_id in pending)
+
+    def purge_expired(self):
+        now = self.clock()
+        with self.uow_factory() as uow:
+            uow.data.purge_expired(now, now - timedelta(days=self.policy.receipt_days))
+            uow.commit()

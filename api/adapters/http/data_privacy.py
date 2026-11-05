@@ -2,7 +2,7 @@ from typing import Annotated, Literal
 from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Response
 from pydantic import BaseModel, ConfigDict, StrictBool, model_validator
 
 from api.domain.data_privacy import (DataConflict, DataExpired, DataNotFound,
@@ -96,6 +96,27 @@ class Feedback(StrictModel):
     created_at: datetime
 
 
+class DataRequestInput(StrictModel):
+    kind: Literal['export', 'erase']
+    confirmation: str | None = None
+
+
+class DataRequestAccepted(StrictModel):
+    id: UUID
+    kind: Literal['export', 'erase']
+    state: str
+    receipt: str
+    expires_at: datetime
+
+
+class DataRequest(StrictModel):
+    id: UUID
+    kind: Literal['export', 'erase']
+    state: Literal['queued', 'running', 'completed', 'failed']
+    download_available: bool
+    expires_at: datetime
+
+
 def request_identity(x_idempotency_key: Annotated[str | None, Header(alias='X-Idempotency-Key')] = None,
                      idempotency_key: Annotated[str | None, Header(alias='Idempotency-Key')] = None):
     try:
@@ -126,6 +147,7 @@ def data_call(operation):
 def data_privacy_router(service, owner_dependency, *, status_owner_dependency=None):
     router = APIRouter(prefix='/v2', tags=['data-privacy'])
     Owner = Annotated[UUID, Depends(owner_dependency)]
+    StatusOwner = Annotated[UUID | None, Depends(status_owner_dependency or owner_dependency)]
     RequestKey = Annotated[UUID, Depends(request_identity)]
 
     @router.get('/me', response_model=Me, operation_id='getMe')
@@ -157,5 +179,28 @@ def data_privacy_router(service, owner_dependency, *, status_owner_dependency=No
     @router.post('/feedback', response_model=Feedback, status_code=201, operation_id='createFeedback')
     def create_feedback(body: FeedbackInput, owner: Owner, request_key: RequestKey):
         return data_call(lambda: service.create_feedback(owner, body.model_dump(exclude_none=True), request_key))
+
+    @router.post('/me/data-requests', response_model=DataRequestAccepted, status_code=202, operation_id='createDataRequest')
+    def create_data_request(body: DataRequestInput, owner: Owner, request_key: RequestKey,
+                            background_tasks: BackgroundTasks, response: Response):
+        accepted = data_call(lambda: service.create_data_request(owner, body.kind, body.confirmation, request_key))
+        if accepted['state'] in ('queued', 'running'):
+            background_tasks.add_task(service.process_request, accepted['id'])
+        response.headers['Cache-Control'] = 'no-store'
+        return accepted
+
+    @router.get('/data-requests/{request_id}', response_model=DataRequest, operation_id='getDataRequest')
+    def get_data_request(request_id: UUID, owner: StatusOwner, response: Response,
+                         receipt: Annotated[str | None, Header(alias='X-Data-Receipt', max_length=128)] = None):
+        response.headers['Cache-Control'] = 'no-store'
+        return data_call(lambda: service.get_data_request(request_id, owner=owner, receipt=receipt))
+
+    @router.get('/data-requests/{request_id}/download', operation_id='downloadExport',
+                 response_class=Response, responses={200: {'content': {'application/zip': {}}}})
+    def download_export(request_id: UUID, owner: Owner):
+        archive = data_call(lambda: service.download_export(owner, request_id))
+        return Response(archive, media_type='application/zip', headers={
+            'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff',
+            'Content-Disposition': f'attachment; filename="yeoun-export-{request_id}.zip"'})
 
     return router
