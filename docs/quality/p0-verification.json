@@ -1,0 +1,94 @@
+{
+  "verified_at": "2026-11-05T20:21:22.677470+00:00",
+  "scope": "agreed P0 only",
+  "api": {
+    "p0_operations": 44,
+    "matching_routes_methods_statuses": 44,
+    "application_sql_or_postgresql_driver_imports": 0
+  },
+  "tests": {
+    "backend": {
+      "passed": 226,
+      "failed": 0,
+      "skipped": 0,
+      "log": "p0-backend-final.txt"
+    },
+    "rn_unit": {
+      "passed": 54,
+      "failed": 0,
+      "skipped": 0,
+      "log": "p0-rn-final-unit.txt"
+    },
+    "web_unit": {
+      "passed": 51,
+      "failed": 0,
+      "skipped": 0,
+      "log": "p0-web-final-unit.txt"
+    },
+    "browser": {
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "composition": {
+        "contract": 13,
+        "existing_regression": 4,
+        "real_api_postgresql_worker": 2
+      },
+      "log": "p0-browser-final-3.txt"
+    }
+  },
+  "builds": {
+    "typescript_both": "passed",
+    "web_production": "passed; final UI-copy-only rebuild passed",
+    "android_release": "passed; x86_64 emulator baseline"
+  },
+  "native": {
+    "version": "1.2.0",
+    "version_code": 3,
+    "abi": "x86_64",
+    "signing": "local Android debug signing for emulator release build",
+    "code_sha": "beee61fa169423eaebf30b01e5d53bf5a7631c48",
+    "production_inputs_compared": 207,
+    "source_inputs_equivalent_after_git_eol_normalization": true,
+    "eol_only_differences": [
+      "android/app/build.gradle",
+      "package-lock.json",
+      "package.json",
+      "src/config/runtime.native.ts",
+      "src/domain/content.ts",
+      "src/features/experience/submit.ts"
+    ],
+    "apk_bytes": 40087709,
+    "apk_sha256": "d8a04a8e452bb374ae02cea34c382a5616986d85c963265be07b57b99e8233ba",
+    "reduced_screen_verified": true,
+    "system_audio_picker_and_review_verified": true,
+    "authenticated_system_zip_save_verified": true,
+    "ota_applied": true,
+    "ota_channel": "preview",
+    "ota_target_native": "1.2.0",
+    "ota_release": "01a1ad5c-7911-70ed-95f3-823dcbada880",
+    "ota_bundle": "01a1ad5b-d0ce-72b3-95d0-2bce348f3161",
+    "ota_from_release": "01a1ad59-0bf7-74e8-9fbb-f0c2d20006df",
+    "mapped_running_bundle_verified": true,
+    "prior_same_sdk_startup_recovery_verified_native_version": "1.1.0",
+    "superseded_failing_preview_releases_disabled": true
+  },
+  "external": {
+    "actual_openai_call": false,
+    "microphone_capture": false,
+    "production_deployment": false,
+    "ios_build": false,
+    "physical_haptic_or_fps_benchmark": false,
+    "remote_actions_registered": false
+  },
+  "test_contract_changes": "Approved positive onboarding/DTO/request version extensions; original assertions retained; one positive AI fixture summary corrected; no deletion/weakening/skip",
+  "limits": {
+    "owner_daily_ai_attempts": 20,
+    "global_daily_ai_attempts": 200
+  },
+  "warnings": [
+    "Existing Starlette/httpx deprecation warning",
+    "Vite minified chunk exceeds 500kB; final JS about651kB/gzip183kB",
+    "Gradle deprecated API warnings"
+  ]
+}

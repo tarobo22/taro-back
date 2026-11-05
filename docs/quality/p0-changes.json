@@ -1,0 +1,726 @@
+{
+  "repository": "taro-back",
+  "code_head": "59a05c69a1e2a6d53c23a71542838bb724d5a9c9",
+  "base": "origin/main",
+  "branch": "codex/complete-core-flows-20261106",
+  "changes": [
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/ai_audio.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/ai_jobs_postgres.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/ai_openai.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/data_privacy_postgres.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/adapters/experience_postgres.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/http/ai_jobs.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/http/bootstrap.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/http/data_privacy.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/adapters/http/experience.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/http/identity.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/adapters/http/journal.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/http/journal_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/http/reading_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/identity_postgres.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/journal_v2_postgres.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/owned_references.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/owner_lifecycle.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/adapters/postgres.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/adapters/reading_v2_postgres.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/ai_jobs.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/ai_jobs_ports.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/data_privacy.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/data_privacy_ports.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/application/experience.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/application/experience_ports.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/identity.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/identity_ports.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/application/journal.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/journal_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/journal_v2_ports.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/application/ports.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/reading_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/application/reading_v2_ports.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/config.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/domain/ai_jobs.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/domain/data_privacy.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/domain/identity.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/domain/journal.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/domain/journal_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/domain/reading_v2.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/main.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0004_journal_create_requests.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0005_journal_versions.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0006_ai_reservations.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0007_p0_data_privacy.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0008_p0_ai_jobs.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0009_p0_identity.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0012_p0_readings.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0013_p0_journal.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/migrations/0020_data_privacy_receipt_salt.sql"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/requirements.txt"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/schema.sql"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_ai_reservations.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_data_privacy_catalog_paging.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_data_privacy_feedback.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_data_privacy_profile_catalog.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_data_privacy_requests.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_data_privacy_security.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_identity_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_journal_conflict.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_journal_detail.py"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "api/tests/integration/test_journal_http.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_journal_retry.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_journal_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_legacy_experience_delete.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_p0_ai_context_versions.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_p0_ai_http_transcription.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_p0_ai_jobs.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_p0_ai_output_policy_worker.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_p0_app_flow.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_p0_reading_ai_races.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_p0_v1_ai_guard.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_reading_v2.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/integration/test_v1_owner_lifecycle_guard.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_ai_jobs_repository_port.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_journal_v2_openapi.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_owner_lifecycle_boundary.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_p0_ai_domain.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_p0_ai_output_policy.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_p0_audio_codecs.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_p0_openai_boundary.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "api/tests/unit/test_reading_v2_repository_boundary.py"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/architecture/p0-ai-jobs.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/architecture/p0-ai-validation.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/architecture/p0-composition.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/architecture/p0-owner-lifecycle.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/architecture/p0-reading-repository.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/architecture/p0-readings.md"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "docs/contracts/openapi.json"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/p0-data-privacy.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/p0-journal-v2.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/quality/completion.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "shared/ai-policy.json"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "shared/data-catalog.json"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "shared/data-policy.json"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "shared/experience-policy.json"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "shared/identity-policy.json"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "shared/journal-v2-policy.json"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "README.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/quality/p0-completion.md"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/quality/p0-verification.json"
+      ]
+    },
+    {
+      "status": "A",
+      "paths": [
+        "docs/quality/p0-changes.json"
+      ]
+    }
+  ],
+  "feature_commits": [
+    {
+      "sha": "c8e4207debdf9e1a47869507677faffdde5c1c5e",
+      "subject": "feat(journal): prevent duplicate records across retries and concurrent creates"
+    },
+    {
+      "sha": "178394b9665812868d9a4824fec6e58ab648a0a6",
+      "subject": "feat(journal): reject stale and concurrent edits with entry versions"
+    },
+    {
+      "sha": "123a97729eb63ac3b37f3348d08856ff1f249060",
+      "subject": "feat(ai): reserve bounded attempts and release database connections before provider calls"
+    },
+    {
+      "sha": "7df336fc5eedd7b58e0bdc2777c6d9636e8da7a0",
+      "subject": "feat(journal): expose owner-scoped current entries for conflict resolution"
+    },
+    {
+      "sha": "1fac13171b716406f5341174403bcdd187cccab4",
+      "subject": "feat(ai): validate purpose-bound structured results and inputs"
+    },
+    {
+      "sha": "2877b63ec229b0fe56013facf792c1090acf88e3",
+      "subject": "feat(data): add P0 owner preferences and versioned RWS catalog"
+    },
+    {
+      "sha": "e99eda55469f8e43ee5b73d16bc9102c2e14c3bb",
+      "subject": "feat(feedback): persist owner-scoped P0 result and app feedback"
+    },
+    {
+      "sha": "8c6419327dfae016f6fdd909f995ab579d538e62",
+      "subject": "feat(ai): persist consent conversations and durable leased jobs"
+    },
+    {
+      "sha": "339bbf166d1be73091d095ff5941917910efd1c6",
+      "subject": "feat(identity): preserve guest ownership across valid session renewal"
+    },
+    {
+      "sha": "62b108f5f7122a4174d52d9637c996b32dbbe1ee",
+      "subject": "feat(privacy): add async private export and verified full erasure"
+    },
+    {
+      "sha": "32530034f4fd107fc12c628135ccb9d27f2891be",
+      "subject": "feat(ai): expose status APIs and separately consented bounded transcription"
+    },
+    {
+      "sha": "9c4fde3e487d5963595c4b617340159a3d954219",
+      "subject": "fix(ai): guard production v1 completion against consent and erasure races"
+    },
+    {
+      "sha": "8a9325a16eca7a877b1f5cfa98213ed438a4b63e",
+      "subject": "feat(catalog): honor P0 version queries and cursor pagination"
+    },
+    {
+      "sha": "5461668018d1a81970efc91a3a1efd22c9e29679",
+      "subject": "fix(ai): share v1 v2 quotas and preserve selected journal provenance"
+    },
+    {
+      "sha": "a9411a4a03b023f3e29d0032c00437df4718e181",
+      "subject": "feat(readings): persist server-authoritative P0 draws and versioned selection"
+    },
+    {
+      "sha": "ab02ada3b6eae043eb209885b9c9107595c2e642",
+      "subject": "feat(journal): add compatible P0 v2 journal contracts and privacy ports"
+    },
+    {
+      "sha": "d3e44f18ac1955dd07741d8dbf9c77c9b4f3a90d",
+      "subject": "fix(readings): synchronize cancellation and reject late AI resurrection"
+    },
+    {
+      "sha": "771c29a79be845a5cb6a6943e34f0f0b4cb93dd7",
+      "subject": "fix(privacy): guard legacy reads and writes against full erasure races"
+    },
+    {
+      "sha": "be6c9a1696d24a50fd478b57acc070713c19f43f",
+      "subject": "feat(api): compose durable P0 flows with owned lifecycle and workers"
+    },
+    {
+      "sha": "892cae5c218f6d4c0c0541823d7e4a897edb051c",
+      "subject": "fix(ai): reject empty guidance and explicit unsafe outcome claims"
+    },
+    {
+      "sha": "4b476c7c1f28905e9850b421ebbb3ba0048920a0",
+      "subject": "feat(history): delete owned legacy results without retry resurrection"
+    },
+    {
+      "sha": "4e85cb43cb74ccafd155da7a4049c6eb1386efbb",
+      "subject": "feat(ai): validate reviewed journal versions before job admission"
+    },
+    {
+      "sha": "96ab3c31ebd2b70512b11dec74417b1d208398b0",
+      "subject": "refactor(readings): isolate persistence behind repository ports"
+    },
+    {
+      "sha": "f23b5964eeb11b17a134b5f13acb384923cb16ee",
+      "subject": "refactor(ai): isolate persistence behind explicit repository port"
+    },
+    {
+      "sha": "257f2db5c7f9827e4ab47076d668810051c6ce38",
+      "subject": "refactor(identity): move legacy owner guard SQL into unit-of-work adapters"
+    },
+    {
+      "sha": "59a05c69a1e2a6d53c23a71542838bb724d5a9c9",
+      "subject": "refactor(api): compose owned reference lookup behind the adapter boundary"
+    }
+  ]
+}

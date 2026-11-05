@@ -3,3 +3,5 @@ uvicorn>=0.35,<1
 psycopg[binary,pool]>=3.2,<4
 python-dotenv>=1,<2
 httpx==0.28.1
+python-multipart==0.0.22
+av==19.0.2

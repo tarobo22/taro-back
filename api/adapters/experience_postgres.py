@@ -1,6 +1,8 @@
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
+from api.adapters.owner_lifecycle import guard_owner as guard_transaction_owner
+
 
 class PostgresExperienceRepository:
     def __init__(self, connection):
@@ -45,6 +47,30 @@ class PostgresExperienceRepository:
         row = self.connection.execute('SELECT id,result,created_at FROM daily_readings WHERE session_id=%s AND day=%s AND topic=%s', (owner, day, topic)).fetchone()
         return {**row['result'], 'id': str(row['id']), 'day': str(day), 'created_at': row['created_at'].isoformat()}
 
+    def delete(self, owner, kind, result_id):
+        if kind == 'counsel':
+            exists = self.connection.execute('SELECT 1 FROM counsel_sessions WHERE session_id=%s AND id=%s',
+                                             (owner, result_id)).fetchone()
+            if not exists:
+                return False
+            children = self.connection.execute('''UPDATE counsel_sessions SET parent_id=NULL,
+                advice=jsonb_set(advice,'{parentId}','null'::jsonb)
+                WHERE session_id=%s AND parent_id=%s RETURNING id''', (owner, result_id)).fetchall()
+            for child in children:
+                self.connection.execute("UPDATE experience_operations SET result=jsonb_set(result,'{parentId}','null'::jsonb) WHERE session_id=%s AND result->>'id'=%s",
+                                         (owner, str(child['id'])))
+            deleted = self.connection.execute('DELETE FROM counsel_sessions WHERE session_id=%s AND id=%s',
+                                              (owner, result_id)).rowcount
+        else:
+            deleted = sum(self.connection.execute(f'DELETE FROM {table} WHERE session_id=%s AND id=%s',
+                                                  (owner, result_id)).rowcount
+                          for table in ('tarot_readings', 'daily_readings'))
+        if deleted:
+            # Retain only a spent-request marker so response-loss replay cannot recreate deleted content.
+            self.connection.execute("UPDATE experience_operations SET result=%s WHERE session_id=%s AND result->>'id'=%s",
+                (Jsonb({'id': str(result_id), 'deleted': True}), owner, str(result_id)))
+        return bool(deleted)
+
     def context(self, owner, parent):
         rows = self.connection.execute('''WITH RECURSIVE chain AS (
           SELECT id,parent_id,question,advice,1 AS depth FROM counsel_sessions WHERE id=%s AND session_id=%s
@@ -53,15 +79,45 @@ class PostgresExperienceRepository:
         ) SELECT question,advice FROM chain ORDER BY depth DESC''', (parent, owner, owner)).fetchall()
         return [{'question': row['question'], 'advice': row['advice'].get('advice', '')} for row in rows]
 
-    def ai_usage(self, owner):
-        # Serializes all AI requests by owner, including requests with different idempotency keys.
-        self.connection.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))', (f'{owner}:ai-quota',))
-        return self.connection.execute("SELECT count(*) AS n FROM counsel_sessions WHERE session_id=%s AND created_at>=(now() AT TIME ZONE 'UTC')::date AND advice->>'source'='openai'", (owner,)).fetchone()['n']
+    def ai_job(self, owner, request_id):
+        return self.connection.execute(
+            'SELECT fingerprint,lease_id,state,lease_until>clock_timestamp() AS active FROM experience_ai_jobs WHERE session_id=%s AND request_id=%s',
+            (owner, request_id)).fetchone()
+
+    def reserve_ai(self, owner, request_id, fingerprint, lease_id, owner_limit, global_limit, lease_seconds):
+        from api.application.experience import UsageLimitReached
+        # Only reservation accounting is serialized; provider calls never hold this lock.
+        self.connection.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))', ('ai:global-daily-reservations',))
+        usage = self.connection.execute("""
+            SELECT count(*) AS total,count(*) FILTER(WHERE session_id=%s) AS owned
+            FROM ai_usage_attempts
+            WHERE created_at >= date_trunc('day',now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC'
+        """, (owner,)).fetchone()
+        if usage['owned'] >= owner_limit:
+            raise UsageLimitReached('오늘 AI 대화를 충분히 나누었어요. 기본 가이드로 계속할 수 있어요.')
+        if usage['total'] >= global_limit:
+            raise UsageLimitReached('지금은 AI 대화가 잠시 쉬고 있어요. 기본 가이드로 계속할 수 있어요.')
+        self.connection.execute("""
+            INSERT INTO experience_ai_jobs(session_id,request_id,fingerprint,lease_id,lease_until,state)
+            VALUES(%s,%s,%s,%s,clock_timestamp()+(%s * interval '1 second'),'pending')
+            ON CONFLICT(session_id,request_id) DO UPDATE SET
+                lease_id=excluded.lease_id,lease_until=excluded.lease_until,state='pending'
+        """, (owner, request_id, fingerprint, lease_id, lease_seconds))
+        self.connection.execute('INSERT INTO ai_usage_attempts(id,session_id,request_id) VALUES(%s,%s,%s)',
+                                (lease_id, owner, request_id))
+
+    def finish_ai(self, owner, request_id, lease_id, state):
+        self.connection.execute('UPDATE experience_ai_jobs SET state=%s WHERE session_id=%s AND request_id=%s AND lease_id=%s',
+                                (state, owner, request_id, lease_id))
 
 
 class PostgresExperienceUnitOfWork:
     def __init__(self, pool):
         self.pool = pool
+
+    def guard_owner(self, owner_id, callback):
+        if callback is not None:
+            guard_transaction_owner(self.connection, owner_id, callback)
 
     def __enter__(self):
         self.connection = self.pool.getconn()
