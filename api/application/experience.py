@@ -53,6 +53,8 @@ class ExperienceUseCases:
             if previous:
                 if previous['fingerprint'] != fingerprint:
                     raise RequestConflict('request_id_reused_for_different_input')
+                if previous['result'].get('deleted') is True:
+                    raise RequestConflict('result_deleted')
                 return previous['result']
             if kind == 'counsel':
                 job = repo.ai_job(owner, request_id)
@@ -113,6 +115,8 @@ class ExperienceUseCases:
             if previous:
                 if previous['fingerprint'] != fingerprint:
                     raise RequestConflict('request_id_reused_for_different_input')
+                if previous['result'].get('deleted') is True:
+                    raise RequestConflict('result_deleted')
                 return previous['result']
             job = repo.ai_job(owner, request_id)
             if job:
@@ -153,6 +157,8 @@ class ExperienceUseCases:
             if previous:
                 if previous['fingerprint'] != fingerprint:
                     raise RequestConflict('request_id_reused_for_different_input')
+                if previous['result'].get('deleted') is True:
+                    raise RequestConflict('result_deleted')
                 return previous['result']
             job = repo.ai_job(owner, request_id)
             if not job or job['lease_id'] != lease_id or job['state'] != 'pending':
@@ -171,3 +177,12 @@ class ExperienceUseCases:
         with self._uow() as uow:
             guard_owner(uow, owner, self._owner_guard)
             return uow.experiences.list(owner, kind)
+
+    def delete(self, owner, kind, result_id):
+        if kind not in ('reading', 'counsel'):
+            raise ExperienceRuleViolation('result_not_found')
+        with self._uow() as uow:
+            guard_owner(uow, owner, self._owner_guard)
+            if not uow.experiences.delete(owner, kind, result_id):
+                raise ExperienceRuleViolation('result_not_found')
+            uow.commit()
