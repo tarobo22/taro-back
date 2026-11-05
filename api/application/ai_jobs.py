@@ -384,6 +384,8 @@ class AIJobsService:
         elif job['kind'] == 'transcription':
             self._remove_audio(c, job['resource_id'])
             c.execute("UPDATE p0_ai_transcriptions SET state='deleted',transcript=NULL,version=version+1 WHERE id=%s", (job['resource_id'],))
+        elif job['kind'] == 'tarot' and hasattr(self.reading_source, 'mark_failed'):
+            self.reading_source.mark_failed(c, job['owner_id'], job['resource_id'], job['resource_version'])
 
     def cancel_job(self, owner, jid, key):
         with self._uow() as uow:
@@ -743,6 +745,9 @@ class AIJobsService:
                 'conversations': [conversation_view(r) for r in connection.execute('SELECT * FROM ai_conversations WHERE owner_id=%s ORDER BY created_at,id', (owner,))],
                 'turns': [turn_view(r) for r in connection.execute('SELECT * FROM ai_conversation_turns WHERE owner_id=%s ORDER BY conversation_id,turn_index', (owner,))],
                 'transcriptions': [_public(r, ('id', 'state', 'transcript', 'expires_at')) for r in connection.execute("SELECT * FROM p0_ai_transcriptions WHERE owner_id=%s AND expires_at>clock_timestamp() AND state!='deleted'", (owner,))]}
+
+    def turn_exists(self, connection, owner, turn_id):
+        return bool(connection.execute('SELECT 1 FROM ai_conversation_turns WHERE owner_id=%s AND id=%s', (owner, turn_id)).fetchone())
 
     def legacy_guard(self):
         """Opt-in production v1 checks; default legacy service behavior remains unchanged."""
