@@ -22,10 +22,16 @@ from api.adapters.ai_jobs_postgres import PostgresAIJobsUnitOfWork
 from api.adapters.ai_openai import OpenAIResultProvider, OpenAITranscriptionProvider
 from api.adapters.data_privacy_postgres import PostgresDataPrivacyUnitOfWork, initialize_profile, owner_guard
 from api.adapters.experience_postgres import PostgresExperienceUnitOfWork
+from api.adapters.favorites_postgres import PostgresFavoritesUnitOfWork
+from api.adapters.journal_summary_postgres import PostgresJournalSummaryUnitOfWork
+from api.adapters.journal_insights_postgres import PostgresJournalInsightsUnitOfWork
 from api.adapters.http.ai_jobs import create_ai_jobs_router
 from api.adapters.http.bootstrap import bootstrap_router
 from api.adapters.http.data_privacy import data_privacy_router
 from api.adapters.http.experience import experience_router
+from api.adapters.http.favorites import favorites_router
+from api.adapters.http.journal_summary import journal_summary_router
+from api.adapters.http.journal_insights import create_journal_insights_router
 from api.adapters.http.identity import identity_router
 from api.adapters.http.journal import journal_router
 from api.adapters.http.journal_v2 import journal_v2_router
@@ -40,6 +46,9 @@ from api.adapters.reading_v2_postgres import PostgresReadingV2UnitOfWork
 from api.application.ai_jobs import AIJobsService
 from api.application.data_privacy import DataPrivacyUseCases
 from api.application.experience import ExperienceUseCases
+from api.application.favorites import FavoritesUseCases
+from api.application.journal_summary import JournalSummaryUseCases
+from api.application.journal_insights import JournalInsightsService
 from api.application.identity import IdentityUseCases
 from api.application.journal import InactiveOwnerError, JournalUseCases
 from api.application.journal_v2 import JournalV2UseCases
@@ -99,8 +108,15 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     journal_v2_policy = JournalV2Policy.from_legacy(content['moods'], rules, read_shared('journal-v2-policy.json'))
     journals_v2 = JournalV2UseCases(lambda: PostgresJournalV2UnitOfWork(pool), journal_v2_policy,
         source_exists=references.exists, invalidate_context=ai_jobs.cancel_for_journal)
-    data.export_callbacks = (ai_jobs.export_owner, readings.export_owner, journals_v2.export_owner)
-    data.erase_callbacks = (readings.erase_owner, ai_jobs.erase_owner, journals_v2.erase_owner)
+    summary = JournalSummaryUseCases(lambda: PostgresJournalSummaryUnitOfWork(pool), journal_v2_policy)
+    favorites = FavoritesUseCases(lambda: PostgresFavoritesUnitOfWork(pool))
+    insights = JournalInsightsService(lambda: PostgresJournalInsightsUnitOfWork(pool), ai_jobs=ai_jobs,
+        owner_guard=owner_guard, policy=ai_policy)
+    ai_jobs.insight_source = insights
+    data.export_callbacks = (ai_jobs.export_owner, readings.export_owner, journals_v2.export_owner,
+                             favorites.export_owner, insights.export_owner)
+    data.erase_callbacks = (readings.erase_owner, ai_jobs.erase_owner, journals_v2.erase_owner,
+                            favorites.erase_owner, insights.erase_owner)
 
     policy = JournalPolicy(frozenset(content['moods']), rules['maxBodyLength'])
     journals = JournalUseCases(lambda: PostgresJournalUnitOfWork(pool), policy, uuid4, owner_guard=owner_guard)
@@ -217,6 +233,9 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     app.include_router(create_ai_jobs_router(ai_jobs, current_session))
     app.include_router(create_reading_v2_router(readings, current_session))
     app.include_router(journal_v2_router(journals_v2, current_session))
+    app.include_router(journal_summary_router(summary, current_session))
+    app.include_router(favorites_router(favorites, current_session))
+    app.include_router(create_journal_insights_router(insights, current_session))
     app.include_router(journal_router(journals, policy, current_session))
     app.include_router(experience_router(experiences, configuration, current_session))
     return app
