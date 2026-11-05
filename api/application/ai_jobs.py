@@ -256,6 +256,8 @@ class AIJobsService:
     def _reserve(self, c, owner):
         if c.execute("SELECT 1 FROM p0_ai_jobs WHERE owner_id=%s AND state IN ('queued','running','cancel_requested') LIMIT 1", (owner,)).fetchone():
             raise AIError('AI_CONCURRENT_LIMIT', 429, retryable=True)
+        if c.execute("SELECT 1 FROM experience_ai_jobs WHERE session_id=%s AND state='pending' AND lease_until>clock_timestamp() LIMIT 1", (owner,)).fetchone():
+            raise AIError('AI_CONCURRENT_LIMIT', 429, retryable=True)
         c.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))', ('ai:global-daily-reservations',))
         row = c.execute("""SELECT count(*) AS total,count(*) FILTER(WHERE owner_id=%s) AS owned FROM (
           SELECT owner_id,created_at FROM p0_ai_usage_attempts UNION ALL
@@ -278,7 +280,8 @@ class AIJobsService:
         if use_ai:
             self._reserve(c, owner)
         jid = uuid4()
-        payload = {**payload, 'context_entry_ids': list(map(str, context))}
+        payload = {**payload, 'context_entry_ids': list(map(str, context)),
+                   'context_versions': {str(source['id']): source['version'] for source in sources}}
         row = c.execute('''INSERT INTO p0_ai_jobs(id,owner_id,kind,resource_id,resource_version,conversation_id,consent_event_id,context_consent_id,payload)
             VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''',
             (jid, owner, kind, resource, version, conversation, consent_id, context_consent, Jsonb(payload))).fetchone()
@@ -413,6 +416,11 @@ class AIJobsService:
                 # Audio is removed on every terminal path. A fresh upload is required.
                 raise AIError('TRANSCRIPTION_REUPLOAD_REQUIRED', 409)
             context = job['payload'].get('context_entry_ids', [])
+            if context:
+                prior_versions = job['payload'].get('context_versions', {})
+                for source in self._sources(c, owner, context):
+                    if prior_versions.get(str(source['id'])) != source['version']:
+                        raise AIError('CONTEXT_CHANGED', 409, '선택한 기록이 바뀌었어요. 내용을 확인한 뒤 새 요청을 보내 주세요.')
             consent_id = self._require_consent(c, owner, 'ai_processing') if job['payload'].get('use_ai', True) else None
             fresh = self._new_job(c, owner, job['kind'], job['resource_id'], job['resource_version'], consent_id, context, job['payload'], job['conversation_id'])
             if job['kind'] == 'tarot' and hasattr(self.reading_source, 'mark_generating'):
@@ -741,11 +749,16 @@ class AIJobsService:
         service = self
         class LegacyGuard:
             def capture(self, connection, owner):
-                from api.application.experience import GuidanceUnavailable
+                from api.application.experience import GuidanceUnavailable, UsageLimitReached
                 try:
                     service._owner(connection, owner)
-                    return service._require_consent(connection, owner, 'ai_processing')
-                except AIError:
+                    stamp = service._require_consent(connection, owner, 'ai_processing')
+                    # Legacy reservation follows in the same transaction and takes this same lock.
+                    service._reserve(connection, owner)
+                    return stamp
+                except AIError as error:
+                    if error.status == 429:
+                        raise UsageLimitReached('오늘 AI 요청 한도나 진행 중인 작업을 확인해 주세요.') from None
                     raise GuidanceUnavailable('현재 AI 처리 동의를 확인해 주세요.') from None
 
             def validate(self, connection, owner, stamp):

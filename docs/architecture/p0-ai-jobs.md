@@ -26,6 +26,9 @@ guard captures the current persisted consent before external I/O and rechecks it
 the active owner under the shared owner lock in the final v1 save transaction. Isolated legacy
 callers that omit this hook retain their existing behavior. A revoke/regrant sequence still blocks
 the old answer because the exact consent event changed.
+The guard also checks the combined v1/v2 attempt ledger under `ai:global-daily-reservations` before
+the existing v1 reservation. V2 uses the same lock and aggregates both tables, so endpoints share
+the configured owner 20/global 200 daily budget. Active jobs also block admission across versions.
 
 All mutating POST routes require UUID `X-Idempotency-Key` (`Idempotency-Key` alias accepted).
 Conversation turns additionally deduplicate `client_message_id`. `TurnInput.use_ai=false` is an
@@ -40,6 +43,8 @@ GET job never calls a provider. SSE sends committed status/heartbeat/completed/f
 Validated results appear at `result_url` after the completion transaction. Failed/cancelled jobs can
 be explicitly retried into a new billed job retaining the original turn/card selection. Transcription
 retry requires a fresh upload because terminal paths delete the original audio.
+Changed selected journal versions require confirmation in a fresh request; explicit retry does not
+silently transmit the edited text under an earlier selection.
 
 `PrivateAudioStore(root)` keeps random private filenames outside public routes. Configure a dedicated
 server-user directory. Runtime requirements pin `av==19.0.2` and `python-multipart==0.0.22`; PyAV wheels

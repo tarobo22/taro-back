@@ -231,3 +231,20 @@ def test_invalid_cursor_is_validation_error_and_cannot_rebind_owner(ai_env):
     bad = base64.urlsafe_b64encode(json.dumps({'scope': 'conversations', 'owner': str(owners[0]), 'after': ['nonsense', 'also-bad']}).encode()).decode()
     with pytest.raises(AIError, match='INVALID_CURSOR'):
         service.list_conversations(owners[0], cursor=bad)
+
+
+def test_retry_requires_reconfirmation_when_selected_journal_content_changed(ai_env):
+    service, _, pool, owners, _ = ai_env
+    owner = owners[0]
+    journal = uuid4()
+    with pool.connection() as connection:
+        connection.execute("INSERT INTO journal_entries(id,session_id,day,mood,body) VALUES(%s,%s,current_date,'calm','original selected body')", (journal, owner))
+    c = service.create_conversation(owner, uuid4(), 'care', 'warm')
+    cid = consent(service, owner)
+    consent(service, owner, 'journal_context')
+    a = turn(service, owner, c, cid, context_entry_ids=[str(journal)])
+    service.cancel_job(owner, UUID(a['job_id']), uuid4())
+    with pool.connection() as connection:
+        connection.execute("UPDATE journal_entries SET body='changed',version=version+1 WHERE id=%s", (journal,))
+    with pytest.raises(AIError, match='CONTEXT_CHANGED'):
+        service.retry_job(owner, UUID(a['job_id']), uuid4())
