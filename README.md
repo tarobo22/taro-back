@@ -43,3 +43,7 @@ GPT는 서버 전용 연결 코드와 계약 검사가 준비돼 있다. 실제 
 - [기능별 커밋 기록](docs/quality/commits.json)
 
 GitHub Actions 자동 등록은 사용자의 추가 인증 중단 요청에 따라 보류했다. [CI 설정 템플릿](docs/ci/checks.yml)은 준비돼 있으며 실제 원격 CI가 실행됐다고 표시하지 않는다.
+
+## P0 구현 완료 기록
+
+[기능·TDD·검증 결과와 남은 범위](docs/quality/p0-completion.md)를 확인할 수 있다.
