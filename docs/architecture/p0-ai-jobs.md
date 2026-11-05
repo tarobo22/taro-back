@@ -30,6 +30,18 @@ The guard also checks the combined v1/v2 attempt ledger under `ai:global-daily-r
 the existing v1 reservation. V2 uses the same lock and aggregates both tables, so endpoints share
 the configured owner 20/global 200 daily budget. Active jobs also block admission across versions.
 
+Production v1 also passes `owner_guard=api.adapters.data_privacy_postgres.owner_guard` to both
+`JournalUseCases(uow_factory, policy, new_id, owner_guard=None)` and
+`ExperienceUseCases(..., ai_guard=None, owner_guard=None)`. The optional callback has signature
+`owner_guard(connection, owner) -> bool | None`: True/None permits access, False raises
+`api.application.journal.InactiveOwnerError`, and a callback may raise its own mapped exception.
+Register InactiveOwnerError as a 401 at the root HTTP boundary. Services acquire the shared owner
+transaction lock immediately on entering every read/write UoW, before calling this guard and before
+personal SQL or request locks. The lock remains until that UoW commits or rolls back. This closes
+the authentication-to-storage gap for local guidance, daily draws, journal CRUD and cached reads.
+External provider calls still run with no open UoW/owner lock, and their final saves separately
+recheck both lifecycle and the exact consent event. Omitting owner_guard preserves legacy callers.
+
 All mutating POST routes require UUID `X-Idempotency-Key` (`Idempotency-Key` alias accepted).
 Conversation turns additionally deduplicate `client_message_id`. `TurnInput.use_ai=false` is an
 additive local-guide mode: no external request, AI consent or usage reservation. For `use_ai=true`,

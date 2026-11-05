@@ -99,7 +99,7 @@ def call(operation):
     except RequestConflict:
         raise HTTPException(409, '바뀐 내용은 새 요청으로 보내 주세요.') from None
     except ExperienceRuleViolation as error:
-        if str(error) == 'conversation_not_found':
+        if str(error) in ('conversation_not_found', 'result_not_found'):
             raise HTTPException(404, '이전 대화를 찾지 못했어요.') from None
         raise HTTPException(422, '주제·선택한 카드·입력 내용과 AI 동의를 확인해 주세요.') from None
     except GuidanceUnavailable as error:
@@ -138,5 +138,13 @@ def experience_router(service, configuration, owner_dependency):
     @router.get('/counsel', response_model=list[CounselResponse])
     def list_counsel(owner: Owner):
         return service.list(owner, 'counsel')
+
+    @router.delete('/readings/{reading_id}', status_code=204)
+    def delete_reading(reading_id: UUID, owner: Owner):
+        call(lambda: service.delete(owner, 'reading', reading_id))
+
+    @router.delete('/counsel/{counsel_id}', status_code=204)
+    def delete_counsel(counsel_id: UUID, owner: Owner):
+        call(lambda: service.delete(owner, 'counsel', counsel_id))
 
     return router

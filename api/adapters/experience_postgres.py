@@ -45,6 +45,30 @@ class PostgresExperienceRepository:
         row = self.connection.execute('SELECT id,result,created_at FROM daily_readings WHERE session_id=%s AND day=%s AND topic=%s', (owner, day, topic)).fetchone()
         return {**row['result'], 'id': str(row['id']), 'day': str(day), 'created_at': row['created_at'].isoformat()}
 
+    def delete(self, owner, kind, result_id):
+        if kind == 'counsel':
+            exists = self.connection.execute('SELECT 1 FROM counsel_sessions WHERE session_id=%s AND id=%s',
+                                             (owner, result_id)).fetchone()
+            if not exists:
+                return False
+            children = self.connection.execute('''UPDATE counsel_sessions SET parent_id=NULL,
+                advice=jsonb_set(advice,'{parentId}','null'::jsonb)
+                WHERE session_id=%s AND parent_id=%s RETURNING id''', (owner, result_id)).fetchall()
+            for child in children:
+                self.connection.execute("UPDATE experience_operations SET result=jsonb_set(result,'{parentId}','null'::jsonb) WHERE session_id=%s AND result->>'id'=%s",
+                                         (owner, str(child['id'])))
+            deleted = self.connection.execute('DELETE FROM counsel_sessions WHERE session_id=%s AND id=%s',
+                                              (owner, result_id)).rowcount
+        else:
+            deleted = sum(self.connection.execute(f'DELETE FROM {table} WHERE session_id=%s AND id=%s',
+                                                  (owner, result_id)).rowcount
+                          for table in ('tarot_readings', 'daily_readings'))
+        if deleted:
+            # Retain only a spent-request marker so response-loss replay cannot recreate deleted content.
+            self.connection.execute("UPDATE experience_operations SET result=%s WHERE session_id=%s AND result->>'id'=%s",
+                (Jsonb({'id': str(result_id), 'deleted': True}), owner, str(result_id)))
+        return bool(deleted)
+
     def context(self, owner, parent):
         rows = self.connection.execute('''WITH RECURSIVE chain AS (
           SELECT id,parent_id,question,advice,1 AS depth FROM counsel_sessions WHERE id=%s AND session_id=%s
