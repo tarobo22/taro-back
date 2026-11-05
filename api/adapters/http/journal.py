@@ -76,6 +76,10 @@ def journal_router(service, policy, owner_dependency):
     def update(entry_id: UUID, body: UpdateEntry, owner: Owner):
         return domain_call(lambda: service.update(owner, entry_id, body.mood, body.body, body.expectedVersion))
 
+    @router.get('/entries/{entry_id}', response_model=EntryResponse)
+    def detail(entry_id: UUID, owner: Owner):
+        return domain_call(lambda: service.get(owner, entry_id))
+
     @router.delete('/entries/{entry_id}', response_model=DeleteResponse)
     def delete(entry_id: UUID, owner: Owner):
         return {'deleted': service.delete(owner, entry_id)}

@@ -8,6 +8,7 @@ Existing tests are preserved. Each feature records a real failing behavior befor
 | Journal create retry identity | Two retries created different records, including concurrent requests | Full backend suite: 32 cases | Atomic owner-scoped receipts, payload conflict, unchanged original acknowledgement |
 | Journal edit conflict | Concurrent stale edits both succeeded | Full backend suite: 34 cases | Versioned responses and atomic compare-and-update; stale editors receive 409 |
 | AI reservation and lease fencing | Provider held a DB transaction; failed calls did not consume quota; no global cap or lease | Full backend suite: 38 cases | Reserve/commit, provider outside UoW, fenced completion, owner/global UTC-day attempt caps including failed calls |
+| Latest journal lookup | Detail GET returned 405 | Full backend suite: 39 cases | Owner-scoped latest entry/version lookup for explicit editor conflict resolution |
 
 AI pending duplicates return 409; exhausted limits return 429. Defaults live in shared/experience-policy.json.
 An expired worker may finish its provider call, but cannot overwrite a newer committed result.

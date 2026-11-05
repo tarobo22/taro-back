@@ -49,6 +49,13 @@ class JournalUseCases:
         with self._uow() as uow:
             return uow.journals.list(owner_id)
 
+    def get(self, owner_id: UUID, entry_id: UUID) -> JournalEntry:
+        with self._uow() as uow:
+            entry = uow.journals.get(owner_id, entry_id)
+            if entry is None:
+                raise JournalNotFound(entry_id)
+            return entry
+
     def delete(self, owner_id: UUID, entry_id: UUID) -> bool:
         with self._uow() as uow:
             deleted = uow.journals.delete(owner_id, entry_id)
