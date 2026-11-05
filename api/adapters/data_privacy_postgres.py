@@ -60,6 +60,28 @@ class PostgresDataPrivacyRepository:
         self.connection.execute(sql.SQL('UPDATE data_privacy_profiles SET {},updated_at=now() WHERE owner_id=%s').format(assignments),
                                 (*values.values(), owner))
 
+    def feedback_operation(self, owner, key_hash):
+        return self.connection.execute('''SELECT id,fingerprint,created_at FROM data_privacy_feedback
+            WHERE owner_id=%s AND idempotency_hash=%s''', (owner, key_hash)).fetchone()
+
+    def feedback_count(self, owner, day_start):
+        return self.connection.execute('''SELECT count(*) AS total FROM data_privacy_feedback
+            WHERE owner_id=%s AND created_at>=%s''', (owner, day_start)).fetchone()['total']
+
+    def legacy_target_exists(self, owner, kind, target):
+        if kind != 'reading':
+            return False
+        return bool(self.connection.execute('''SELECT 1 FROM tarot_readings WHERE session_id=%s AND id=%s
+            UNION ALL SELECT 1 FROM daily_readings WHERE session_id=%s AND id=%s''',
+            (owner, target, owner, target)).fetchone())
+
+    def add_feedback(self, owner, feedback_id, values, key_hash, fingerprint):
+        return self.connection.execute('''INSERT INTO data_privacy_feedback
+            (id,owner_id,reading_id,turn_id,rating,reason,comment,idempotency_hash,fingerprint)
+            VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id,created_at''',
+            (feedback_id, owner, values.get('reading_id'), values.get('turn_id'), values['rating'],
+             values['reason'], values['comment'], key_hash, fingerprint)).fetchone()
+
 
 class PostgresDataPrivacyUnitOfWork:
     def __init__(self, pool):

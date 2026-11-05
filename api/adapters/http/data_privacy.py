@@ -1,7 +1,8 @@
 from typing import Annotated, Literal
+from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, StrictBool, model_validator
 
 from api.domain.data_privacy import (DataConflict, DataExpired, DataNotFound,
@@ -82,6 +83,31 @@ class CardList(StrictModel):
     next_cursor: str | None
 
 
+class FeedbackInput(StrictModel):
+    reading_id: UUID | None = None
+    turn_id: UUID | None = None
+    rating: Literal['helpful', 'unhelpful']
+    reason: str
+    comment: str = ''
+
+
+class Feedback(StrictModel):
+    id: UUID
+    created_at: datetime
+
+
+def request_identity(x_idempotency_key: Annotated[str | None, Header(alias='X-Idempotency-Key')] = None,
+                     idempotency_key: Annotated[str | None, Header(alias='Idempotency-Key')] = None):
+    try:
+        primary = UUID(x_idempotency_key) if x_idempotency_key is not None else None
+        alias = UUID(idempotency_key) if idempotency_key is not None else None
+    except ValueError:
+        raise HTTPException(422, '요청 식별자를 확인해 주세요.') from None
+    if primary is None and alias is None or primary is not None and alias is not None and primary != alias:
+        raise HTTPException(422, '요청 식별자를 확인해 주세요.')
+    return primary or alias
+
+
 def data_call(operation):
     try:
         return operation()
@@ -100,6 +126,7 @@ def data_call(operation):
 def data_privacy_router(service, owner_dependency, *, status_owner_dependency=None):
     router = APIRouter(prefix='/v2', tags=['data-privacy'])
     Owner = Annotated[UUID, Depends(owner_dependency)]
+    RequestKey = Annotated[UUID, Depends(request_identity)]
 
     @router.get('/me', response_model=Me, operation_id='getMe')
     def get_me(owner: Owner):
@@ -126,5 +153,9 @@ def data_privacy_router(service, owner_dependency, *, status_owner_dependency=No
     @router.get('/cards/{card_id}', response_model=Card, operation_id='getCard')
     def get_card(card_id: int, owner: Owner):
         return data_call(lambda: service.get_card(card_id))
+
+    @router.post('/feedback', response_model=Feedback, status_code=201, operation_id='createFeedback')
+    def create_feedback(body: FeedbackInput, owner: Owner, request_key: RequestKey):
+        return data_call(lambda: service.create_feedback(owner, body.model_dump(exclude_none=True), request_key))
 
     return router
