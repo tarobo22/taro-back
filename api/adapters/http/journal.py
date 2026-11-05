@@ -6,13 +6,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from api.application.journal import JournalNotFound
-from api.domain.journal import JournalRuleViolation
+from api.domain.journal import JournalRequestConflict, JournalRuleViolation
 
 
 class CreateEntry(BaseModel):
     day: date
     mood: str
     body: str = ''
+    requestId: UUID | None = None
 
 
 class UpdateEntry(BaseModel):
@@ -45,6 +46,8 @@ def domain_call(operation):
         return operation()
     except JournalNotFound:
         raise HTTPException(404, '기록을 찾지 못했어요.') from None
+    except JournalRequestConflict:
+        raise HTTPException(409, '바뀐 기록은 새 요청으로 저장해 주세요.') from None
     except JournalRuleViolation:
         raise HTTPException(422, '선택한 마음과 글자 수를 확인해 주세요.') from None
 
@@ -63,7 +66,7 @@ def journal_router(service, policy, owner_dependency):
 
     @router.post('/entries', status_code=201, response_model=EntryResponse)
     def create(body: CreateEntry, owner: Owner):
-        return domain_call(lambda: service.create(owner, body.day, body.mood, body.body))
+        return domain_call(lambda: service.create(owner, body.day, body.mood, body.body, body.requestId))
 
     @router.put('/entries/{entry_id}', response_model=EntryResponse)
     def update(entry_id: UUID, body: UpdateEntry, owner: Owner):

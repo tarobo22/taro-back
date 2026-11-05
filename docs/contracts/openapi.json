@@ -807,6 +807,18 @@
             "type": "string",
             "title": "Body",
             "default": ""
+          },
+          "requestId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requestid"
           }
         },
         "type": "object",

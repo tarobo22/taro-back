@@ -10,6 +10,10 @@ class JournalRuleViolation(ValueError):
         super().__init__(code)
 
 
+class JournalRequestConflict(JournalRuleViolation):
+    """One client request identity must describe one logical create."""
+
+
 @dataclass(frozen=True)
 class JournalPolicy:
     moods: frozenset[str]

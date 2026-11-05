@@ -18,11 +18,13 @@ class JournalUseCases:
         self._policy = policy
         self._new_id = new_id
 
-    def create(self, owner_id: UUID, day: date, mood: str, body: str) -> JournalEntry:
+    def create(self, owner_id: UUID, day: date, mood: str, body: str,
+               request_id: UUID | None = None) -> JournalEntry:
         entry = JournalEntry.create(entry_id=self._new_id(), owner_id=owner_id,
                                     day=day, mood=mood, body=body, policy=self._policy)
         with self._uow() as uow:
-            saved = uow.journals.add(entry)
+            saved = (uow.journals.add_once(entry, request_id) if request_id is not None
+                     else uow.journals.add(entry))
             uow.commit()
             return saved
 
