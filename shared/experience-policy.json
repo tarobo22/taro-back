@@ -1,0 +1,11 @@
+{
+  "maxTarotQuestion": 500,
+  "maxCounselQuestion": 2000,
+  "deckPreviewSize": 12,
+  "aiDailyLimit": 20,
+  "spreads": {
+    "one": {"name": "한 장의 힌트", "positions": ["지금 필요한 한마디"]},
+    "three": {"name": "마음의 흐름", "positions": ["지금의 마음", "주변의 흐름", "다음 한 걸음"]},
+    "five": {"name": "조금 더 깊이", "positions": ["현재의 마음", "마음의 걸림돌", "나의 바람", "도움이 되는 것", "다음 한 걸음"]}
+  }
+}
