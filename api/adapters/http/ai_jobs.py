@@ -103,7 +103,7 @@ class ErrorDetail(InputModel):
 
 class Job(InputModel):
     id: UUID
-    kind: Literal['tarot', 'chat', 'transcription']
+    kind: Literal['tarot', 'chat', 'transcription', 'insight']
     state: Literal['queued', 'running', 'cancel_requested', 'succeeded', 'failed', 'cancelled']
     version: int
     resource_id: UUID

@@ -10,6 +10,7 @@ from uuid import UUID, uuid4
 from api.application.ai_jobs_ports import AIJobsRepository
 from api.domain.ai_jobs import (AIError, fingerprint, load_policy, safety_result,
     validate_context_entry_versions, validate_result, validate_turn)
+from api.domain.journal_insights import insight_input
 
 
 TERMINAL = ('succeeded', 'failed', 'cancelled')
@@ -18,10 +19,11 @@ TOPICS = ('relationship', 'work', 'self', 'daily', 'care', 'start')
 
 class AIJobsService:
     def __init__(self, uow_factory, provider=None, transcription_provider=None, reading_source=None,
-                 owner_guard=None, audio_store=None, policy=None):
+                 owner_guard=None, audio_store=None, policy=None, insight_source=None):
         self._uow = uow_factory
         self.provider, self.transcription_provider = provider, transcription_provider
         self.reading_source = reading_source
+        self.insight_source = insight_source
         self.owner_guard = owner_guard
         self.audio_store = audio_store
         self.policy = {**load_policy(), **(policy or {})}
@@ -69,6 +71,8 @@ class AIJobsService:
             jobs = c.pending_for_consent(owner, kind)
             for job in jobs:
                 self._cancel(c, job)
+            if self.insight_source and kind in ('ai_processing', 'journal_context'):
+                self.insight_source.invalidate_for_consent(c.transaction, owner, kind)
             result = c.consent_view(row)
             self._remember(c, owner, 'consent', key, payload, row['id'], result)
             uow.commit()
@@ -183,8 +187,8 @@ class AIJobsService:
         if provider is None or not provider.available():
             raise AIError('AI_UNAVAILABLE', 503, 'AI 연결이 아직 준비되지 않았어요. 기본 기능을 이용할 수 있어요.', True)
 
-    def _sources(self, c, owner, ids, versions=None):
-        if len(ids) > self.policy['context_entries_max'] or len(set(map(str, ids))) != len(ids):
+    def _sources(self, c, owner, ids, versions=None, *, maximum=None):
+        if len(ids) > (self.policy['context_entries_max'] if maximum is None else maximum) or len(set(map(str, ids))) != len(ids):
             raise AIError('INVALID_CONTEXT')
         expected_versions = validate_context_entry_versions(ids, versions)
         rows = []
@@ -210,7 +214,8 @@ class AIJobsService:
                  *, context_entry_versions=None):
         # This additive client precondition precedes availability and quota checks.
         # Omitting it retains the existing admission order and request contract.
-        sources = self._sources(c, owner, context, context_entry_versions) if context_entry_versions is not None else None
+        maximum = self.policy['insight_entries_max'] if kind == 'insight' else None
+        sources = self._sources(c, owner, context, context_entry_versions, maximum=maximum) if context_entry_versions is not None else None
         use_ai = kind != 'chat' or payload.get('use_ai', True)
         if use_ai:
             self._available(kind)
@@ -221,7 +226,7 @@ class AIJobsService:
             raise AIError('BASIC_CONTEXT_UNSUPPORTED')
         context_consent = self._require_consent(c, owner, 'journal_context') if context else None
         if sources is None:
-            sources = self._sources(c, owner, context)
+            sources = self._sources(c, owner, context, maximum=maximum)
         if use_ai:
             self._reserve(c, owner)
         jid = uuid4()
@@ -313,6 +318,32 @@ class AIJobsService:
             uow.commit()
             return result
 
+    def create_insight(self, owner, key, body):
+        body = insight_input(body, self.policy['insight_entries_max'])
+        if self.insight_source is None:
+            raise AIError('AI_UNAVAILABLE', 503)
+        with self._uow() as uow:
+            c = uow.ai_jobs
+            self._owner(c, owner)
+            previous = self._once(c, owner, 'insight', key, body)
+            if previous:
+                return previous
+            sources = self._sources(c, owner, body['entry_ids'], body.get('entry_versions'),
+                                    maximum=self.policy['insight_entries_max'])
+            if any(not body['range_start'] <= str(source['day']) <= body['range_end'] for source in sources):
+                raise AIError('INVALID_INSIGHT_RANGE')
+            resource = uuid4()
+            job = self._new_job(c, owner, 'insight', resource, 1, body['consent_event_id'], body['entry_ids'], {},
+                                context_entry_versions=body.get('entry_versions'))
+            self.insight_source.create_source(c.transaction, owner, resource, body, sources,
+                                              job['consent_event_id'], job['context_consent_id'])
+            if not self.insight_source.mark_generating(c.transaction, owner, resource, 1):
+                raise AIError('RESOURCE_CHANGED', 409)
+            result = c.accepted(job)
+            self._remember(c, owner, 'insight', key, body, resource, result)
+            uow.commit()
+            return result
+
     def _job(self, c, owner, jid):
         row = c.job(owner, jid)
         if not row:
@@ -334,6 +365,8 @@ class AIJobsService:
             c.set_transcription_state(job['resource_id'], 'deleted', advance_version=True)
         elif job['kind'] == 'tarot' and hasattr(self.reading_source, 'mark_failed'):
             self.reading_source.mark_failed(c.transaction, job['owner_id'], job['resource_id'], job['resource_version'])
+        elif job['kind'] == 'insight' and self.insight_source:
+            self.insight_source.mark_cancelled(c.transaction, job['owner_id'], job['resource_id'], job['resource_version'])
 
     def cancel_job(self, owner, jid, key):
         with self._uow() as uow:
@@ -368,7 +401,8 @@ class AIJobsService:
             context = job['payload'].get('context_entry_ids', [])
             if context:
                 prior_versions = job['payload'].get('context_versions', {})
-                for source in self._sources(c, owner, context):
+                maximum = self.policy['insight_entries_max'] if job['kind'] == 'insight' else None
+                for source in self._sources(c, owner, context, maximum=maximum):
                     if prior_versions.get(str(source['id'])) != source['version']:
                         raise AIError('CONTEXT_CHANGED', 409, '선택한 기록이 바뀌었어요. 내용을 확인한 뒤 새 요청을 보내 주세요.')
             consent_id = self._require_consent(c, owner, 'ai_processing') if job['payload'].get('use_ai', True) else None
@@ -376,6 +410,9 @@ class AIJobsService:
             if job['kind'] == 'tarot' and hasattr(self.reading_source, 'mark_generating'):
                 if not self.reading_source.mark_generating(c.transaction, owner, job['resource_id'], job['resource_version']):
                     raise AIError('RESOURCE_CHANGED', 409)
+            if job['kind'] == 'insight' and (not self.insight_source or not
+                    self.insight_source.mark_generating(c.transaction, owner, job['resource_id'], job['resource_version'])):
+                raise AIError('RESOURCE_CHANGED', 409)
             if job['kind'] == 'chat':
                 c.set_turn_state(owner, job['resource_id'], 'accepted')
             result = c.accepted(fresh)
@@ -391,6 +428,8 @@ class AIJobsService:
             valid = row and row['version'] == job['resource_version']
         elif job['kind'] == 'tarot':
             valid = self.reading_source and self.reading_source.validate(c.transaction, owner, rid, job['resource_version'])
+        elif job['kind'] == 'insight':
+            valid = self.insight_source and self.insight_source.validate(c.transaction, owner, rid, job['resource_version'])
         else:
             row = c.transcription(owner, rid, live_only=True)
             valid = row and row['version'] == job['resource_version']
@@ -407,6 +446,14 @@ class AIJobsService:
         self._resource(c, job)
         sources = c.context_sources(job['id'])
         expected = job['payload'].get('context_entry_ids', [])
+        if job['kind'] == 'insight':
+            original = self.insight_source.snapshot(c.transaction, job['owner_id'], job['resource_id'])
+            selected = {str(source['entry_id']): source['entry_version'] for source in original['sources']} if original else {}
+            if (not 1 <= len(expected) <= self.policy['insight_entries_max'] or len(set(expected)) != len(expected)
+                    or set(expected) != set(selected) or job['payload'].get('context_versions') != selected
+                    or str(job['consent_event_id']) != str(original['consent_event_id'])
+                    or str(job['context_consent_id']) != str(original['context_consent_id'])):
+                raise AIError('RESOURCE_CHANGED', 409)
         if {str(s['entry_id']) for s in sources} != set(expected):
             raise AIError('RESOURCE_CHANGED', 409)
         for source in sources:
@@ -430,10 +477,17 @@ class AIJobsService:
                 history.insert(0, item)
                 budget -= cost
             payload = {'kind': 'chat', 'topic': conversation['topic'], 'tone': conversation['tone'], 'text': turn['text'], 'answers': turn['answers'], 'cards': [], 'history': history}
+        elif job['kind'] == 'insight':
+            insight = self.insight_source.snapshot(c.transaction, job['owner_id'], job['resource_id'])
+            payload = {'kind': 'insight', 'topic': 'self', 'tone': 'warm', 'text': '', 'answers': [],
+                       'cards': [], 'history': [], 'range_start': str(insight['range_start']),
+                       'range_end': str(insight['range_end']), 'based_on_count': insight['based_on_count']}
         else:
             reading = self.reading_source.snapshot(c.transaction, job['owner_id'], job['resource_id'])
             payload = {'kind': 'tarot', 'topic': reading['topic'], 'tone': reading.get('tone', 'warm'), 'text': reading.get('question', ''), 'answers': [], 'cards': job['payload']['cards'], 'history': []}
-        sources = self._sources(c, job['owner_id'], job['payload'].get('context_entry_ids', []))
+        sources = self._sources(c, job['owner_id'], job['payload'].get('context_entry_ids', []),
+                                job['payload'].get('context_versions') if job['kind'] == 'insight' else None,
+                                maximum=self.policy['insight_entries_max'] if job['kind'] == 'insight' else None)
         remaining, journals = self.policy['context_chars'], []
         for source in sources:
             body = source['body'][:remaining]
@@ -452,6 +506,10 @@ class AIJobsService:
                 if not self.reading_source.complete(c.transaction, job['owner_id'], job['resource_id'], job['resource_version'], result):
                     raise AIError('RESOURCE_CHANGED', 409)
                 url = f"/v2/readings/{job['resource_id']}"
+            elif job['kind'] == 'insight':
+                if not self.insight_source.complete(c.transaction, job['owner_id'], job['resource_id'], job['resource_version'], result):
+                    raise AIError('RESOURCE_CHANGED', 409)
+                url = f"/v2/journal-insights/{job['resource_id']}"
             else:
                 c.set_transcription_state(job['resource_id'], 'ready', result)
                 url = f"/v2/transcriptions/{job['resource_id']}"
@@ -461,6 +519,13 @@ class AIJobsService:
             c.set_transcription_state(job['resource_id'], 'failed', keep_deleted=True)
         elif job['kind'] == 'tarot' and hasattr(self.reading_source, 'mark_failed'):
             self.reading_source.mark_failed(c.transaction, job['owner_id'], job['resource_id'], job['resource_version'])
+        elif job['kind'] == 'insight' and self.insight_source:
+            if code in ('RESOURCE_CHANGED', 'CONSENT_REQUIRED', 'OWNER_UNAVAILABLE'):
+                self.insight_source.invalidate(c.transaction, job['owner_id'], job['resource_id'])
+            elif state == 'cancelled':
+                self.insight_source.mark_cancelled(c.transaction, job['owner_id'], job['resource_id'], job['resource_version'])
+            else:
+                self.insight_source.mark_failed(c.transaction, job['owner_id'], job['resource_id'], job['resource_version'])
         if job['kind'] == 'transcription':
             self._remove_audio(c, job['resource_id'])
         c.finish_job(job['id'], state, code, url)
@@ -589,6 +654,8 @@ class AIJobsService:
         repository.lock_owner(owner)
         for job in repository.pending_for_journal(owner, entry_id):
             self._cancel(repository, job)
+        if self.insight_source:
+            self.insight_source.invalidate_for_journal(repository.transaction, owner, entry_id)
 
     def _remove_audio(self, c, rid):
         path = c.audio_path(rid)
