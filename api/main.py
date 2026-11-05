@@ -34,6 +34,7 @@ from api.adapters.identity_postgres import PostgresIdentityUnitOfWork
 from api.adapters.journal_v2_postgres import PostgresJournalV2UnitOfWork
 from api.adapters.local_guidance import LocalGuidance
 from api.adapters.openai_guidance import OpenAIGuidance
+from api.adapters.owned_references import PostgresOwnedReferences
 from api.adapters.postgres import PostgresJournalUnitOfWork
 from api.adapters.reading_v2_postgres import PostgresReadingV2UnitOfWork
 from api.application.ai_jobs import AIJobsService
@@ -82,17 +83,8 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
             ai_policy['provider_deadline_seconds'])
     ai_available = bool(result_provider and result_provider.available())
 
-    def reference_exists(connection, owner, kind, resource_id):
-        if kind == 'reading':
-            return readings.source_exists(connection, owner, resource_id) or bool(connection.execute(
-                'SELECT 1 FROM tarot_readings WHERE session_id=%s AND id=%s UNION ALL '
-                'SELECT 1 FROM daily_readings WHERE session_id=%s AND id=%s LIMIT 1',
-                (owner, resource_id, owner, resource_id)).fetchone())
-        return ai_jobs.turn_exists(connection, owner, resource_id) or bool(connection.execute(
-            'SELECT 1 FROM counsel_sessions WHERE session_id=%s AND id=%s', (owner, resource_id)).fetchone())
-
     data = DataPrivacyUseCases(lambda: PostgresDataPrivacyUnitOfWork(pool), data_policy,
-        read_shared('data-catalog.json'), feedback_target_exists=reference_exists)
+        read_shared('data-catalog.json'))
     identity = IdentityUseCases(lambda: PostgresIdentityUnitOfWork(pool, initialize_profile, owner_guard),
         IdentityPolicy(identity_rules['session_days'], tuple(identity_rules['locales'])),
         lambda: datetime.now(timezone.utc), uuid4)
@@ -102,9 +94,11 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         transcription_provider=transcription_provider, reading_source=readings, owner_guard=owner_guard,
         audio_store=audio_store or PrivateAudioStore(settings.private_audio_dir), policy=ai_policy)
     readings.ai_jobs = ai_jobs
+    references = PostgresOwnedReferences(readings, ai_jobs)
+    data.feedback_target_exists = references.exists
     journal_v2_policy = JournalV2Policy.from_legacy(content['moods'], rules, read_shared('journal-v2-policy.json'))
     journals_v2 = JournalV2UseCases(lambda: PostgresJournalV2UnitOfWork(pool), journal_v2_policy,
-        source_exists=reference_exists, invalidate_context=ai_jobs.cancel_for_journal)
+        source_exists=references.exists, invalidate_context=ai_jobs.cancel_for_journal)
     data.export_callbacks = (ai_jobs.export_owner, readings.export_owner, journals_v2.export_owner)
     data.erase_callbacks = (readings.erase_owner, ai_jobs.erase_owner, journals_v2.erase_owner)
 

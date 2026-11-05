@@ -4125,11 +4125,13 @@
           "empathy": {
             "type": "string",
             "maxLength": 300,
+            "minLength": 1,
             "title": "Empathy"
           },
           "summary": {
             "type": "string",
             "maxLength": 600,
+            "minLength": 1,
             "title": "Summary"
           },
           "card_insights": {
@@ -4143,6 +4145,7 @@
           "advice": {
             "type": "string",
             "maxLength": 800,
+            "minLength": 1,
             "title": "Advice"
           },
           "actions": {
@@ -4424,11 +4427,13 @@
           "meaning": {
             "type": "string",
             "maxLength": 300,
+            "minLength": 1,
             "title": "Meaning"
           },
           "reflection": {
             "type": "string",
             "maxLength": 400,
+            "minLength": 1,
             "title": "Reflection"
           }
         },
@@ -5475,11 +5480,6 @@
       },
       "InterpretationInput": {
         "properties": {
-          "expected_version": {
-            "type": "integer",
-            "minimum": 1.0,
-            "title": "Expected Version"
-          },
           "context_entry_ids": {
             "items": {
               "type": "string",
@@ -5488,6 +5488,29 @@
             "type": "array",
             "maxItems": 3,
             "title": "Context Entry Ids"
+          },
+          "context_entry_versions": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 1.0
+                },
+                "propertyNames": {
+                  "format": "uuid"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context Entry Versions"
+          },
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
           },
           "consent_event_id": {
             "type": "string",
@@ -6681,6 +6704,33 @@
       },
       "TurnInput": {
         "properties": {
+          "context_entry_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Context Entry Ids"
+          },
+          "context_entry_versions": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 1.0
+                },
+                "propertyNames": {
+                  "format": "uuid"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context Entry Versions"
+          },
           "client_message_id": {
             "type": "string",
             "format": "uuid",
@@ -6708,15 +6758,6 @@
             "type": "array",
             "maxItems": 3,
             "title": "Answers"
-          },
-          "context_entry_ids": {
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "type": "array",
-            "maxItems": 3,
-            "title": "Context Entry Ids"
           },
           "consent_event_id": {
             "anyOf": [
