@@ -3381,6 +3381,424 @@
         }
       }
     },
+    "/v2/journal-summary": {
+      "get": {
+        "tags": [
+          "journal"
+        ],
+        "summary": "Summary",
+        "operationId": "getJournalSummary",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "From"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "To"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/favorites": {
+      "get": {
+        "tags": [
+          "journal"
+        ],
+        "summary": "List Favorites",
+        "operationId": "listFavorites",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 1024
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "journal"
+        ],
+        "summary": "Add Favorite",
+        "operationId": "addFavorite",
+        "parameters": [
+          {
+            "name": "X-Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Idempotency-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FavoriteInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Favorite"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/favorites/{reading_id}": {
+      "delete": {
+        "tags": [
+          "journal"
+        ],
+        "summary": "Remove Favorite",
+        "operationId": "removeFavorite",
+        "parameters": [
+          {
+            "name": "reading_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Reading Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/journal-insights": {
+      "post": {
+        "tags": [
+          "journal-insights"
+        ],
+        "summary": "Create",
+        "operationId": "createInsight",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "name": "X-Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Idempotency-Key"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsightInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobAccepted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/journal-insights/{insight_id}": {
+      "get": {
+        "tags": [
+          "journal-insights"
+        ],
+        "summary": "Get",
+        "operationId": "getInsight",
+        "parameters": [
+          {
+            "name": "insight_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Insight Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Insight"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/journal-policy": {
       "get": {
         "tags": [
@@ -5368,6 +5786,71 @@
         ],
         "title": "ExperienceConfig"
       },
+      "Favorite": {
+        "properties": {
+          "reading_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Reading Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reading_id",
+          "created_at"
+        ],
+        "title": "Favorite"
+      },
+      "FavoriteInput": {
+        "properties": {
+          "reading_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Reading Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reading_id"
+        ],
+        "title": "FavoriteInput"
+      },
+      "FavoriteList": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Favorite"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "FavoriteList"
+      },
       "Feedback": {
         "properties": {
           "id": {
@@ -5478,6 +5961,144 @@
         ],
         "title": "Health"
       },
+      "Insight": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "range_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Range Start"
+          },
+          "range_end": {
+            "type": "string",
+            "format": "date",
+            "title": "Range End"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "generating",
+              "ready",
+              "failed",
+              "cancelled",
+              "invalidated"
+            ],
+            "title": "State"
+          },
+          "based_on_count": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Based On Count"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AIResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "entry_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Entry Ids"
+          },
+          "entry_versions": {
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 1.0
+            },
+            "propertyNames": {
+              "format": "uuid"
+            },
+            "type": "object",
+            "title": "Entry Versions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "range_start",
+          "range_end",
+          "state",
+          "based_on_count",
+          "result",
+          "entry_ids",
+          "entry_versions"
+        ],
+        "title": "Insight"
+      },
+      "InsightInput": {
+        "properties": {
+          "range_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Range Start"
+          },
+          "range_end": {
+            "type": "string",
+            "format": "date",
+            "title": "Range End"
+          },
+          "entry_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "uniqueItems": true,
+            "title": "Entry Ids"
+          },
+          "consent_event_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Consent Event Id"
+          },
+          "entry_versions": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 1.0
+                },
+                "propertyNames": {
+                  "format": "uuid"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entry Versions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "range_start",
+          "range_end",
+          "entry_ids",
+          "consent_event_id"
+        ],
+        "title": "InsightInput"
+      },
       "InterpretationInput": {
         "properties": {
           "context_entry_ids": {
@@ -5538,7 +6159,8 @@
             "enum": [
               "tarot",
               "chat",
-              "transcription"
+              "transcription",
+              "insight"
             ],
             "title": "Kind"
           },
@@ -5885,6 +6507,46 @@
         ],
         "title": "JournalPolicyResponse"
       },
+      "JournalSummary": {
+        "properties": {
+          "range_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Range Start"
+          },
+          "range_end": {
+            "type": "string",
+            "format": "date",
+            "title": "Range End"
+          },
+          "entry_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Entry Count"
+          },
+          "days_with_entries": {
+            "items": {
+              "type": "string",
+              "format": "date"
+            },
+            "type": "array",
+            "title": "Days With Entries"
+          },
+          "mood_counts": {
+            "$ref": "#/components/schemas/MoodCounts"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "range_start",
+          "range_end",
+          "entry_count",
+          "days_with_entries",
+          "mood_counts"
+        ],
+        "title": "JournalSummary"
+      },
       "Limits": {
         "properties": {
           "daily_ai_requests": {
@@ -5956,6 +6618,45 @@
           "preferences"
         ],
         "title": "Me"
+      },
+      "MoodCounts": {
+        "properties": {
+          "calm": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Calm"
+          },
+          "happy": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Happy"
+          },
+          "thinking": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Thinking"
+          },
+          "settled": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Settled"
+          },
+          "talk": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Talk"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "calm",
+          "happy",
+          "thinking",
+          "settled",
+          "talk"
+        ],
+        "title": "MoodCounts"
       },
       "OTAPolicy": {
         "properties": {

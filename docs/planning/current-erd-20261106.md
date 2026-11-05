@@ -1,0 +1,336 @@
+# 현재 물리 DB ERD - 2026-11-06
+
+실제 PostgreSQL 메타데이터에서 생성한 31개 테이블(마이그레이션 이력 포함)이다. 선은 강제 FK 관계이며, 단순 ID 참조를 강제 FK처럼 추가하지 않았다.
+
+```mermaid
+erDiagram
+  %% PostgreSQL verification schema, 2026-11-06; metadata only.
+  ai_consent_events {
+    uuid id PK
+    uuid owner_id FK
+    text kind
+    text policy_version
+    boolean granted
+    timestamp_with_time_zone occurred_at
+  }
+  ai_conversation_turns {
+    uuid id PK
+    uuid owner_id FK
+    uuid conversation_id FK
+    uuid client_message_id
+    text fingerprint
+    integer turn_index
+    text text
+    jsonb answers
+    text input_source
+    text state
+    jsonb assistant_result
+    integer version
+    timestamp_with_time_zone created_at
+  }
+  ai_conversations {
+    uuid id PK
+    uuid owner_id FK
+    text topic
+    text tone
+    text state
+    integer version
+    timestamp_with_time_zone created_at
+    timestamp_with_time_zone updated_at
+  }
+  ai_usage_attempts {
+    uuid id PK
+    uuid session_id FK
+    uuid request_id
+    timestamp_with_time_zone created_at
+  }
+  app_sessions {
+    uuid id PK
+    text token_hash
+    timestamp_with_time_zone created_at
+    timestamp_with_time_zone expires_at
+    timestamp_with_time_zone last_seen_at
+    text platform
+  }
+  counsel_sessions {
+    uuid id PK
+    uuid session_id FK
+    text topic
+    text question
+    jsonb answers
+    text tone
+    jsonb advice
+    timestamp_with_time_zone created_at
+    uuid parent_id FK
+  }
+  daily_readings {
+    uuid session_id PK,FK
+    date day PK
+    text topic PK
+    jsonb result
+    uuid id
+    timestamp_with_time_zone created_at
+  }
+  data_privacy_feedback {
+    uuid id PK
+    uuid owner_id FK
+    uuid reading_id
+    uuid turn_id
+    text rating
+    text reason
+    text comment
+    text idempotency_hash
+    text fingerprint
+    timestamp_with_time_zone created_at
+  }
+  data_privacy_profiles {
+    uuid owner_id PK,FK
+    text locale
+    text timezone
+    text tone
+    boolean reduced_motion
+    text voice_mode
+    text state
+    timestamp_with_time_zone updated_at
+  }
+  data_privacy_requests {
+    uuid id PK
+    uuid owner_id FK
+    text kind
+    text state
+    text idempotency_hash
+    text fingerprint
+    text receipt_hash
+    bytea export_bytes
+    timestamp_with_time_zone expires_at
+    timestamp_with_time_zone created_at
+    timestamp_with_time_zone updated_at
+    bytea receipt_salt
+  }
+  experience_ai_jobs {
+    uuid session_id PK,FK
+    uuid request_id PK
+    text fingerprint
+    uuid lease_id
+    timestamp_with_time_zone lease_until
+    text state
+  }
+  experience_operations {
+    uuid session_id PK,FK
+    text kind PK
+    uuid request_id PK
+    text fingerprint
+    jsonb result
+    timestamp_with_time_zone created_at
+  }
+  favorites {
+    uuid owner_id PK,FK
+    uuid reading_id PK,FK
+    timestamp_with_time_zone created_at
+  }
+  journal_create_requests {
+    uuid session_id PK,FK
+    uuid request_id PK
+    text fingerprint
+    jsonb result
+    timestamp_with_time_zone created_at
+  }
+  journal_entries {
+    uuid id PK
+    uuid session_id FK
+    date day
+    text mood
+    text body
+    timestamp_with_time_zone created_at
+    timestamp_with_time_zone updated_at
+    integer version
+  }
+  journal_insights {
+    uuid id PK
+    uuid owner_id FK
+    date range_start
+    date range_end
+    text state
+    integer based_on_count
+    jsonb result
+    uuid consent_event_id
+    uuid context_consent_id
+    integer version
+    timestamp_with_time_zone created_at
+  }
+  journal_v2_create_requests {
+    uuid owner_id PK,FK
+    text key_hash PK
+    text fingerprint
+    uuid entry_id FK
+    timestamp_with_time_zone created_at
+    timestamp_with_time_zone expires_at
+  }
+  journal_v2_deleted_entries {
+    uuid owner_id PK,FK
+    uuid entry_id PK
+    timestamp_with_time_zone deleted_at
+  }
+  journal_v2_sources {
+    uuid entry_id PK,FK
+    uuid owner_id FK
+    uuid source_reading_id
+    uuid source_turn_id
+  }
+  p0_ai_context_sources {
+    uuid job_id PK,FK
+    uuid entry_id PK
+    integer entry_version
+  }
+  p0_ai_idempotency {
+    uuid owner_id PK,FK
+    text scope PK
+    uuid key PK
+    text fingerprint
+    uuid resource_id
+    jsonb response
+    timestamp_with_time_zone expires_at
+  }
+  p0_ai_jobs {
+    uuid id PK
+    uuid owner_id FK
+    text kind
+    text state
+    uuid resource_id
+    integer resource_version
+    uuid conversation_id FK
+    uuid consent_event_id
+    uuid context_consent_id
+    jsonb payload
+    integer version
+    uuid lease_id
+    timestamp_with_time_zone lease_until
+    boolean provider_started
+    text error_code
+    text result_url
+    timestamp_with_time_zone created_at
+    timestamp_with_time_zone finished_at
+  }
+  p0_ai_runs {
+    uuid id PK
+    uuid job_id FK
+    text model_id
+    text prompt_version
+    text schema_version
+    text request_id
+    text response_id
+    integer input_tokens
+    integer output_tokens
+    integer elapsed_ms
+    timestamp_with_time_zone created_at
+  }
+  p0_ai_transcriptions {
+    uuid id PK
+    uuid owner_id FK
+    text state
+    text transcript
+    text audio_path
+    text mime_type
+    integer duration_ms
+    integer version
+    timestamp_with_time_zone expires_at
+    timestamp_with_time_zone created_at
+  }
+  p0_ai_usage_attempts {
+    uuid id PK
+    uuid owner_id FK
+    timestamp_with_time_zone created_at
+  }
+  p0_daily_draws {
+    uuid owner_id PK,FK
+    date local_day PK
+    text topic PK
+    integer card_id
+    uuid deck_version_id
+    text captured_timezone
+    timestamp_with_time_zone expires_at
+  }
+  p0_reading_commands {
+    uuid owner_id PK,FK
+    text scope PK
+    uuid key PK
+    text fingerprint
+    uuid reading_id
+    timestamp_with_time_zone expires_at
+  }
+  p0_readings {
+    uuid id PK
+    uuid owner_id FK
+    text kind
+    text topic
+    text question
+    uuid deck_version_id
+    date local_day
+    text captured_timezone
+    text state
+    integer version
+    jsonb private_slots
+    jsonb selected_cards
+    jsonb result
+    timestamp_with_time_zone created_at
+  }
+  p1_favorite_create_requests {
+    uuid owner_id PK,FK
+    text key_hash PK
+    text fingerprint
+    uuid reading_id FK
+    timestamp_with_time_zone favorite_created_at
+  }
+  p1_journal_insight_sources {
+    uuid insight_id PK,FK
+    uuid entry_id PK
+    integer entry_version
+    integer position
+  }
+  tarot_readings {
+    uuid id PK
+    uuid session_id FK
+    text topic
+    text question
+    ARRAY card_ids
+    jsonb result
+    timestamp_with_time_zone created_at
+  }
+  app_sessions ||--o{ ai_consent_events : "owner_id"
+  app_sessions ||--o{ ai_conversations : "owner_id"
+  ai_conversations ||--o{ ai_conversation_turns : "conversation_id"
+  app_sessions ||--o{ ai_conversation_turns : "owner_id"
+  app_sessions ||--o{ ai_usage_attempts : "session_id"
+  counsel_sessions o|--o{ counsel_sessions : "parent_id"
+  app_sessions ||--o{ counsel_sessions : "session_id"
+  app_sessions ||--o{ daily_readings : "session_id"
+  app_sessions ||--o{ data_privacy_feedback : "owner_id"
+  app_sessions ||--o| data_privacy_profiles : "owner_id"
+  app_sessions o|--o{ data_privacy_requests : "owner_id"
+  app_sessions ||--o{ experience_ai_jobs : "session_id"
+  app_sessions ||--o{ experience_operations : "session_id"
+  app_sessions ||--o{ favorites : "owner_id"
+  p0_readings ||--o| favorites : "owner_id,reading_id"
+  app_sessions ||--o{ journal_create_requests : "session_id"
+  app_sessions ||--o{ journal_entries : "session_id"
+  app_sessions ||--o{ journal_insights : "owner_id"
+  journal_entries o|--o{ journal_v2_create_requests : "entry_id"
+  app_sessions ||--o{ journal_v2_create_requests : "owner_id"
+  app_sessions ||--o{ journal_v2_deleted_entries : "owner_id"
+  journal_entries ||--o| journal_v2_sources : "entry_id"
+  app_sessions ||--o{ journal_v2_sources : "owner_id"
+  p0_ai_jobs ||--o{ p0_ai_context_sources : "job_id"
+  app_sessions ||--o{ p0_ai_idempotency : "owner_id"
+  ai_conversations o|--o{ p0_ai_jobs : "conversation_id"
+  app_sessions ||--o{ p0_ai_jobs : "owner_id"
+  p0_ai_jobs ||--o{ p0_ai_runs : "job_id"
+  app_sessions ||--o{ p0_ai_transcriptions : "owner_id"
+  app_sessions o|--o{ p0_ai_usage_attempts : "owner_id"
+  app_sessions ||--o{ p0_daily_draws : "owner_id"
+  app_sessions ||--o{ p0_reading_commands : "owner_id"
+  app_sessions ||--o{ p0_readings : "owner_id"
+  app_sessions ||--o{ p1_favorite_create_requests : "owner_id"
+  p0_readings o|--o{ p1_favorite_create_requests : "reading_id"
+  journal_insights ||--o{ p1_journal_insight_sources : "insight_id"
+  app_sessions ||--o{ tarot_readings : "session_id"
+```

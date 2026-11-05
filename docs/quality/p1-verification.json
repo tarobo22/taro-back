@@ -1,0 +1,77 @@
+{
+  "as_of": "2026-11-06",
+  "branch": "codex/complete-planned-p1-20261106",
+  "implementation_heads": {
+    "taro": "66cbc275be73342d040cb02537ba47a55f3527c7",
+    "taro-raect": "ed687e0555dc64025606312bb70bcb1c86d017e9",
+    "taro-back": "f64a53880f93f8d9f7faa3910e354162d091c0e9"
+  },
+  "requirement_count": 68,
+  "planned_api_operations": 50,
+  "verified_api_path_method_status": 50,
+  "operation_id_differences_mapped": 28,
+  "backend_tests": {
+    "passed": 390,
+    "log": "backend-all-green.log",
+    "scope": "unit + isolated PostgreSQL integration"
+  },
+  "rn_unit_tests": 71,
+  "web_unit_tests": 68,
+  "typecheck": [
+    "rn PASS",
+    "web PASS"
+  ],
+  "browser": {
+    "fixture_passed": 21,
+    "actual_api_passed": 4,
+    "scope": "21 fixture + P0 actual 2 + P1 actual 2; independent successful runs"
+  },
+  "native": {
+    "device": "emulator-5554",
+    "android_api": 35,
+    "package": "com.yeoun.app.p1verify",
+    "fresh_default_off": true,
+    "denied_permission_schedules": 0,
+    "granted_permission_schedules": 1,
+    "changed_time_schedules": 1,
+    "changed_time": "21:00 device local time",
+    "preview_notification_observed": true,
+    "force_stop_then_reopen_passed": true,
+    "disabled_schedules": 0,
+    "next_day_background_delivery_measured": false,
+    "full_device_reset_race": "7 shared controller/erasure tests; native clear bridge compiled, not claimed as OS background delivery"
+  },
+  "jvm_clock_tests": 6,
+  "android_release_build": "PASS",
+  "web_production_build": "PASS",
+  "apk": {
+    "path": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-p1-completion-20261106\\yeoun-1.3.0-emulator-x86_64.apk",
+    "application_id": "com.yeoun.app",
+    "version": "1.3.0",
+    "version_code": 4,
+    "abi": "x86_64",
+    "bytes": 40149721,
+    "sha256": "6982daf78478f599d60feaafe2ec1f57158b92f6f7625f275390f87007a4731c",
+    "signing": "development debug key; not a store release"
+  },
+  "existing_test_files_changed": false,
+  "new_jvm_test_dependency": "junit:junit:4.13.2",
+  "not_verified": [
+    "real OpenAI/transcription calls and Korean output quality",
+    "production HTTPS/database/OTA hosting",
+    "store signing and publication",
+    "iOS build",
+    "real-device FPS, microphone, haptics and full accessibility",
+    "next-day inexact notification delivery under every OEM power policy"
+  ],
+  "deferred_requirements": [
+    "P1-02",
+    "P1-03",
+    "P2-01",
+    "P2-02"
+  ],
+  "test_fixture_commit": "2b162f0636adfea69c0d86c03105d23471f27a66",
+  "reproduction": "docs/quality/p1-reproduce.md",
+  "summaries": "docs/quality/p1-test-results.txt",
+  "original_planning_sha256": "c3c3260ec2c715d18747e8171367281fa8cbd634db6da6409c77c62bd03c6305"
+}

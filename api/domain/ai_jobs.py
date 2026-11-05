@@ -69,6 +69,22 @@ _UNSAFE_CLAIMS = tuple(re.compile(pattern, re.IGNORECASE) for pattern in (
     r'(?:your\s+)?(?:profits|returns|success|a\s+cure)\b',
 ))
 
+# S26 forbids presenting an emotional/psychological score as an established fact.
+# These bounded affirmative forms do not classify ordinary action or entry counts.
+_SCORE_SUBJECT = r'(?:감정|기분|마음|심리|우울|불안|스트레스)'
+_SCORE_NUMBER = r'\d+(?:\.\d+)?'
+_SCORE_UNIT = r'(?:점|%|퍼센트|/\s*\d+(?:\.\d+)?)'
+_SCORE_ASSERTION = (r'\s*(?:(?:으로|로)\s*)?'
+                    r'(?:입니다|이에요|예요|이다|확정(?:입니다|이에요|됐어요|합니다|해요))' + _CLAIM_END)
+_INSIGHT_SCORE_CLAIMS = tuple(re.compile(pattern, re.IGNORECASE) for pattern in (
+    _SCORE_SUBJECT + r'\s*(?:상태\s*)?(?:점수|지수|수치|수준|강도)\s*(?:은|는|이|가|:|=)?\s*'
+    + _SCORE_NUMBER + r'\s*(?:' + _SCORE_UNIT + r')?' + _SCORE_ASSERTION,
+    _SCORE_SUBJECT + r'\s*(?:은|는|이|가|:|=)\s*' + _SCORE_NUMBER + r'\s*' + _SCORE_UNIT + _SCORE_ASSERTION,
+    r'\b(?:emotion(?:al)?|mood|mental(?:\s+health)?|anxiety|depression|stress)\s+'
+    r'(?:score|level|index|rating)\s*(?:is|=|:)\s*' + _SCORE_NUMBER
+    + r'\s*(?:%|/\s*\d+(?:\.\d+)?|out\s+of\s+\d+(?:\.\d+)?)?' + _CLAIM_END,
+))
+
 
 def load_policy():
     return json.loads((Path(__file__).parents[2] / 'shared' / 'ai-policy.json').read_text(encoding='utf-8'))
@@ -125,6 +141,9 @@ def validate_result(value, kind, cards):
             raise ValueError()
         if any(pattern.search(unicodedata.normalize('NFKC', sentence))
                for sentence in sentences for pattern in _UNSAFE_CLAIMS):
+            raise ValueError()
+        if kind == 'insight' and any(pattern.search(unicodedata.normalize('NFKC', sentence))
+                                    for sentence in sentences for pattern in _INSIGHT_SCORE_CLAIMS):
             raise ValueError()
         expected = {(card['card_id'], card['position']) for card in cards} if kind == 'tarot' else set()
         actual = [(card['card_id'], card['position']) for card in result['card_insights']]
