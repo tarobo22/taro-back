@@ -1,0 +1,19 @@
+{
+  "policy_version": "2026-11-05",
+  "prompt_version": "yeoun-p0-1",
+  "schema_version": "ai-result-1",
+  "owner_daily_limit": 20,
+  "global_daily_limit": 200,
+  "max_concurrent_jobs": 1,
+  "lease_seconds": 90,
+  "provider_deadline_seconds": 60,
+  "max_output_tokens": 1500,
+  "history_turns": 6,
+  "history_chars": 6000,
+  "context_entries_max": 3,
+  "context_chars": 12000,
+  "audio_max_bytes": 10485760,
+  "audio_max_duration_ms": 60000,
+  "temporary_seconds": 3600,
+  "idempotency_seconds": 86400
+}
