@@ -5,6 +5,7 @@ from typing import Callable
 from uuid import uuid4
 
 from api.application.experience_ports import ExperienceUnitOfWork, Guidance
+from api.application.journal import guard_owner
 from api.domain.experience import ExperiencePolicy, ExperienceRuleViolation, reading_plan, validate_counsel
 
 
@@ -31,7 +32,7 @@ def fingerprint_of(payload):
 class ExperienceUseCases:
     def __init__(self, uow_factory: Callable[[], ExperienceUnitOfWork], policy: ExperiencePolicy,
                  local_guidance: Guidance, ai_guidance: Guidance | None = None, ai_daily_limit=20,
-                 ai_global_daily_limit=200, ai_lease_seconds=90, ai_guard=None):
+                 ai_global_daily_limit=200, ai_lease_seconds=90, ai_guard=None, owner_guard=None):
         self._uow = uow_factory
         self.policy = policy
         self.local = local_guidance
@@ -40,10 +41,12 @@ class ExperienceUseCases:
         self.ai_global_daily_limit = ai_global_daily_limit
         self.ai_lease_seconds = ai_lease_seconds
         self.ai_guard = ai_guard
+        self._owner_guard = owner_guard
 
     def _once(self, owner, kind, request_id, payload, execute):
         fingerprint = fingerprint_of(payload)
         with self._uow() as uow:
+            guard_owner(uow, owner, self._owner_guard)
             repo = uow.experiences
             repo.lock(owner, kind, request_id)
             previous = repo.operation(owner, kind, request_id)
@@ -74,6 +77,7 @@ class ExperienceUseCases:
         plan = reading_plan(self.policy, topic, '오늘 나에게 필요한 한마디', [self.policy.cards[index]['id']], 'one')
         plan['advice'] = self.local.advise(topic, '', [], 'warm', [])['advice']
         with self._uow() as uow:
+            guard_owner(uow, owner, self._owner_guard)
             result = uow.experiences.daily(owner, day, topic, plan)
             uow.commit()
             return result
@@ -102,6 +106,7 @@ class ExperienceUseCases:
         lease_id = uuid4()
         guard_stamp = None
         with self._uow() as uow:
+            guard_owner(uow, owner, self._owner_guard)
             repo = uow.experiences
             repo.lock(owner, 'counsel', request_id)
             previous = repo.operation(owner, 'counsel', request_id)
@@ -132,6 +137,7 @@ class ExperienceUseCases:
         except Exception:
             try:
                 with self._uow() as uow:
+                    guard_owner(uow, owner, self._owner_guard)
                     uow.experiences.finish_ai(owner, request_id, lease_id, 'failed')
                     uow.commit()
             except Exception:
@@ -140,6 +146,7 @@ class ExperienceUseCases:
             raise
 
         with self._uow() as uow:
+            guard_owner(uow, owner, self._owner_guard)
             repo = uow.experiences
             repo.lock(owner, 'counsel', request_id)
             previous = repo.operation(owner, 'counsel', request_id)
@@ -162,4 +169,5 @@ class ExperienceUseCases:
 
     def list(self, owner, kind):
         with self._uow() as uow:
+            guard_owner(uow, owner, self._owner_guard)
             return uow.experiences.list(owner, kind)
