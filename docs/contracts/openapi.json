@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "여운 API",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "paths": {
     "/health": {
@@ -301,10 +301,497 @@
           }
         }
       }
+    },
+    "/v1/experience-config": {
+      "get": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "Config",
+        "operationId": "config_v1_experience_config_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperienceConfig"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/readings": {
+      "post": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "Create Reading",
+        "operationId": "create_reading_v1_readings_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadingInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "List Readings",
+        "operationId": "list_readings_v1_readings_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReadingResponse"
+                  },
+                  "title": "Response List Readings V1 Readings Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/daily": {
+      "post": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "Daily",
+        "operationId": "daily_v1_daily_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DailyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/counsel": {
+      "post": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "Counsel",
+        "operationId": "counsel_v1_counsel_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CounselInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CounselResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "List Counsel",
+        "operationId": "list_counsel_v1_counsel_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CounselResponse"
+                  },
+                  "title": "Response List Counsel V1 Counsel Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "CatalogCard": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "keyword": {
+            "type": "string",
+            "title": "Keyword"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "art": {
+            "type": "string",
+            "title": "Art"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "keyword",
+          "message",
+          "action",
+          "art"
+        ],
+        "title": "CatalogCard"
+      },
+      "CounselInput": {
+        "properties": {
+          "topic": {
+            "type": "string",
+            "title": "Topic"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question",
+            "default": ""
+          },
+          "answers": {
+            "items": {
+              "type": "boolean"
+            },
+            "type": "array",
+            "title": "Answers"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "warm",
+              "giga"
+            ],
+            "title": "Tone",
+            "default": "warm"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Requestid"
+          },
+          "useAI": {
+            "type": "boolean",
+            "title": "Useai",
+            "default": false
+          },
+          "consent": {
+            "type": "boolean",
+            "title": "Consent",
+            "default": false
+          },
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "topic"
+        ],
+        "title": "CounselInput"
+      },
+      "CounselResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "topic": {
+            "type": "string",
+            "title": "Topic"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "warm",
+              "giga"
+            ],
+            "title": "Tone"
+          },
+          "empathy": {
+            "type": "string",
+            "title": "Empathy"
+          },
+          "advice": {
+            "type": "string",
+            "title": "Advice"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "expression": {
+            "type": "string",
+            "enum": [
+              "listen",
+              "encourage",
+              "joy",
+              "concern",
+              "serious"
+            ],
+            "title": "Expression"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "local",
+              "openai",
+              "safety"
+            ],
+            "title": "Source",
+            "default": "local"
+          },
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentid"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "topic",
+          "question",
+          "tone",
+          "empathy",
+          "advice",
+          "action",
+          "expression",
+          "created_at"
+        ],
+        "title": "CounselResponse"
+      },
       "CreateEntry": {
         "properties": {
           "day": {
@@ -329,6 +816,25 @@
         ],
         "title": "CreateEntry"
       },
+      "DailyInput": {
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date",
+            "title": "Day"
+          },
+          "topic": {
+            "type": "string",
+            "title": "Topic"
+          }
+        },
+        "type": "object",
+        "required": [
+          "day",
+          "topic"
+        ],
+        "title": "DailyInput"
+      },
       "DeleteResponse": {
         "properties": {
           "deleted": {
@@ -341,6 +847,49 @@
           "deleted"
         ],
         "title": "DeleteResponse"
+      },
+      "DrawnCard": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "keyword": {
+            "type": "string",
+            "title": "Keyword"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "art": {
+            "type": "string",
+            "title": "Art"
+          },
+          "position": {
+            "type": "string",
+            "title": "Position"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "keyword",
+          "message",
+          "action",
+          "art",
+          "position"
+        ],
+        "title": "DrawnCard"
       },
       "EntryResponse": {
         "properties": {
@@ -384,6 +933,66 @@
         ],
         "title": "EntryResponse"
       },
+      "ExperienceConfig": {
+        "properties": {
+          "topics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Topics"
+          },
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogCard"
+            },
+            "type": "array",
+            "title": "Cards"
+          },
+          "spreads": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Spread"
+            },
+            "type": "object",
+            "title": "Spreads"
+          },
+          "questions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Questions"
+          },
+          "maxTarotQuestion": {
+            "type": "integer",
+            "title": "Maxtarotquestion"
+          },
+          "maxCounselQuestion": {
+            "type": "integer",
+            "title": "Maxcounselquestion"
+          },
+          "deckPreviewSize": {
+            "type": "integer",
+            "title": "Deckpreviewsize"
+          },
+          "aiAvailable": {
+            "type": "boolean",
+            "title": "Aiavailable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "topics",
+          "cards",
+          "spreads",
+          "questions",
+          "maxTarotQuestion",
+          "maxCounselQuestion",
+          "deckPreviewSize",
+          "aiAvailable"
+        ],
+        "title": "ExperienceConfig"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -418,6 +1027,126 @@
         ],
         "title": "JournalPolicyResponse"
       },
+      "ReadingInput": {
+        "properties": {
+          "topic": {
+            "type": "string",
+            "title": "Topic"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question",
+            "default": ""
+          },
+          "cardIds": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "minItems": 1,
+            "title": "Cardids"
+          },
+          "spreadId": {
+            "type": "string",
+            "title": "Spreadid",
+            "default": "three"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Requestid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "topic",
+          "cardIds"
+        ],
+        "title": "ReadingInput"
+      },
+      "ReadingResponse": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "day": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Day"
+          },
+          "topic": {
+            "type": "string",
+            "title": "Topic"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "spreadId": {
+            "type": "string",
+            "title": "Spreadid",
+            "default": "three"
+          },
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/DrawnCard"
+            },
+            "type": "array",
+            "title": "Cards"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "advice": {
+            "type": "string",
+            "title": "Advice"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "topic",
+          "question",
+          "cards",
+          "summary",
+          "advice",
+          "action"
+        ],
+        "title": "ReadingResponse"
+      },
       "SessionResponse": {
         "properties": {
           "token": {
@@ -430,6 +1159,27 @@
           "token"
         ],
         "title": "SessionResponse"
+      },
+      "Spread": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "positions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Positions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "positions"
+        ],
+        "title": "Spread"
       },
       "UpdateEntry": {
         "properties": {

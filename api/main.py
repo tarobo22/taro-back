@@ -19,6 +19,11 @@ from psycopg_pool import ConnectionPool
 import httpx
 
 from api.adapters.http.journal import journal_router
+from api.adapters.http.experience import experience_router
+from api.adapters.experience_postgres import PostgresExperienceUnitOfWork
+from api.adapters.local_guidance import LocalGuidance
+from api.application.experience import ExperienceUseCases
+from api.domain.experience import ExperiencePolicy
 from api.adapters.postgres import PostgresJournalUnitOfWork
 from api.application.journal import JournalUseCases
 from api.config import ROOT, Settings
@@ -37,6 +42,17 @@ def create_app(settings=None):
     pool = ConnectionPool(settings.database_url, open=False, min_size=1, max_size=6,
                           kwargs={'row_factory': dict_row})
     journals = JournalUseCases(lambda: PostgresJournalUnitOfWork(pool), policy, uuid4)
+    experience_rules = json.loads((ROOT / 'shared/experience-policy.json').read_text(encoding='utf-8'))
+    experience_policy = ExperiencePolicy(tuple(content['topics']), tuple(content['cards']),
+        experience_rules['spreads'], tuple(content['talkQuestions']),
+        experience_rules['maxTarotQuestion'], experience_rules['maxCounselQuestion'])
+    ai_available = False
+    ai = None
+    experiences = ExperienceUseCases(lambda: PostgresExperienceUnitOfWork(pool), experience_policy,
+                                     LocalGuidance(), ai, experience_rules['aiDailyLimit'])
+    configuration = {**experience_rules, 'topics': content['topics'], 'cards': content['cards'],
+                     'questions': content['talkQuestions'], 'aiAvailable': ai_available}
+
     @asynccontextmanager
     async def lifespan(app):
         try:
@@ -45,7 +61,7 @@ def create_app(settings=None):
         finally:
             pool.close()
 
-    app = FastAPI(title='여운 API', version='1.1.0', lifespan=lifespan)
+    app = FastAPI(title='여운 API', version='1.2.0', lifespan=lifespan)
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins),
                        allow_methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
                        allow_headers=['Content-Type', 'Authorization'])
@@ -89,6 +105,7 @@ def create_app(settings=None):
         return {'token': token}
 
     app.include_router(journal_router(journals, policy, current_session))
+    app.include_router(experience_router(experiences, configuration, current_session))
     return app
 
 
