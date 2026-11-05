@@ -1,8 +1,10 @@
 """Durable P0 jobs, explicit consent and owner-scoped conversation operations."""
 import base64
+import hashlib
 import json
 import re
 import time
+from datetime import datetime
 from uuid import UUID, uuid4
 
 from psycopg.types.json import Jsonb
@@ -108,7 +110,7 @@ class AIJobsService:
                 jobs = c.execute("SELECT * FROM p0_ai_jobs WHERE owner_id=%s AND context_consent_id IS NOT NULL AND state IN ('queued','running','cancel_requested')", (owner,)).fetchall()
             else:
                 target = 'transcription' if kind == 'cloud_transcription' else 'ai'
-                jobs = c.execute("SELECT * FROM p0_ai_jobs WHERE owner_id=%s AND ((kind='transcription')=%s) AND state IN ('queued','running','cancel_requested')", (owner, target == 'transcription')).fetchall()
+                jobs = c.execute("SELECT * FROM p0_ai_jobs WHERE owner_id=%s AND consent_event_id IS NOT NULL AND ((kind='transcription')=%s) AND state IN ('queued','running','cancel_requested')", (owner, target == 'transcription')).fetchall()
             for job in jobs:
                 self._cancel(c, job)
             result = consent_view(row)
@@ -120,10 +122,20 @@ class AIJobsService:
         if not value:
             return None
         try:
+            if not isinstance(value, str) or len(value) > 2048:
+                raise ValueError()
             data = json.loads(base64.urlsafe_b64decode(value.encode()).decode())
             if data['scope'] != scope or data['owner'] != str(owner):
                 raise ValueError()
-            return data['after']
+            after = data['after']
+            if scope in ('consents', 'conversations'):
+                if not isinstance(after, list) or len(after) != 2:
+                    raise ValueError()
+                stamp = datetime.fromisoformat(after[0])
+                if stamp.tzinfo is None:
+                    raise ValueError()
+                return [stamp, UUID(after[1])]
+            return after
         except (ValueError, KeyError, TypeError, UnicodeError):
             raise AIError('INVALID_CURSOR') from None
 
@@ -403,6 +415,9 @@ class AIJobsService:
             context = job['payload'].get('context_entry_ids', [])
             consent_id = self._require_consent(c, owner, 'ai_processing') if job['payload'].get('use_ai', True) else None
             fresh = self._new_job(c, owner, job['kind'], job['resource_id'], job['resource_version'], consent_id, context, job['payload'], job['conversation_id'])
+            if job['kind'] == 'tarot' and hasattr(self.reading_source, 'mark_generating'):
+                if not self.reading_source.mark_generating(c, owner, job['resource_id'], job['resource_version']):
+                    raise AIError('RESOURCE_CHANGED', 409)
             if job['kind'] == 'chat':
                 c.execute("UPDATE ai_conversation_turns SET state='accepted',assistant_result=NULL WHERE owner_id=%s AND id=%s", (owner, job['resource_id']))
             result = accepted(fresh)
@@ -505,7 +520,9 @@ class AIJobsService:
         with self._uow() as uow:
             c = uow.connection
             owner_lock(c, row['owner_id'])
-            job = self._job(c, row['owner_id'], row['id'])
+            job = c.execute('SELECT * FROM p0_ai_jobs WHERE owner_id=%s AND id=%s', (row['owner_id'], row['id'])).fetchone()
+            if not job:
+                return True
             if job['lease_id'] != lease or job['state'] != 'running':
                 return True
             try:
@@ -562,7 +579,15 @@ class AIJobsService:
             else:
                 self._finish(c, current, 'failed' if error else 'succeeded', error, output)
                 provider = self.transcription_provider if current['kind'] == 'transcription' else self.provider
-                c.execute('INSERT INTO p0_ai_runs(id,job_id,model_id,prompt_version,schema_version,elapsed_ms) VALUES(%s,%s,%s,%s,%s,%s)', (uuid4(), current['id'], getattr(provider, 'model', None), self.policy['prompt_version'], self.policy['schema_version'], int((time.monotonic() - started) * 1000)))
+                diagnostics = provider.diagnostics() if provider and hasattr(provider, 'diagnostics') else {}
+                def diagnostic_id(name):
+                    value = diagnostics.get(name)
+                    return value if isinstance(value, str) and re.fullmatch(r'[A-Za-z0-9_:\-]{1,200}', value) else None
+                def diagnostic_tokens(name):
+                    value = diagnostics.get(name)
+                    return value if type(value) is int and 0 <= value < 2 ** 31 else None
+                c.execute('''INSERT INTO p0_ai_runs(id,job_id,model_id,prompt_version,schema_version,elapsed_ms,request_id,response_id,input_tokens,output_tokens)
+                    VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (uuid4(), current['id'], getattr(provider, 'model', None), self.policy['prompt_version'], self.policy['schema_version'], int((time.monotonic() - started) * 1000), diagnostic_id('request_id'), diagnostic_id('response_id'), diagnostic_tokens('input_tokens'), diagnostic_tokens('output_tokens')))
             uow.commit()
         return True
 
@@ -608,6 +633,83 @@ class AIJobsService:
         if row and row['audio_path'] and self.audio_store:
             self.audio_store.delete(row['audio_path'])
         c.execute('UPDATE p0_ai_transcriptions SET audio_path=NULL WHERE id=%s', (rid,))
+
+    def create_transcription(self, owner, key, audio, mime_type, duration_ms, consent_event_id):
+        if self.audio_store is None:
+            raise AIError('AI_UNAVAILABLE', 503)
+        payload = [hashlib.sha256(audio).hexdigest(), mime_type, duration_ms, str(consent_event_id)]
+        with self._uow() as uow:
+            c = uow.connection
+            self._owner(c, owner)
+            previous = self._once(c, owner, 'transcription', key, payload)
+            if previous:
+                return previous
+            self._require_consent(c, owner, 'cloud_transcription', consent_event_id)
+            self._available('transcription')
+        # Bounded media decoding also holds no DB transaction.
+        mime, actual_duration = self.audio_store.validate(audio, mime_type, duration_ms, self.policy['audio_max_bytes'], self.policy['audio_max_duration_ms'])
+        path = None
+        committed = False
+        try:
+            with self._uow() as uow:
+                c = uow.connection
+                self._owner(c, owner)
+                previous = self._once(c, owner, 'transcription', key, payload)
+                if previous:
+                    return previous
+                rid = uuid4()
+                job = self._new_job(c, owner, 'transcription', rid, 1, consent_event_id, [], {})
+                path = self.audio_store.save(audio, mime)
+                c.execute("INSERT INTO p0_ai_transcriptions(id,owner_id,audio_path,mime_type,duration_ms,expires_at) VALUES(%s,%s,%s,%s,%s,clock_timestamp()+(%s * interval '1 second'))", (rid, owner, path, mime, actual_duration, self.policy['temporary_seconds']))
+                result = accepted(job)
+                self._remember(c, owner, 'transcription', key, payload, rid, result)
+                uow.commit()
+                committed = True
+                return result
+        finally:
+            if path and not committed:
+                self.audio_store.delete(path)
+
+    def get_transcription(self, owner, rid):
+        with self._uow() as uow:
+            c = uow.connection
+            self._owner(c, owner)
+            row = c.execute('SELECT *,expires_at<=clock_timestamp() AS expired FROM p0_ai_transcriptions WHERE owner_id=%s AND id=%s', (owner, rid)).fetchone()
+            if not row:
+                raise AIError('NOT_FOUND', 404)
+            if row['expired']:
+                raise AIError('TRANSCRIPTION_EXPIRED', 410)
+            if row['state'] == 'deleted':
+                raise AIError('NOT_FOUND', 404)
+            return _public(row, ('id', 'state', 'transcript', 'expires_at'))
+
+    def delete_transcription(self, owner, rid):
+        with self._uow() as uow:
+            c = uow.connection
+            self._owner(c, owner)
+            row = c.execute('SELECT id FROM p0_ai_transcriptions WHERE owner_id=%s AND id=%s', (owner, rid)).fetchone()
+            if not row:
+                raise AIError('NOT_FOUND', 404)
+            self.cancel_for_resource(c, owner, rid)
+            self._remove_audio(c, rid)
+            c.execute("UPDATE p0_ai_transcriptions SET state='deleted',transcript=NULL,version=version+1 WHERE id=%s", (rid,))
+            c.execute('DELETE FROM p0_ai_idempotency WHERE owner_id=%s AND resource_id=%s', (owner, rid))
+            uow.commit()
+
+    def purge_expired(self):
+        with self._uow() as uow:
+            rows = uow.connection.execute("SELECT id,owner_id FROM p0_ai_transcriptions WHERE expires_at<=clock_timestamp() AND (state!='deleted' OR transcript IS NOT NULL OR audio_path IS NOT NULL)").fetchall()
+        for row in rows:
+            with self._uow() as uow:
+                c = uow.connection
+                owner_lock(c, row['owner_id'])
+                self.cancel_for_resource(c, row['owner_id'], row['id'])
+                self._remove_audio(c, row['id'])
+                c.execute("UPDATE p0_ai_transcriptions SET state='deleted',transcript=NULL,version=version+1 WHERE id=%s", (row['id'],))
+                uow.commit()
+        if self.audio_store:
+            self.audio_store.purge(self.policy['temporary_seconds'])
+        return len(rows)
 
     def erase_owner(self, owner, connection=None):
         # Accept both callback(connection, owner) and erase_owner(owner, connection=...).

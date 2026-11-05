@@ -205,3 +205,29 @@ def test_basic_conversation_remains_available_without_ai_consent_or_provider(ai_
     assert service.get_turn(owner, UUID(c['id']), UUID(a['resource_id']))['assistant_result']['kind'] == 'chat'
     with pool.connection() as connection:
         assert connection.execute('SELECT count(*) AS n FROM p0_ai_usage_attempts WHERE owner_id=%s', (owner,)).fetchone()['n'] == 0
+
+
+def test_worker_records_only_provider_diagnostics_not_prompt_or_result(ai_env):
+    _, _, pool, owners, factory = ai_env
+    class DiagnosticProvider(Provider):
+        def diagnostics(self):
+            return {'request_id': 'req_test', 'response_id': 'resp_test', 'input_tokens': 8, 'output_tokens': 9}
+    service = AIJobsService(factory, provider=DiagnosticProvider())
+    owner = owners[0]
+    c = service.create_conversation(owner, uuid4(), 'care', 'warm')
+    a = turn(service, owner, c, consent(service, owner))
+    assert service.run_next('worker')
+    with pool.connection() as connection:
+        run = connection.execute('SELECT * FROM p0_ai_runs WHERE job_id=%s', (UUID(a['job_id']),)).fetchone()
+        assert run['request_id'] == 'req_test' and run['response_id'] == 'resp_test'
+        assert run['input_tokens'] == 8 and run['output_tokens'] == 9
+        assert not {'prompt', 'question', 'result', 'journal_body', 'api_key'} & set(run)
+
+
+def test_invalid_cursor_is_validation_error_and_cannot_rebind_owner(ai_env):
+    service, _, _, owners, _ = ai_env
+    import base64
+    import json
+    bad = base64.urlsafe_b64encode(json.dumps({'scope': 'conversations', 'owner': str(owners[0]), 'after': ['nonsense', 'also-bad']}).encode()).decode()
+    with pytest.raises(AIError, match='INVALID_CURSOR'):
+        service.list_conversations(owners[0], cursor=bad)
