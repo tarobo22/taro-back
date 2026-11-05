@@ -22,6 +22,7 @@ from api.adapters.http.journal import journal_router
 from api.adapters.http.experience import experience_router
 from api.adapters.experience_postgres import PostgresExperienceUnitOfWork
 from api.adapters.local_guidance import LocalGuidance
+from api.adapters.openai_guidance import OpenAIGuidance
 from api.application.experience import ExperienceUseCases
 from api.domain.experience import ExperiencePolicy
 from api.adapters.postgres import PostgresJournalUnitOfWork
@@ -46,8 +47,9 @@ def create_app(settings=None):
     experience_policy = ExperiencePolicy(tuple(content['topics']), tuple(content['cards']),
         experience_rules['spreads'], tuple(content['talkQuestions']),
         experience_rules['maxTarotQuestion'], experience_rules['maxCounselQuestion'])
-    ai_available = False
-    ai = None
+    ai_client = httpx.Client(timeout=20, limits=httpx.Limits(max_connections=2))
+    ai_available = bool(settings.openai_model and os.environ.get('OPENAI_API_KEY'))
+    ai = OpenAIGuidance(ai_client, settings.openai_model, lambda: os.environ.get('OPENAI_API_KEY')) if ai_available else None
     experiences = ExperienceUseCases(lambda: PostgresExperienceUnitOfWork(pool), experience_policy,
                                      LocalGuidance(), ai, experience_rules['aiDailyLimit'])
     configuration = {**experience_rules, 'topics': content['topics'], 'cards': content['cards'],
@@ -60,6 +62,7 @@ def create_app(settings=None):
             yield
         finally:
             pool.close()
+            ai_client.close()
 
     app = FastAPI(title='여운 API', version='1.2.0', lifespan=lifespan)
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins),
