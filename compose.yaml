@@ -1,0 +1,31 @@
+name: taro-back
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: taro_dev
+      POSTGRES_USER: taro_dev
+      POSTGRES_PASSWORD: local_development_only
+    ports: ["127.0.0.1:55440:5432"]
+    volumes: ["taro_dev_data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taro_dev -d taro_dev"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  db-test:
+    image: postgres:17
+    profiles: [test]
+    environment:
+      POSTGRES_DB: taro_journal_test
+      POSTGRES_USER: taro_test
+      POSTGRES_PASSWORD: local_test_only
+    ports: ["127.0.0.1:55441:5432"]
+    tmpfs: ["/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taro_test -d taro_journal_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+volumes:
+  taro_dev_data:

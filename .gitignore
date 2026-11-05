@@ -1,0 +1,25 @@
+node_modules/
+web-dist/
+android/.gradle/
+android/.cxx/
+android/app/.cxx/
+android/app/build/
+android/build/
+android/local.properties
+ota/data/
+ota/bundles/
+.env*
+.local/
+*.keystore
+results/*.log
+
+# Local dependencies and TDD execution artifacts
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+reports/
+
+!.env.example
