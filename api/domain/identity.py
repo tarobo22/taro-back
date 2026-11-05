@@ -12,6 +12,10 @@ class SessionRejected(ValueError):
     pass
 
 
+class InactiveOwnerError(PermissionError):
+    """A request authenticated earlier cannot access an inactive owner."""
+
+
 @dataclass(frozen=True)
 class IdentityPolicy:
     session_days: int

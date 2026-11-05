@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Protocol
+from typing import Callable, Protocol
 from uuid import UUID
 
 
@@ -26,6 +26,7 @@ class ExperienceRepository(Protocol):
 
 class ExperienceUnitOfWork(Protocol):
     experiences: ExperienceRepository
+    def guard_owner(self, owner_id: UUID, callback: Callable[[object, UUID], bool | None] | None) -> None: ...
     def __enter__(self): ...
     def __exit__(self, *args): ...
     def commit(self) -> None: ...
