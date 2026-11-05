@@ -90,5 +90,11 @@
     "Existing Starlette/httpx deprecation warning",
     "Vite minified chunk exceeds 500kB; final JS about651kB/gzip183kB",
     "Gradle deprecated API warnings"
-  ]
+  ],
+  "qa_cleanup": {
+    "destructive_fixture_cleanup": "not executed; automatic review rejected the combined cleanup command",
+    "reason_returned": "blocked by policy; no detailed reason provided",
+    "retained": "synthetic native-test owner in isolated browser-test database and emulator app data",
+    "non_destructive_teardown": "isolated test HTTP servers stopped; real local API restored; source files untouched"
+  }
 }
