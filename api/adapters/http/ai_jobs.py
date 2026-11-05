@@ -6,7 +6,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, Query, UploadFile
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, field_validator
 
 from api.domain.ai_jobs import AIError, AIResult, ChoiceAnswer
 
@@ -51,19 +51,29 @@ class ConversationList(InputModel):
     next_cursor: str | None
 
 
-class TurnInput(InputModel):
+class ContextInput(InputModel):
+    context_entry_ids: list[UUID] = Field(default_factory=list, max_length=3)
+    context_entry_versions: dict[UUID, Annotated[StrictInt, Field(ge=1)]] | None = None
+
+    @field_validator('context_entry_versions', mode='before')
+    @classmethod
+    def supplied_versions_are_a_map(cls, value):
+        if value is None:
+            raise ValueError('Omit context_entry_versions or supply a version map')
+        return value
+
+
+class TurnInput(ContextInput):
     client_message_id: UUID
     input_source: Literal['text', 'choice', 'voice']
     text: str = Field(default='', max_length=2000)
     answers: list[ChoiceAnswer] = Field(default_factory=list, max_length=3)
-    context_entry_ids: list[UUID] = Field(default_factory=list, max_length=3)
     consent_event_id: UUID | None = None
     use_ai: StrictBool = True
 
 
-class InterpretationInput(InputModel):
+class InterpretationInput(ContextInput):
     expected_version: StrictInt = Field(ge=1)
-    context_entry_ids: list[UUID] = Field(default_factory=list, max_length=3)
     consent_event_id: UUID
 
 
@@ -118,6 +128,14 @@ class Transcription(InputModel):
     expires_at: str
 
 
+def context_payload(body):
+    result = body.model_dump(mode='json')
+    # Do not change fingerprints for legacy requests that omit the additive field.
+    if 'context_entry_versions' not in body.model_fields_set:
+        result.pop('context_entry_versions', None)
+    return result
+
+
 def call(operation):
     try:
         return operation()
@@ -170,7 +188,7 @@ def create_ai_jobs_router(service, owner_dependency):
 
     @router.post('/conversations/{conversation_id}/turns', status_code=202, response_model=JobAccepted)
     def create_turn(conversation_id: UUID, body: TurnInput, owner: Owner, key: Key):
-        return call(lambda: service.create_turn(owner, conversation_id, key, body.model_dump(mode='json')))
+        return call(lambda: service.create_turn(owner, conversation_id, key, context_payload(body)))
 
     @router.get('/conversations/{conversation_id}/turns', response_model=TurnList)
     def turns(conversation_id: UUID, owner: Owner, limit: Limit = 20, cursor: str | None = None):
@@ -182,7 +200,7 @@ def create_ai_jobs_router(service, owner_dependency):
 
     @router.post('/readings/{reading_id}/interpretations', status_code=202, response_model=JobAccepted)
     def interpretation(reading_id: UUID, body: InterpretationInput, owner: Owner, key: Key):
-        return call(lambda: service.create_interpretation(owner, reading_id, key, body.model_dump(mode='json')))
+        return call(lambda: service.create_interpretation(owner, reading_id, key, context_payload(body)))
 
     @router.get('/ai/jobs/{job_id}', response_model=Job)
     def job(job_id: UUID, owner: Owner):

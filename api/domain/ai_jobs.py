@@ -5,6 +5,7 @@ import re
 import unicodedata
 from pathlib import Path
 from typing import Literal
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, ValidationError
 
@@ -88,6 +89,24 @@ def validate_turn(text, answers):
     if len({answer.question_id for answer in parsed}) != len(parsed) or not (text.strip() or parsed):
         raise AIError('INVALID_TURN')
     return text.strip()
+
+
+def validate_context_entry_versions(ids, versions):
+    """Optional caller-observed versions bind exactly the explicitly selected IDs."""
+    if versions is None:
+        return None
+    try:
+        if not isinstance(versions, dict):
+            raise ValueError()
+        selected = {str(UUID(str(entry))) for entry in ids}
+        normalized = {str(UUID(str(entry))): version for entry, version in versions.items()}
+        if (len(selected) != len(ids) or len(normalized) != len(versions)
+                or set(normalized) != selected
+                or any(type(version) is not int or version < 1 for version in normalized.values())):
+            raise ValueError()
+        return normalized
+    except (ValueError, TypeError, AttributeError):
+        raise AIError('INVALID_CONTEXT_VERSIONS') from None
 
 
 def validate_result(value, kind, cards):

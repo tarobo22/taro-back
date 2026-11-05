@@ -9,7 +9,8 @@ from uuid import UUID, uuid4
 
 from psycopg.types.json import Jsonb
 
-from api.domain.ai_jobs import AIError, fingerprint, load_policy, safety_result, validate_result, validate_turn
+from api.domain.ai_jobs import (AIError, fingerprint, load_policy, safety_result,
+    validate_context_entry_versions, validate_result, validate_turn)
 
 
 TERMINAL = ('succeeded', 'failed', 'cancelled')
@@ -242,14 +243,18 @@ class AIJobsService:
         if provider is None or not provider.available():
             raise AIError('AI_UNAVAILABLE', 503, 'AI 연결이 아직 준비되지 않았어요. 기본 기능을 이용할 수 있어요.', True)
 
-    def _sources(self, c, owner, ids):
+    def _sources(self, c, owner, ids, versions=None):
         if len(ids) > self.policy['context_entries_max'] or len(set(map(str, ids))) != len(ids):
             raise AIError('INVALID_CONTEXT')
+        expected_versions = validate_context_entry_versions(ids, versions)
         rows = []
         for entry in ids:
             row = c.execute('SELECT id,version,body,day,mood FROM journal_entries WHERE session_id=%s AND id=%s', (owner, entry)).fetchone()
             if not row:
                 raise AIError('NOT_FOUND', 404)
+            if expected_versions is not None and expected_versions[str(row['id'])] != row['version']:
+                raise AIError('RESOURCE_CHANGED', 409,
+                              '선택한 기록이 바뀌었어요. 내용을 확인한 뒤 다시 선택해 주세요.')
             rows.append(row)
         return rows
 
@@ -266,7 +271,11 @@ class AIJobsService:
         if row['owned'] >= self.policy['owner_daily_limit'] or row['total'] >= self.policy['global_daily_limit']:
             raise AIError('AI_DAILY_LIMIT', 429, retryable=True)
 
-    def _new_job(self, c, owner, kind, resource, version, consent_id, context, payload, conversation=None):
+    def _new_job(self, c, owner, kind, resource, version, consent_id, context, payload, conversation=None,
+                 *, context_entry_versions=None):
+        # This additive client precondition precedes availability and quota checks.
+        # Omitting it retains the existing admission order and request contract.
+        sources = self._sources(c, owner, context, context_entry_versions) if context_entry_versions is not None else None
         use_ai = kind != 'chat' or payload.get('use_ai', True)
         if use_ai:
             self._available(kind)
@@ -276,7 +285,8 @@ class AIJobsService:
         elif context:
             raise AIError('BASIC_CONTEXT_UNSUPPORTED')
         context_consent = self._require_consent(c, owner, 'journal_context') if context else None
-        sources = self._sources(c, owner, context)
+        if sources is None:
+            sources = self._sources(c, owner, context)
         if use_ai:
             self._reserve(c, owner)
         jid = uuid4()
@@ -310,7 +320,9 @@ class AIJobsService:
                 return accepted(job)
             tid = uuid4()
             index = c.execute('SELECT coalesce(max(turn_index),0)+1 AS n FROM ai_conversation_turns WHERE conversation_id=%s', (cid,)).fetchone()['n']
-            job = self._new_job(c, owner, 'chat', tid, 1, body.get('consent_event_id'), body.get('context_entry_ids', []), {'use_ai': body.get('use_ai', True)}, cid)
+            job = self._new_job(c, owner, 'chat', tid, 1, body.get('consent_event_id'), body.get('context_entry_ids', []),
+                                {'use_ai': body.get('use_ai', True)}, cid,
+                                context_entry_versions=body.get('context_entry_versions'))
             c.execute('''INSERT INTO ai_conversation_turns(id,owner_id,conversation_id,client_message_id,fingerprint,turn_index,text,answers,input_source)
                 VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)''', (tid, owner, cid, body['client_message_id'], fingerprint(body), index, body['text'], Jsonb(body.get('answers', [])), body['input_source']))
             c.execute('UPDATE ai_conversations SET updated_at=clock_timestamp() WHERE id=%s', (cid,))
@@ -356,7 +368,8 @@ class AIJobsService:
                 raise AIError('NOT_FOUND', 404)
             if reading['version'] != body['expected_version'] or not reading.get('cards'):
                 raise AIError('READING_VERSION_CONFLICT', 409)
-            job = self._new_job(c, owner, 'tarot', rid, reading['version'], body['consent_event_id'], body.get('context_entry_ids', []), {'cards': reading['cards']})
+            job = self._new_job(c, owner, 'tarot', rid, reading['version'], body['consent_event_id'], body.get('context_entry_ids', []),
+                                {'cards': reading['cards']}, context_entry_versions=body.get('context_entry_versions'))
             if hasattr(self.reading_source, 'mark_generating') and not self.reading_source.mark_generating(c, owner, rid, reading['version']):
                 raise AIError('READING_VERSION_CONFLICT', 409)
             result = accepted(job)

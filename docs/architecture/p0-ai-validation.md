@@ -9,3 +9,15 @@ A blocked output follows the existing `AI_OUTPUT_INVALID` worker failure path: n
 The existing positive fixture in `test_p0_openai_boundary.py` had an empty summary. With explicit authorization to align a positive fixture to the new stricter output contract, only that summary was replaced by a valid sentence. All original assertions remain; new negative cases prove empty/whitespace summaries are rejected.
 
 The existing operational owner budget remains 20 daily AI attempts, shared with v1; the original P0 design document suggested 30. This follow-up does not raise that limit. Bootstrap/UI limits must describe the configured operational policy, not the unadopted design value.
+
+## Caller-observed journal versions
+
+Turn and interpretation inputs accept optional `context_entry_versions`, mapping each selected journal UUID to the positive integer version that the caller actually reviewed. Example: `context_entry_ids: [entry_id]` together with `context_entry_versions: {entry_id: 3}`. The supplied mapping's canonical UUID keys must match the selected ID set exactly; missing/extra keys and non-integer/boolean/non-positive values are rejected with 422. An explicit null mapping is invalid; omit the field for the prior contract. Empty IDs with an empty mapping are valid.
+
+Every referenced journal still requires owner verification. A foreign/missing journal remains 404. A selected version that differs from the current database version returns 409 `RESOURCE_CHANGED` before provider availability, daily/concurrent quota reservation, job insertion or turn insertion. Valid requests capture the same actual ID/version metadata already used by the worker. No diary body is added to jobs, idempotency records or diagnostic metadata.
+
+The frontend must keep each reviewed entry's version alongside its ID and send that snapshot on the actual AI request. On `RESOURCE_CHANGED`, retain the user's draft, show the current journal and obtain a fresh selection rather than silently replacing the reviewed version.
+
+Omitting this additive field retains prior admission behavior and the exact prior idempotency fingerprint shape. HTTP serialization removes the new default when the client did not supply it. Authenticated replays remain reads of the original accepted operation. Existing worker and explicit-retry version checks are retained; a changed captured source still requires a fresh confirmed request rather than rebilling a retry with edited text.
+
+New integration tests cover chat and tarot admission, strict maps and ownership, zero reservations/results for stale selections, legacy fingerprint/replay compatibility, and the existing retry rejection after a source changes. All providers are injected fakes.
