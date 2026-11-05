@@ -1,0 +1,139 @@
+P1 verification summaries - 2026-11-06
+Actual providers were replaced by explicit test adapters; real PostgreSQL and worker used.
+Reproduction: docs/quality/p1-reproduce.md
+
+[backend-all-green.log]
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 55%]
+........................................................................ [ 73%]
+........................................................................ [ 92%]
+..............................                                           [100%]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\chang\Documents\ChatGPT\0915 2\taro-back\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+390 passed, 1 warning in 21.86s
+
+[rn-all-tests.log]
+✔ insight selection is separate from the three-entry context and requires 1..10 unique current versions within the period (0.4063ms)
+✔ both separate current consent purposes are required and journal body text never enters the insight payload (0.24ms)
+✔ insight POST sends the selected IDs and versions only and accepts the persisted job contract (0.653ms)
+✔ invalidated insight cannot expose a previous GPT result and source versions remain available for explicit source opening (0.7468ms)
+✔ opening reminders never requests permission or schedules an alarm (2.1329ms)
+✔ denied permission and invalid time never schedule (0.9507ms)
+✔ turning off while permission is pending prevents a late grant from enabling (0.3312ms)
+✔ the latest selected time wins and a shared permission prompt is requested once (0.3951ms)
+✔ full device reset during an in-flight native save cancels the saved alarm and chosen time (0.3162ms)
+✔ an unavailable platform never prompts or schedules (0.1987ms)
+✔ completed erasure clears device reminders once, and a retained completed receipt cannot clear a new session (0.3462ms)
+✔ repeated update checks share one download and cannot apply an unfinished bundle (1.092ms)
+✔ a failed download is reported as failure and leaves the running bundle alone (0.5028ms)
+✔ a reload failure retains the prepared update so applying can be retried (0.8281ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 71
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 780.1227
+
+[web-all-tests.log]
+✔ changing a date range prevents a slower old summary from replacing current data (0.1475ms)
+✔ favorites use the v2 reading ID, a stable mutation identity and cursor paging (9.8066ms)
+✔ favorites preserve ownership errors and do not pretend a rejected save succeeded (0.3629ms)
+✔ insight selection is separate from the three-entry context and requires 1..10 unique current versions within the period (0.3947ms)
+✔ both separate current consent purposes are required and journal body text never enters the insight payload (0.2442ms)
+✔ insight POST sends the selected IDs and versions only and accepts the persisted job contract (0.3058ms)
+✔ invalidated insight cannot expose a previous GPT result and source versions remain available for explicit source opening (0.3969ms)
+✔ opening reminders never requests permission or schedules an alarm (1.3172ms)
+✔ denied permission and invalid time never schedule (0.7667ms)
+✔ turning off while permission is pending prevents a late grant from enabling (0.8219ms)
+✔ the latest selected time wins and a shared permission prompt is requested once (0.3342ms)
+✔ full device reset during an in-flight native save cancels the saved alarm and chosen time (0.2976ms)
+✔ an unavailable platform never prompts or schedules (0.1794ms)
+✔ completed erasure clears device reminders once, and a retained completed receipt cannot clear a new session (0.2675ms)
+ℹ tests 68
+ℹ suites 0
+ℹ pass 68
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 733.2243
+
+[screens/web-browser-regression.txt]
+✔ erase completion survives reload using the saved minimal receipt without creating another guest (920.9868ms)
+✔ a reading-linked journal retains its source through v2 creation, detail reload and CAS edit (1025.0938ms)
+✔ reading deletion needs confirmation and cancellation preserves the owned result (949.087ms)
+✔ a closed owned conversation offers an explicit new conversation without automatically sending (778.1976ms)
+✔ server preferences acknowledge tone, motion and voice and restore them after reload (797.6952ms)
+✔ changing reduced motion keeps the settings scroll position (590.7365ms)
+✔ a busy action retains its accessible operation name before and after acknowledgement (623.433ms)
+✔ changed context is rejected with its old version until the user reviews the edited journal (1463.9181ms)
+✔ record filters apply to every history and cursor pages and journal date query preserve the selected view (1037.5316ms)
+✔ dial and side-choice controls expose at least 48dp targets and profile drag stays bounded (710.0588ms)
+✔ inclusive calendar GETs stay current after a range race, open the local day, and work without AI (964.0962ms)
+✔ owned reading favorites add, reopen, remove and disappear with deletion of the original (1208.8162ms)
+✔ ten explicit insight sources persist independently, resume one job, retry explicitly and hide invalidated results (1738.7927ms)
+✔ edited selected versions fail honestly and a fresh revoked context consent prevents another insight POST (765.0409ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13067.4161
+
+[final-real-integration.log]
+✔ real server slots, selected journal context, explicit AI result, card provenance and linked feedback (11013.7009ms)
+✔ real exported journal ZIP and completed erase receipt survive reload without another guest (1600.5735ms)
+✔ real summary and explicit selected insight succeed, preserve source versions and hide a result invalidated by an edited original (4219.6541ms)
+✔ real favorites add and remove, cascade on original deletion, export only remaining favorites and erase the device connection (4048.4801ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13035.0455
+
+[native-clock-green.log]
+JUnit version 4.13.2
+......
+Time: 0.038
+
+OK (6 tests)
+
+
+[native-resume-green.log]
+PASS: force-stop cancelled the alarm; reopening restored exactly one previously enabled reminder
+
+[android-delivery-build.log]
+> Task :app:processReleaseJavaRes UP-TO-DATE
+> Task :app:mergeReleaseJavaResource UP-TO-DATE
+> Task :app:mergeDexRelease
+> Task :app:compileReleaseArtProfile
+> Task :hot-updater_react-native:lintVitalAnalyzeRelease
+> Task :app:lintVitalAnalyzeRelease
+> Task :app:lintVitalReportRelease
+> Task :app:lintVitalRelease
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
+
+[Incubating] Problems report is available at: file:///C:/Users/chang/.cache/taro-recut-20261106-011214/taro/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 53s
+264 actionable tasks: 36 executed, 228 up-to-date

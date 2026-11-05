@@ -1,0 +1,2154 @@
+{
+  "columns": [
+    {
+      "table_name": "ai_consent_events",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_consent_events",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_consent_events",
+      "column_name": "kind",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_consent_events",
+      "column_name": "policy_version",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_consent_events",
+      "column_name": "granted",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_consent_events",
+      "column_name": "occurred_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "conversation_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "client_message_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "turn_index",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "text",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "answers",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "input_source",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "assistant_result",
+      "data_type": "jsonb",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "topic",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "tone",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_conversations",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_usage_attempts",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_usage_attempts",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_usage_attempts",
+      "column_name": "request_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "ai_usage_attempts",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "app_sessions",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "app_sessions",
+      "column_name": "token_hash",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "app_sessions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "app_sessions",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "app_sessions",
+      "column_name": "last_seen_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "app_sessions",
+      "column_name": "platform",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "topic",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "question",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "answers",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "tone",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "advice",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "counsel_sessions",
+      "column_name": "parent_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "daily_readings",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "daily_readings",
+      "column_name": "day",
+      "data_type": "date",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "daily_readings",
+      "column_name": "topic",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "daily_readings",
+      "column_name": "result",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "daily_readings",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "daily_readings",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "reading_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "turn_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "rating",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "reason",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "comment",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "idempotency_hash",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "locale",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "timezone",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "tone",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "reduced_motion",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "voice_mode",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "kind",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "idempotency_hash",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "receipt_hash",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "export_bytes",
+      "data_type": "bytea",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "column_name": "receipt_salt",
+      "data_type": "bytea",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "column_name": "request_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "column_name": "lease_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "column_name": "lease_until",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_operations",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_operations",
+      "column_name": "kind",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_operations",
+      "column_name": "request_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_operations",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_operations",
+      "column_name": "result",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "experience_operations",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "favorites",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "favorites",
+      "column_name": "reading_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "favorites",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_create_requests",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_create_requests",
+      "column_name": "request_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_create_requests",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_create_requests",
+      "column_name": "result",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_create_requests",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "day",
+      "data_type": "date",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "mood",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "body",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_entries",
+      "column_name": "version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "range_start",
+      "data_type": "date",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "range_end",
+      "data_type": "date",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "based_on_count",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "result",
+      "data_type": "jsonb",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "consent_event_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "context_consent_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_insights",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "column_name": "key_hash",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "column_name": "entry_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_deleted_entries",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_deleted_entries",
+      "column_name": "entry_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_deleted_entries",
+      "column_name": "deleted_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_sources",
+      "column_name": "entry_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_sources",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "journal_v2_sources",
+      "column_name": "source_reading_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "journal_v2_sources",
+      "column_name": "source_turn_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_context_sources",
+      "column_name": "job_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_context_sources",
+      "column_name": "entry_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_context_sources",
+      "column_name": "entry_version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "column_name": "scope",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "column_name": "key",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "column_name": "resource_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "column_name": "response",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "kind",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "resource_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "resource_version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "conversation_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "consent_event_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "context_consent_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "payload",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "lease_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "lease_until",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "provider_started",
+      "data_type": "boolean",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "error_code",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "result_url",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "column_name": "finished_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "job_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "model_id",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "prompt_version",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "schema_version",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "request_id",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "response_id",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "input_tokens",
+      "data_type": "integer",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "output_tokens",
+      "data_type": "integer",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "elapsed_ms",
+      "data_type": "integer",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "transcript",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "audio_path",
+      "data_type": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "mime_type",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "duration_ms",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_usage_attempts",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_ai_usage_attempts",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_ai_usage_attempts",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "column_name": "local_day",
+      "data_type": "date",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "column_name": "topic",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "column_name": "card_id",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "column_name": "deck_version_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "column_name": "captured_timezone",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "column_name": "scope",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "column_name": "key",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "column_name": "reading_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "kind",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "topic",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "question",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "deck_version_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "local_day",
+      "data_type": "date",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "captured_timezone",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "state",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "private_slots",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "selected_cards",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "result",
+      "data_type": "jsonb",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p0_readings",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "column_name": "owner_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "column_name": "key_hash",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "column_name": "fingerprint",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "column_name": "reading_id",
+      "data_type": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "column_name": "favorite_created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_journal_insight_sources",
+      "column_name": "insight_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_journal_insight_sources",
+      "column_name": "entry_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_journal_insight_sources",
+      "column_name": "entry_version",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "p1_journal_insight_sources",
+      "column_name": "position",
+      "data_type": "integer",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "tarot_readings",
+      "column_name": "id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "tarot_readings",
+      "column_name": "session_id",
+      "data_type": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "tarot_readings",
+      "column_name": "topic",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "tarot_readings",
+      "column_name": "question",
+      "data_type": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "tarot_readings",
+      "column_name": "card_ids",
+      "data_type": "ARRAY",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "tarot_readings",
+      "column_name": "result",
+      "data_type": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "tarot_readings",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO"
+    }
+  ],
+  "constraints": [
+    {
+      "table_name": "ai_consent_events",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "ai_consent_events",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "ai_conversations",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "ai_conversations",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "kind": "f",
+      "columns": [
+        "conversation_id"
+      ],
+      "referenced_table": "ai_conversations",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "kind": "u",
+      "columns": [
+        "conversation_id",
+        "client_message_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "ai_conversation_turns",
+      "kind": "u",
+      "columns": [
+        "conversation_id",
+        "turn_index"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "ai_usage_attempts",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "ai_usage_attempts",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "app_sessions",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "app_sessions",
+      "kind": "u",
+      "columns": [
+        "token_hash"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "counsel_sessions",
+      "kind": "f",
+      "columns": [
+        "parent_id"
+      ],
+      "referenced_table": "counsel_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "counsel_sessions",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "counsel_sessions",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "daily_readings",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "daily_readings",
+      "kind": "p",
+      "columns": [
+        "session_id",
+        "day",
+        "topic"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "data_privacy_feedback",
+      "kind": "u",
+      "columns": [
+        "owner_id",
+        "idempotency_hash"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "data_privacy_profiles",
+      "kind": "p",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "kind": "u",
+      "columns": [
+        "owner_id",
+        "idempotency_hash"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "data_privacy_requests",
+      "kind": "u",
+      "columns": [
+        "receipt_hash"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "experience_ai_jobs",
+      "kind": "p",
+      "columns": [
+        "session_id",
+        "request_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "experience_operations",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "experience_operations",
+      "kind": "p",
+      "columns": [
+        "session_id",
+        "kind",
+        "request_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "favorites",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "favorites",
+      "kind": "f",
+      "columns": [
+        "owner_id",
+        "reading_id"
+      ],
+      "referenced_table": "p0_readings",
+      "referenced_columns": [
+        "owner_id",
+        "id"
+      ]
+    },
+    {
+      "table_name": "favorites",
+      "kind": "p",
+      "columns": [
+        "owner_id",
+        "reading_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "journal_create_requests",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_create_requests",
+      "kind": "p",
+      "columns": [
+        "session_id",
+        "request_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "journal_entries",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_entries",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "journal_insights",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_insights",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "kind": "f",
+      "columns": [
+        "entry_id"
+      ],
+      "referenced_table": "journal_entries",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_v2_create_requests",
+      "kind": "p",
+      "columns": [
+        "owner_id",
+        "key_hash"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "journal_v2_deleted_entries",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_v2_deleted_entries",
+      "kind": "p",
+      "columns": [
+        "owner_id",
+        "entry_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "journal_v2_sources",
+      "kind": "f",
+      "columns": [
+        "entry_id"
+      ],
+      "referenced_table": "journal_entries",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_v2_sources",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "journal_v2_sources",
+      "kind": "p",
+      "columns": [
+        "entry_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_ai_context_sources",
+      "kind": "f",
+      "columns": [
+        "job_id"
+      ],
+      "referenced_table": "p0_ai_jobs",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_ai_context_sources",
+      "kind": "p",
+      "columns": [
+        "job_id",
+        "entry_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_ai_idempotency",
+      "kind": "p",
+      "columns": [
+        "owner_id",
+        "scope",
+        "key"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "kind": "f",
+      "columns": [
+        "conversation_id"
+      ],
+      "referenced_table": "ai_conversations",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_ai_jobs",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "kind": "f",
+      "columns": [
+        "job_id"
+      ],
+      "referenced_table": "p0_ai_jobs",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_ai_runs",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_ai_transcriptions",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_ai_usage_attempts",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_ai_usage_attempts",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_daily_draws",
+      "kind": "p",
+      "columns": [
+        "owner_id",
+        "local_day",
+        "topic"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_reading_commands",
+      "kind": "p",
+      "columns": [
+        "owner_id",
+        "scope",
+        "key"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p0_readings",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p0_readings",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "kind": "f",
+      "columns": [
+        "owner_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "kind": "f",
+      "columns": [
+        "reading_id"
+      ],
+      "referenced_table": "p0_readings",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p1_favorite_create_requests",
+      "kind": "p",
+      "columns": [
+        "owner_id",
+        "key_hash"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p1_journal_insight_sources",
+      "kind": "f",
+      "columns": [
+        "insight_id"
+      ],
+      "referenced_table": "journal_insights",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "p1_journal_insight_sources",
+      "kind": "p",
+      "columns": [
+        "insight_id",
+        "entry_id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "p1_journal_insight_sources",
+      "kind": "u",
+      "columns": [
+        "insight_id",
+        "position"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    },
+    {
+      "table_name": "tarot_readings",
+      "kind": "f",
+      "columns": [
+        "session_id"
+      ],
+      "referenced_table": "app_sessions",
+      "referenced_columns": [
+        "id"
+      ]
+    },
+    {
+      "table_name": "tarot_readings",
+      "kind": "p",
+      "columns": [
+        "id"
+      ],
+      "referenced_table": null,
+      "referenced_columns": []
+    }
+  ]
+}

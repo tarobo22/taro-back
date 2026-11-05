@@ -1,5 +1,9 @@
 # taro-back · 여운
 
+## 현재 구현 현황 - 2026-11-06
+
+기획 대비 남은 통계·달력·즐겨찾기·선택 기록 AI 요약·Android 기기 알림을 연결했다. [현재 구현 현황](docs/planning/implementation-status-20261106.md), [68개 요구사항 추적표](docs/planning/requirements-traceability-20261106.csv), [남은 결정안](docs/planning/remaining-decisions-20261106.md)을 기준으로 확인한다. RN/웹 1.3.0이며, 운영 배포·실제 GPT 품질·계정/관리/결제/스토리 정책은 구분한다.
+
 FastAPI·DDD 도메인·PostgreSQL·OpenAI 어댑터. 저장소 이름은 사용자가 지정한 철자를 유지했다.
 
 ## 실행

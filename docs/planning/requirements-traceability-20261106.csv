@@ -1,0 +1,69 @@
+﻿id,title,phase,status,screens,spec_apis,evidence,note
+FR-ID-01,게스트 연결,P0,구현·로컬 검증,"S00,S01","createSession,refreshSession,getBootstrap",api/application/identity.py; api/tests/integration/test_p0_app_flow.py,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-ID-02,시간대·언어,P0,구현·로컬 검증,"S00,S17","updatePreferences,getMe",api/application/identity.py; api/tests/integration/test_p0_app_flow.py,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-ID-03,세션 연속성,P0,구현·로컬 검증,"S00,S01","refreshSession,getBootstrap",api/application/identity.py; api/tests/integration/test_p0_app_flow.py,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-01,오늘의 한 장,P0,구현·로컬 검증,"S02,S07","createReading,getReading",api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-02,고민 주제·질문,P0,구현·로컬 검증,S03,createReading,api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-03,외부 78장 덱,P0,후보 구현,"S04,S20","listDecks,getDeck,listCards",api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,78장 매핑·출처·해시 준비. 최종 외부 덱 그림체와 발행 승인은 남음.
+FR-TAR-04,선택 전 비공개 슬롯,P0,구현·로컬 검증,S05,"createReading,selectReading",api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-05,세 장 선택·순서,P0,구현·로컬 검증,"S05,S07",selectReading,api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-06,다시 섞기,P0,구현·로컬 검증,S05,shuffleReading,api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-07,리딩 위치 정의,P0,구현·로컬 검증,"S05,S07","selectReading,generateInterpretation",api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-08,기본 해석,P0,구현·로컬 검증,S07,getBasicReading,api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-09,GPT 타로 해석,P0,연동·모의 검증,"S06,S07","generateInterpretation,getJob",api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,실제 OpenAI 호출·한국어 품질·비용은 검증하지 않음.
+FR-TAR-10,카드 상세,P0,구현·로컬 검증,"S08,S20","getCard,getDeck",api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-11,리딩 기록·삭제,P0,구현·로컬 검증,"S13,S07","listReadings,deleteReading",api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-TAR-12,정역방향 정책,P1,구현·로컬 검증,"S03,S07",getReading,api/application/reading_v2.py; api/tests/integration; src/screens/P0Tarot.tsx,현재 upright 고정으로 초기 요구 충족. 역방향·추가 스프레드는 미승인 확장.
+FR-CON-01,대화 시작,P0,구현·로컬 검증,S09,"createConversation,closeConversation",api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-CON-02,좌 아니요·우 예,P0,구현·로컬 검증,S09,createTurn,api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-CON-03,선택 질문 3개,P0,구현·로컬 검증,"S09,S10",createTurn,api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-CON-04,자유 텍스트 대화,P0,구현·로컬 검증,S09,createTurn,api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-CON-05,공감·조언·행동,P0,연동·모의 검증,S10,"getTurn,getJob",api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,응답 구조·조언·행동 계약 통과. 실제 모델 품질 평가는 남음.
+FR-CON-06,이어 이야기·다시 읽기,P0,구현·로컬 검증,"S09,S15","listTurns,getTurn,getConversation",api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-CON-07,말투 두 가지,P0,구현·로컬 검증,"S09,S17","updatePreferences,createConversation",api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-CON-08,참조 문맥 범위,P0,구현·로컬 검증,"S25,S09","createTurn,listJournals",api/application/ai_jobs.py; src/screens/Talk.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-VOI-01,사용자 시작·중지,P0,코드·부분 검증,S11,,src/services/voice.native.ts; api/application/ai_jobs.py; tests/e2e/p0-integration.test.mjs,Android 시작·중지·텍스트 대체 구현. 실제 마이크/한국어 인식 실기기 검증은 별도.
+FR-VOI-02,기기/클라우드 구분,P0,연동·모의 검증,"S11,S19",createTranscription,src/services/voice.native.ts; api/application/ai_jobs.py; tests/e2e/p0-integration.test.mjs,기기/클라우드 경계·검토 단계 구현. 실제 전사 모델 검증은 별도.
+FR-VOI-03,전사 검토·수정,P0,구현·로컬 검증,"S11,S09","getTranscription,deleteTranscription",src/services/voice.native.ts; api/application/ai_jobs.py; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-VOI-04,음성 크기·보관,P0,구현·로컬 검증,S11,"createTranscription,deleteTranscription",src/services/voice.native.ts; api/application/ai_jobs.py; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-01,기분과 글 작성,P0,구현·로컬 검증,S12,createJournal,api/application/journal_v2.py; src/screens/Journal.tsx; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-02,초안 보존,P0,구현·로컬 검증,"S12,S03,S09",,api/application/journal_v2.py; src/screens/Journal.tsx; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-03,조회·수정·삭제,P0,구현·로컬 검증,"S14,S12","getJournal,updateJournal,deleteJournal",api/application/journal_v2.py; src/screens/Journal.tsx; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-04,통합 기록 목록,P0,구현·로컬 검증,S13,"listJournals,listReadings,listConversations",api/application/journal_v2.py; src/screens/Journal.tsx; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-05,결과에서 기록 연결,P0,구현·로컬 검증,"S07,S10,S12",createJournal,api/application/journal_v2.py; src/screens/Journal.tsx; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-06,기분 통계·달력,P1,구현·로컬 검증,S16,getJournalSummary,api/application/journal_summary.py; src/screens/P1.tsx; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-07,GPT 기록 요약,P1,구현·로컬 검증,"S25,S26","createInsight,getInsight",api/application/journal_insights.py; api/application/ai_jobs.py; src/screens/P1.tsx; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-JOU-08,즐겨찾기,P1,구현·로컬 검증,S28,"listFavorites,addFavorite,removeFavorite",api/application/favorites.py; api/migrations/0014_p1_journal_data.sql; src/screens/P1.tsx; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-AI-01,서버를 통한 GPT 호출,P0,연동·모의 검증,S06,"generateInterpretation,createTurn",api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,키는 서버 경계에만 둠. 이 작업에서 키 등록·실제 호출 없음.
+FR-AI-02,구조화 출력·의미 검증,P0,구현·로컬 검증,"S07,S10",getJob,api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-AI-03,작업 진행 표시,P0,구현·로컬 검증,S06,"getJob,streamJob",api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-AI-04,중복 요청 방지,P0,구현·로컬 검증,"S05,S06,S09","createReading,generateInterpretation,createTurn",api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-AI-05,명시적 취소·재시도,P0,구현·로컬 검증,"S06,S24","cancelJob,retryJob",api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-AI-06,시간·비용 한도,P0,구현·정책 차이,"S06,S24","getJob,generateInterpretation",api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,원본 초안 30회와 달리 현재 정책은 사용자 20/전체 200회·UTC일. 기존 정책 유지.
+FR-AI-07,모델·프롬프트 추적,P0,구현·로컬 검증,S23,createFeedback,api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-AI-08,거절·안전 안내,P0,구현·로컬 검증,"S10,S24","getJob,getBasicReading",api/application/ai_jobs.py; api/domain/ai_jobs.py; api/tests/integration,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-PRI-01,처리 목적별 동의,P0,구현·로컬 검증,S19,"listConsents,recordConsent",api/application/data_privacy.py; src/features/p0/eraseCurrentDeviceData.ts; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-PRI-02,명시적 기록 선택,P0,구현·로컬 검증,S25,"listJournals,generateInterpretation,createTurn",api/application/data_privacy.py; src/features/p0/eraseCurrentDeviceData.ts; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-PRI-03,철회·원본 삭제 처리,P0,구현·로컬 검증,"S19,S14","recordConsent,deleteJournal",api/application/data_privacy.py; src/features/p0/eraseCurrentDeviceData.ts; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-PRI-04,내보내기·전체 삭제,P0,구현·로컬 검증,S22,"createDataRequest,getDataRequest,downloadExport",api/application/data_privacy.py; src/features/p0/eraseCurrentDeviceData.ts; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-PRI-05,소유권·로그 최소화,P0,구현·로컬 검증,"S13,S22","getReading,getJournal,getTurn",api/application/data_privacy.py; src/features/p0/eraseCurrentDeviceData.ts; tests/e2e/p1-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-DES-01,파스텔·적은 색,P0,구현·로컬 검증,"S01,S17",,src/design/tokens.ts; src/components/Character.tsx; src/components/SelectionDial.tsx; App.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-DES-02,얼굴 코드·몸 이미지,P0,구현·로컬 검증,"S09,S18",,src/design/tokens.ts; src/components/Character.tsx; src/components/SelectionDial.tsx; App.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-DES-03,7개 표정,P0,구현·로컬 검증,"S18,S10",,src/design/tokens.ts; src/components/Character.tsx; src/components/SelectionDial.tsx; App.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-DES-04,잘림 없는 프로필,P0,부분 검증,S09,,src/design/tokens.ts; src/components/Character.tsx; src/components/SelectionDial.tsx; App.tsx,프로필 이동 범위·화면 검사 있음. 전 기기 폭/큰 글자 종합 검증은 별도.
+FR-DES-05,모션·줄이기,P0,구현·로컬 검증,"S05,S09,S17",updatePreferences,src/design/tokens.ts; src/components/Character.tsx; src/components/SelectionDial.tsx; App.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-DES-06,뒤로가기·스크롤,P0,구현·로컬 검증,"S03,S05,S09,S12",,src/design/tokens.ts; src/components/Character.tsx; src/components/SelectionDial.tsx; App.tsx,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+FR-OPS-01,코드푸시,P0,preview 구현,S21,getBootstrap,src/features/updates; ota; docs/architecture/p1-reminders.md,P0 preview OTA 검증 이력 존재. P1 운영 OTA 게시·네이티브 새 버전 배포는 별도.
+FR-OPS-02,호환·복구 정책,P0,preview 구현,S21,getBootstrap,src/features/updates; ota; docs/architecture/p1-reminders.md,호환성·실패 복구 코드 및 테스트. 운영 호스팅/스토어 릴리스 미실행.
+FR-OPS-03,외부 에셋 추적,P0,후보 구현,S20,"getDeck,getCard",docs/planning/타로기획1안.pdf; api/application/reading_v2.py; src/screens/P0.tsx; docs/contracts/openapi.json,외부 원본·라이선스·SHA256 이력 보존. 후보의 발행 승인과 분리.
+FR-OPS-04,피드백,P0,구현·로컬 검증,S23,createFeedback,api/application/data_privacy.py; src/screens/P0.tsx; tests/e2e/p0-integration.test.mjs,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+NFR-01,접근성,P0,부분 검증,"S01,S09,S12",,docs/quality/p1-verification.json; docs/planning/api-traceability-20261106.csv,새 달력 날짜 48x52 터치 영역 검사. 전체 2배 글자/스크린리더 실기기 검증은 별도.
+NFR-02,응답 목표,P0,실측 미완료,"S06,S24",getJob,docs/quality/p1-verification.json; docs/planning/api-traceability-20261106.csv,API p95 500ms·GPT 첫 상태 1초는 목표. 실제 제공자/기기 FPS 결과로 제시하지 않음.
+NFR-03,오프라인·빈 상태,P0,구현·로컬 검증,"S24,S13","health,getBootstrap",docs/quality/p1-verification.json; docs/planning/api-traceability-20261106.csv,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+NFR-04,동시성·데이터 보전,P0,구현·로컬 검증,"S05,S12","selectReading,updateJournal",docs/quality/p1-verification.json; docs/planning/api-traceability-20261106.csv,구현·단위/계약 또는 모의 통합 검증. 운영 배포와 실제 제공자 품질 보증은 별도.
+NFR-05,문서 추적성,P0,현황 문서 갱신,S29,,docs/quality/p1-verification.json; docs/planning/api-traceability-20261106.csv,68개 추적표·50개 API 매핑·실DB 메타데이터 ERD 추가. 원본 초안과 현재 계약을 구분.
+P1-01,기기 알림,P1,Android 구현,S27,,src/features/reminders; android/app/src/main/java/com/yeoun/app/YeounReminderScheduler.kt; tests/p1-reminders.test.ts; tools/verify-reminder-resume.py,기본 꺼짐·시간 다이얼·OS 거부·실제 알림·끄기. 웹/iOS는 미지원 안내.
+P1-02,계정·기기 동기화,P1,정책 미정,S29,,docs/planning/remaining-decisions-20261106.md,게스트 전환·계정 공급자·복구·기기 동기화 규칙 결정 후 별도 구현.
+P1-03,운영 관리,P1,정책 미정,S29,,docs/planning/remaining-decisions-20261106.md,관리자 인증·역할·운영 권한의 결정안만 정리. 운영 관리자 화면은 미구현.
+P2-01,결제·유료 덱,P2,후속 기획,S29,,docs/planning/remaining-decisions-20261106.md,상품·결제·복원·취소·환불 정책 결정 후 설계/구현.
+P2-02,분기 스토리 게임,P2,후속 기획,S29,,docs/planning/remaining-decisions-20261106.md,스토리 노드·분기·저장·결말 콘텐츠 정의 후 별도 구현.
