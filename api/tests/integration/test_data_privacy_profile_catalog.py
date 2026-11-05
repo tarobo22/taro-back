@@ -77,7 +77,9 @@ def test_catalog_has_all_78_stable_cards_and_honest_asset_metadata(data_context)
     assert deck['status'] == 'candidate'  # Existing RWS assets have prototype_candidate review only.
     assert deck['card_count'] == 78
     assert client.get('/v2/decks/' + deck['id']).json() == deck
-    cards = client.get('/v2/cards').json()
+    first = client.get('/v2/cards', params={'limit': 50}).json()
+    second = client.get('/v2/cards', params={'limit': 50, 'cursor': first['next_cursor']}).json()
+    cards = {'items': first['items'] + second['items'], 'next_cursor': second['next_cursor']}
     assert cards['next_cursor'] is None
     assert [card['id'] for card in cards['items']] == list(range(78))
     assert len({card['code'] for card in cards['items']}) == 78
@@ -88,9 +90,12 @@ def test_catalog_has_all_78_stable_cards_and_honest_asset_metadata(data_context)
         assert card['image_asset']['source_page'].startswith('https://commons.wikimedia.org/wiki/File:')
         assert card['image_asset']['license_name'] == 'Public domain'
         assert client.get('/v2/cards/' + str(card['id'])).json() == card
-    assert client.get('/v2/cards?arcana=major').json()['items'] == cards['items'][:22]
+    assert client.get('/v2/cards?arcana=major&limit=50').json()['items'] == cards['items'][:22]
     assert len(client.get('/v2/cards?suit=cups').json()['items']) == 14
-    assert client.get('/v2/cards?deck_id=' + deck['id']).json() == cards
+    version_page = client.get('/v2/cards', params={'deck_version_id': deck['id'], 'limit': 50}).json()
+    version_last = client.get('/v2/cards', params={'deck_version_id': deck['id'], 'limit': 50,
+                                                'cursor': version_page['next_cursor']}).json()
+    assert version_page['items'] + version_last['items'] == cards['items']
     assert client.get('/v2/cards?deck_id=' + str(uuid4())).status_code == 404
     assert client.get('/v2/cards/78').status_code == 404
     assert client.get('/v2/cards/-1').status_code == 404

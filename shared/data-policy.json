@@ -3,6 +3,8 @@
   "locales": ["ko-KR", "en-US"],
   "defaultLocale": "ko-KR",
   "defaultTimezone": "Asia/Seoul",
+  "catalogPageDefault": 20,
+  "catalogPageMax": 50,
   "feedbackCommentMaxChars": 500,
   "feedbackReasonMaxChars": 100,
   "feedbackDailyLimit": 30,

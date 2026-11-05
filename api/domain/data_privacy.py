@@ -44,6 +44,8 @@ class DataPolicy:
     export_file_hours: int
     receipt_days: int
     erase_confirmation: str
+    catalog_page_default: int = 20
+    catalog_page_max: int = 50
 
     @classmethod
     def from_mapping(cls, values):
@@ -51,7 +53,8 @@ class DataPolicy:
                    values['defaultTimezone'], values['feedbackCommentMaxChars'],
                    values['feedbackReasonMaxChars'], values['feedbackDailyLimit'],
                    values['dataRequestDailyLimit'], values['exportFileHours'],
-                   values['receiptDays'], values['eraseConfirmation'])
+                   values['receiptDays'], values['eraseConfirmation'],
+                   values['catalogPageDefault'], values['catalogPageMax'])
 
     def preference_patch(self, values):
         allowed = {'tone', 'reduced_motion', 'voice_mode', 'timezone', 'locale'}
