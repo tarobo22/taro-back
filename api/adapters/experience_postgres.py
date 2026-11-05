@@ -53,10 +53,36 @@ class PostgresExperienceRepository:
         ) SELECT question,advice FROM chain ORDER BY depth DESC''', (parent, owner, owner)).fetchall()
         return [{'question': row['question'], 'advice': row['advice'].get('advice', '')} for row in rows]
 
-    def ai_usage(self, owner):
-        # Serializes all AI requests by owner, including requests with different idempotency keys.
-        self.connection.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))', (f'{owner}:ai-quota',))
-        return self.connection.execute("SELECT count(*) AS n FROM counsel_sessions WHERE session_id=%s AND created_at>=(now() AT TIME ZONE 'UTC')::date AND advice->>'source'='openai'", (owner,)).fetchone()['n']
+    def ai_job(self, owner, request_id):
+        return self.connection.execute(
+            'SELECT fingerprint,lease_id,state,lease_until>clock_timestamp() AS active FROM experience_ai_jobs WHERE session_id=%s AND request_id=%s',
+            (owner, request_id)).fetchone()
+
+    def reserve_ai(self, owner, request_id, fingerprint, lease_id, owner_limit, global_limit, lease_seconds):
+        from api.application.experience import UsageLimitReached
+        # Only reservation accounting is serialized; provider calls never hold this lock.
+        self.connection.execute('SELECT pg_advisory_xact_lock(hashtextextended(%s,0))', ('ai:global-daily-reservations',))
+        usage = self.connection.execute("""
+            SELECT count(*) AS total,count(*) FILTER(WHERE session_id=%s) AS owned
+            FROM ai_usage_attempts
+            WHERE created_at >= date_trunc('day',now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC'
+        """, (owner,)).fetchone()
+        if usage['owned'] >= owner_limit:
+            raise UsageLimitReached('오늘 AI 대화를 충분히 나누었어요. 기본 가이드로 계속할 수 있어요.')
+        if usage['total'] >= global_limit:
+            raise UsageLimitReached('지금은 AI 대화가 잠시 쉬고 있어요. 기본 가이드로 계속할 수 있어요.')
+        self.connection.execute("""
+            INSERT INTO experience_ai_jobs(session_id,request_id,fingerprint,lease_id,lease_until,state)
+            VALUES(%s,%s,%s,%s,clock_timestamp()+(%s * interval '1 second'),'pending')
+            ON CONFLICT(session_id,request_id) DO UPDATE SET
+                lease_id=excluded.lease_id,lease_until=excluded.lease_until,state='pending'
+        """, (owner, request_id, fingerprint, lease_id, lease_seconds))
+        self.connection.execute('INSERT INTO ai_usage_attempts(id,session_id,request_id) VALUES(%s,%s,%s)',
+                                (lease_id, owner, request_id))
+
+    def finish_ai(self, owner, request_id, lease_id, state):
+        self.connection.execute('UPDATE experience_ai_jobs SET state=%s WHERE session_id=%s AND request_id=%s AND lease_id=%s',
+                                (state, owner, request_id, lease_id))
 
 
 class PostgresExperienceUnitOfWork:

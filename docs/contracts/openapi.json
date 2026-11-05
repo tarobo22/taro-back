@@ -538,6 +538,15 @@
               }
             }
           },
+          "409": {
+            "description": "Request is in progress or request identity conflicts"
+          },
+          "429": {
+            "description": "Owner or application daily attempt limit reached"
+          },
+          "503": {
+            "description": "AI provider unavailable"
+          },
           "422": {
             "description": "Validation Error",
             "content": {

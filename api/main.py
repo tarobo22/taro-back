@@ -51,7 +51,8 @@ def create_app(settings=None):
     ai_available = bool(settings.openai_model and os.environ.get('OPENAI_API_KEY'))
     ai = OpenAIGuidance(ai_client, settings.openai_model, lambda: os.environ.get('OPENAI_API_KEY')) if ai_available else None
     experiences = ExperienceUseCases(lambda: PostgresExperienceUnitOfWork(pool), experience_policy,
-                                     LocalGuidance(), ai, experience_rules['aiDailyLimit'])
+                                     LocalGuidance(), ai, experience_rules['aiDailyLimit'],
+                                     experience_rules['aiGlobalDailyLimit'], experience_rules['aiLeaseSeconds'])
     configuration = {**experience_rules, 'topics': content['topics'], 'cards': content['cards'],
                      'questions': content['talkQuestions'], 'aiAvailable': ai_available}
 

@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, StrictBool, StrictInt
 
-from api.application.experience import GuidanceUnavailable, RequestConflict
+from api.application.experience import GuidanceUnavailable, OperationInProgress, RequestConflict, UsageLimitReached
 from api.domain.experience import ExperienceRuleViolation
 
 
@@ -92,6 +92,10 @@ class CounselResponse(BaseModel):
 def call(operation):
     try:
         return operation()
+    except OperationInProgress as error:
+        raise HTTPException(409, str(error)) from None
+    except UsageLimitReached as error:
+        raise HTTPException(429, str(error)) from None
     except RequestConflict:
         raise HTTPException(409, '바뀐 내용은 새 요청으로 보내 주세요.') from None
     except ExperienceRuleViolation as error:
@@ -122,7 +126,11 @@ def experience_router(service, configuration, owner_dependency):
     def daily(body: DailyInput, owner: Owner):
         return call(lambda: service.daily(owner, body.day, body.topic))
 
-    @router.post('/counsel', status_code=201, response_model=CounselResponse)
+    @router.post('/counsel', status_code=201, response_model=CounselResponse, responses={
+        409: {'description': 'Request is in progress or request identity conflicts'},
+        429: {'description': 'Owner or application daily attempt limit reached'},
+        503: {'description': 'AI provider unavailable'},
+    })
     def counsel(body: CounselInput, owner: Owner):
         return call(lambda: service.counsel(owner, body.topic, body.question, body.answers, body.tone,
                      body.requestId, body.useAI, body.consent, body.parentId))
