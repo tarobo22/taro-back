@@ -2,7 +2,7 @@ from typing import Annotated, Literal
 from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Query, Response
 from pydantic import BaseModel, ConfigDict, StrictBool, model_validator
 
 from api.domain.data_privacy import (DataConflict, DataExpired, DataNotFound,
@@ -159,22 +159,26 @@ def data_privacy_router(service, owner_dependency, *, status_owner_dependency=No
         return data_call(lambda: service.update_preferences(owner, body.model_dump(exclude_unset=True)))
 
     @router.get('/decks', response_model=DeckList, operation_id='listDecks')
-    def list_decks(owner: Owner):
-        return service.list_decks()
+    def list_decks(owner: Owner, cursor: str | None = Query(None, max_length=1024),
+                    limit: int = Query(service.policy.catalog_page_default, ge=1, le=service.policy.catalog_page_max)):
+        return data_call(lambda: service.list_decks(cursor=cursor, limit=limit))
 
     @router.get('/decks/{deck_id}', response_model=Deck, operation_id='getDeck')
     def get_deck(deck_id: UUID, owner: Owner):
         return data_call(lambda: service.get_deck(deck_id))
 
     @router.get('/cards', response_model=CardList, operation_id='listCards')
-    def list_cards(owner: Owner, deck_id: UUID | None = None,
+    def list_cards(owner: Owner, deck_id: UUID | None = None, deck_version_id: UUID | None = None,
+                   cursor: str | None = Query(None, max_length=1024),
+                   limit: int = Query(service.policy.catalog_page_default, ge=1, le=service.policy.catalog_page_max),
                    arcana: Literal['major', 'minor'] | None = None,
                    suit: Literal['wands', 'cups', 'swords', 'pentacles'] | None = None):
-        return data_call(lambda: service.list_cards(deck_id=deck_id, arcana=arcana, suit=suit))
+        return data_call(lambda: service.list_cards(deck_id=deck_id, deck_version_id=deck_version_id,
+                                                  arcana=arcana, suit=suit, cursor=cursor, limit=limit))
 
     @router.get('/cards/{card_id}', response_model=Card, operation_id='getCard')
-    def get_card(card_id: int, owner: Owner):
-        return data_call(lambda: service.get_card(card_id))
+    def get_card(card_id: int, owner: Owner, deck_version_id: UUID | None = None):
+        return data_call(lambda: service.get_card(card_id, deck_version_id=deck_version_id))
 
     @router.post('/feedback', response_model=Feedback, status_code=201, operation_id='createFeedback')
     def create_feedback(body: FeedbackInput, owner: Owner, request_key: RequestKey):

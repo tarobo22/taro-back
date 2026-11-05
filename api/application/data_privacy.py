@@ -1,5 +1,6 @@
 """Owner-scoped data operations. Constructors never acquire a database connection."""
 from copy import deepcopy
+import base64
 from datetime import datetime, timedelta, timezone
 import csv
 import hashlib
@@ -51,8 +52,32 @@ class DataPrivacyUseCases:
             uow.commit()
             return result
 
-    def list_decks(self):
-        return {'items': deepcopy(self.catalog['decks']), 'next_cursor': None}
+    def _catalog_page(self, items, kind, cursor, limit, filters):
+        if limit is None:
+            return {'items': deepcopy(items), 'next_cursor': None}
+        if type(limit) is not int or not 1 <= limit <= self.policy.catalog_page_max:
+            raise InvalidDataInput('invalid_page_limit')
+        binding = {'kind': kind, 'version': self.catalog['source_manifest_sha256'], 'filters': filters}
+        start = 0
+        if cursor is not None:
+            try:
+                if not isinstance(cursor, str) or len(cursor) > 1024:
+                    raise ValueError
+                value = json.loads(base64.b64decode(cursor + '=' * (-len(cursor) % 4), altchars=b'-_', validate=True))
+                start = value.pop('offset')
+                if value != binding or type(start) is not int or not 0 <= start < len(items):
+                    raise ValueError
+            except (ValueError, TypeError, KeyError, AttributeError):
+                raise InvalidDataInput('invalid_catalog_cursor') from None
+        end = start + limit
+        next_cursor = None
+        if end < len(items):
+            next_cursor = base64.urlsafe_b64encode(json.dumps({**binding, 'offset': end},
+                sort_keys=True, separators=(',', ':')).encode()).decode().rstrip('=')
+        return {'items': deepcopy(items[start:end]), 'next_cursor': next_cursor}
+
+    def list_decks(self, *, cursor=None, limit=None):
+        return self._catalog_page(self.catalog['decks'], 'decks', cursor, limit, {})
 
     def get_deck(self, deck_id):
         for deck in self.catalog['decks']:
@@ -60,16 +85,23 @@ class DataPrivacyUseCases:
                 return deepcopy(deck)
         raise DataNotFound('deck_not_found')
 
-    def list_cards(self, *, deck_id=None, arcana=None, suit=None):
+    def list_cards(self, *, deck_id=None, deck_version_id=None, arcana=None, suit=None, cursor=None, limit=None):
+        if deck_id is not None and deck_version_id is not None and str(deck_id) != str(deck_version_id):
+            raise InvalidDataInput('conflicting_deck_version')
+        deck_id = deck_version_id or deck_id
         if deck_id is not None:
             self.get_deck(deck_id)
         if arcana not in (None, 'major', 'minor') or suit not in (None, 'wands', 'cups', 'swords', 'pentacles'):
             raise InvalidDataInput('invalid_card_filter')
-        return {'items': [deepcopy(card) for card in self.catalog['cards']
+        cards = [card for card in self.catalog['cards']
                           if (arcana is None or card['arcana'] == arcana)
-                          and (suit is None or card['suit'] == suit)], 'next_cursor': None}
+                          and (suit is None or card['suit'] == suit)]
+        return self._catalog_page(cards, 'cards', cursor, limit,
+                                  {'deck': str(deck_id) if deck_id else None, 'arcana': arcana, 'suit': suit})
 
-    def get_card(self, card_id):
+    def get_card(self, card_id, *, deck_version_id=None):
+        if deck_version_id is not None:
+            self.get_deck(deck_version_id)
         for card in self.catalog['cards']:
             if card['id'] == card_id:
                 return deepcopy(card)
