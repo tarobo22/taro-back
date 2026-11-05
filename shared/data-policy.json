@@ -1,0 +1,13 @@
+{
+  "version": "2026-11-05.p0",
+  "locales": ["ko-KR", "en-US"],
+  "defaultLocale": "ko-KR",
+  "defaultTimezone": "Asia/Seoul",
+  "feedbackCommentMaxChars": 500,
+  "feedbackReasonMaxChars": 100,
+  "feedbackDailyLimit": 30,
+  "dataRequestDailyLimit": 5,
+  "exportFileHours": 24,
+  "receiptDays": 30,
+  "eraseConfirmation": "내 기록 모두 삭제"
+}
