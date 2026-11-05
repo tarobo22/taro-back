@@ -1,0 +1,1509 @@
+{
+  "content_version": "yeoun-basic-20261105",
+  "source_manifest_sha256": "ef03c0b150d33feac8f4d336b6dbaab5dbed16a67c400ab10c57fa7a4a4eb818",
+  "asset_review": "prototype_candidate; publication approval has not been recorded",
+  "decks": [
+    {
+      "id": "fa221057-0567-5e10-8054-26661dac2e0a",
+      "code": "rws1909-roses-lilies",
+      "version": "rws1909-20261105-ef03c0b150d3",
+      "name": "Rider-Waite 1909 Roses & Lilies",
+      "card_count": 78,
+      "status": "candidate",
+      "back_asset": {
+        "id": "34899b47-1f63-5c10-bd95-c0ca8fd852a4",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Waite%E2%80%93Smith_Tarot_Roses_and_Lilies_cropped.jpg/500px-Waite%E2%80%93Smith_Tarot_Roses_and_Lilies_cropped.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "156607a1dd983470b6d4cd81370de71cc2924e771f4b299f3ea06af55fb00414",
+        "width": 500,
+        "height": 864,
+        "source_page": "https://commons.wikimedia.org/wiki/File:Waite%E2%80%93Smith_Tarot_Roses_and_Lilies_cropped.jpg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": 0,
+      "code": "major_00",
+      "name_ko": "바보",
+      "name_en": "The Fool",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "정답을 모두 알아야 시작할 수 있는 건 아니에요. 오늘 궁금한 일 하나를 작게 시도해 보세요.",
+      "image_asset": {
+        "id": "a1292461-24de-59de-870e-d403105ceb6f",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/RWS1909_-_00_Fool.jpeg/500px-RWS1909_-_00_Fool.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "8059b06b49ff69621a0f5eae29bde427597a60c9f0c179ff740fdcddd7847611",
+        "width": 500,
+        "height": 866,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_00_Fool.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 1,
+      "code": "major_01",
+      "name_ko": "마법사",
+      "name_en": "The Magician",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "이미 가진 능력에서 시작해도 충분해요. 지금 사용할 수 있는 내 자원 세 가지를 적어 보세요.",
+      "image_asset": {
+        "id": "d062321a-49c5-5dd7-8bcd-676804abbeec",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/RWS1909_-_01_Magician.jpeg/500px-RWS1909_-_01_Magician.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "9f1cc2e3f4c5c607b4e125c79cde7f858248c3bcfcb94bae0d92de3bde6ac600",
+        "width": 500,
+        "height": 842,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_01_Magician.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 2,
+      "code": "major_02",
+      "name_ko": "여사제",
+      "name_en": "The High Priestess",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "조용히 마음의 소리에 귀를 기울여 보세요. 잠시 화면을 내려놓고 원하는 것을 한 문장으로 적어 보세요.",
+      "image_asset": {
+        "id": "ad7261f0-821a-542f-b5c5-6e020183f257",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/RWS1909_-_02_High_Priestess.jpeg/500px-RWS1909_-_02_High_Priestess.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "88c89465e51c437f217fcf991bfb5288abc189568aec7be65daa18c086950c98",
+        "width": 500,
+        "height": 886,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_02_High_Priestess.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 3,
+      "code": "major_03",
+      "name_ko": "여황제",
+      "name_en": "The Empress",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "나를 돌보는 시간도 하루의 중요한 일이에요. 좋아하는 음식이나 따뜻한 차로 나를 챙겨 주세요.",
+      "image_asset": {
+        "id": "04062ef8-dd36-54bd-857d-76b4cacf1df7",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/RWS1909_-_03_Empress.jpeg/500px-RWS1909_-_03_Empress.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ad54075f807f33477b6f4d0a624f13113610ca584acc694a8597461133450a75",
+        "width": 500,
+        "height": 846,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_03_Empress.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 4,
+      "code": "major_04",
+      "name_ko": "황제",
+      "name_en": "The Emperor",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "나에게 편안한 기준을 정해도 괜찮아요. 지킬 수 있는 오늘의 경계 한 가지를 정해 보세요.",
+      "image_asset": {
+        "id": "b3b1102c-f631-5fc2-afd5-521dca5b4d43",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/RWS1909_-_04_Emperor.jpeg/500px-RWS1909_-_04_Emperor.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "a281f240bda80bd9889629528dccd9b149fd957a989da662267f776edd3d9057",
+        "width": 500,
+        "height": 868,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_04_Emperor.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 5,
+      "code": "major_05",
+      "name_ko": "교황",
+      "name_en": "The Hierophant",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "혼자 모든 답을 찾지 않아도 괜찮아요. 믿을 만한 사람에게 구체적인 질문 하나를 건네 보세요.",
+      "image_asset": {
+        "id": "f46e74a5-ce11-5cd3-ad7e-857e075a3514",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/RWS1909_-_05_Hierophant.jpeg/500px-RWS1909_-_05_Hierophant.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "53c8a4efd882d9f7a0720dcde69d7294fb51f311fd234333992afb22a1a5be3d",
+        "width": 500,
+        "height": 851,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_05_Hierophant.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 6,
+      "code": "major_06",
+      "name_ko": "연인",
+      "name_en": "The Lovers",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "관계 안에서도 나의 마음은 중요해요. 상대의 뜻을 단정하기보다 내 바람을 차분히 말해 보세요.",
+      "image_asset": {
+        "id": "1af8e535-3aef-522e-afdc-c17bc01cf4e9",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/RWS1909_-_06_Lovers.jpeg/500px-RWS1909_-_06_Lovers.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "3ddef75ea580090ad0d18ec0494905be63209ee9251e02404df85d0c3c5a0296",
+        "width": 500,
+        "height": 878,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_06_Lovers.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 7,
+      "code": "major_07",
+      "name_ko": "전차",
+      "name_en": "The Chariot",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "작은 방향이 다음 움직임을 도와줄 거예요. 오늘 할 수 있는 가장 작은 일을 하나만 골라 보세요.",
+      "image_asset": {
+        "id": "089c18f9-13ab-5408-afd1-8d5cb5bf39af",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/RWS1909_-_07_Chariot.jpeg/500px-RWS1909_-_07_Chariot.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ef1ba8322cfc49915aa0bd3f031b4bc29a6e1c25cfe720097a970e2e82bf1261",
+        "width": 500,
+        "height": 860,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_07_Chariot.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 8,
+      "code": "major_08",
+      "name_ko": "힘",
+      "name_en": "Strength",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "나를 몰아붙이지 않는 용기도 있어요. 스스로에게 격려 한 문장을 건네 주세요.",
+      "image_asset": {
+        "id": "c7da7f98-bb63-55bb-987f-71550b03e745",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/RWS1909_-_08_Strength.jpeg/500px-RWS1909_-_08_Strength.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "6ec9f44703ecead7a343589d747ac0ff4b89ab24d4bc76f87bfb074d0b1357ef",
+        "width": 500,
+        "height": 865,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_08_Strength.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 9,
+      "code": "major_09",
+      "name_ko": "은둔자",
+      "name_en": "The Hermit",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "잠시 혼자 생각할 시간을 가져도 괜찮아요. 10분 동안 내 마음에 필요한 것을 정리해 보세요.",
+      "image_asset": {
+        "id": "93aa97c3-6ae8-5b2f-92d4-c1ca1fd99011",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/RWS1909_-_09_Hermit.jpeg/500px-RWS1909_-_09_Hermit.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "4eaf84cc123c039253aa677bd523c62e2246f88508435ff578fa4b1c20f8d781",
+        "width": 500,
+        "height": 846,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_09_Hermit.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 10,
+      "code": "major_10",
+      "name_ko": "운명의 수레바퀴",
+      "name_en": "Wheel of Fortune",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "바뀌는 상황 속에서도 선택할 수 있는 부분이 있어요. 바꿀 수 있는 것과 기다려야 할 것을 나눠 적어 보세요.",
+      "image_asset": {
+        "id": "dd25a5ac-049f-5b7b-b8c2-3101479b63c6",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/RWS1909_-_10_Wheel_of_Fortune.jpeg/500px-RWS1909_-_10_Wheel_of_Fortune.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "047c6f41f9506485f70b07df6468a0f4e161350a6baf8926db5d850b6cec9cf2",
+        "width": 500,
+        "height": 883,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_10_Wheel_of_Fortune.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 11,
+      "code": "major_11",
+      "name_ko": "정의",
+      "name_en": "Justice",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "내 마음과 사실을 함께 살펴보는 시간이에요. 확인한 사실과 나의 추측을 따로 적어 보세요.",
+      "image_asset": {
+        "id": "88e54343-ad77-5243-8c44-58624e12338c",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/RWS1909_-_11_Justice.jpeg/500px-RWS1909_-_11_Justice.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "fb56aac767aa074607d679015eaea3c10f7460033085e83972c452ca21943083",
+        "width": 500,
+        "height": 870,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_11_Justice.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 12,
+      "code": "major_12",
+      "name_ko": "매달린 사람",
+      "name_en": "The Hanged Man",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "잠시 멈추면 다른 관점이 보일 수 있어요. 같은 상황을 다른 사람의 입장에서 한 번 적어 보세요.",
+      "image_asset": {
+        "id": "7053bb77-5b38-50d3-8428-4da10956a6e8",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/RWS1909_-_12_Hanged_Man.jpeg/500px-RWS1909_-_12_Hanged_Man.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ab2ee29a6158cc55c084492d33eed0959d1d3d2f629ce06577f00105b20506a0",
+        "width": 500,
+        "height": 876,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_12_Hanged_Man.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 13,
+      "code": "major_13",
+      "name_ko": "죽음",
+      "name_en": "Death",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "어떤 장면의 마무리가 새로운 시작을 도울 수 있어요. 더는 나에게 맞지 않는 습관 하나를 살펴보세요.",
+      "image_asset": {
+        "id": "622005cd-93ab-5678-90fe-644eba8d1928",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/RWS1909_-_13_Death.jpeg/500px-RWS1909_-_13_Death.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "af8df6be854aa6944056a104bee5d5a1223faa6a523dc2ccd9a6d4e5b815a941",
+        "width": 500,
+        "height": 857,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_13_Death.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 14,
+      "code": "major_14",
+      "name_ko": "절제",
+      "name_en": "Temperance",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "오늘은 한쪽으로 기울지 않는 속도를 찾아보세요. 일과 휴식 사이에 짧은 쉼을 넣어 보세요.",
+      "image_asset": {
+        "id": "cdb19559-321a-54b2-85e4-f9938de0db3a",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/RWS1909_-_14_Temperance.jpeg/500px-RWS1909_-_14_Temperance.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "38c5741f5fe8121a145e0329a972511a96295018b175afdfe3a1e1d2a5647a05",
+        "width": 500,
+        "height": 867,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_14_Temperance.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 15,
+      "code": "major_15",
+      "name_ko": "악마",
+      "name_en": "The Devil",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "익숙한 패턴을 알아차리는 것부터 시작할 수 있어요. 반복되는 행동 하나와 그때의 마음을 함께 적어 보세요.",
+      "image_asset": {
+        "id": "9301f15d-f0a2-5e03-a681-a496f12485d4",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/RWS1909_-_15_Devil.jpeg/500px-RWS1909_-_15_Devil.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "5b85c0f44eaae32e6ef3078f077b486f59fb05e841f0fdabe42f0e668ec7116d",
+        "width": 500,
+        "height": 856,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_15_Devil.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 16,
+      "code": "major_16",
+      "name_ko": "탑",
+      "name_en": "The Tower",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "예상과 달라진 순간에도 다시 정리할 수 있어요. 지금 나를 지지해 줄 사람이나 공간을 하나 떠올려 보세요.",
+      "image_asset": {
+        "id": "558e9e94-69fe-5315-a3b3-428738c2986f",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/RWS1909_-_16_Tower.jpeg/500px-RWS1909_-_16_Tower.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "9d6942a4160df629dd79c56ec064745ed55578bdf90ab589234a3b2787ba1a22",
+        "width": 500,
+        "height": 875,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_16_Tower.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 17,
+      "code": "major_17",
+      "name_ko": "별",
+      "name_en": "The Star",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "멀리 있는 답보다 오늘의 작은 희망을 만나 보세요. 오늘 기대하는 작은 일 하나를 남겨 보세요.",
+      "image_asset": {
+        "id": "476c5d04-4513-5bc5-afb1-722e3f34ea51",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/RWS1909_-_17_Star.jpeg/500px-RWS1909_-_17_Star.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "803c24006444c662575368251da4cfde10328264f9722ab619c0e93882771c41",
+        "width": 500,
+        "height": 847,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_17_Star.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 18,
+      "code": "major_18",
+      "name_ko": "달",
+      "name_en": "The Moon",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "아직 모르는 부분은 서둘러 단정하지 않아도 돼요. 걱정 속에서 실제로 확인할 수 있는 것 하나를 찾아보세요.",
+      "image_asset": {
+        "id": "032ac748-6640-5847-8c5b-56f9d125da84",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/RWS1909_-_18_Moon.jpeg/500px-RWS1909_-_18_Moon.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "6c3b98970076872fede42d96b0579483093f7fa822e5436edcfdd78fb9deaa6a",
+        "width": 500,
+        "height": 885,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_18_Moon.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 19,
+      "code": "major_19",
+      "name_ko": "태양",
+      "name_en": "The Sun",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "기분 좋은 순간을 충분히 누려도 괜찮아요. 오늘 좋았던 순간을 사진이나 한 줄로 남겨 보세요.",
+      "image_asset": {
+        "id": "65390e78-c517-5b39-9cac-0c4dc7f374e9",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/RWS1909_-_19_Sun.jpeg/500px-RWS1909_-_19_Sun.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "eb5be1fd84477da414b1c2d2c1e237cf11403acf30cbd12c5c853bf87b5255e5",
+        "width": 500,
+        "height": 860,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_19_Sun.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 20,
+      "code": "major_20",
+      "name_ko": "심판",
+      "name_en": "Judgement",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "지금의 나는 이전과 다른 선택을 할 수 있어요. 다시 해보고 싶은 일을 작은 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "a7bbdf30-6453-5d73-9e78-9de6d6698f2f",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/RWS1909_-_20_Judgement.jpeg/500px-RWS1909_-_20_Judgement.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "1c7aef0d032fe236084ee2cce585ace08bf32966f20c7318574766e56cc956ff",
+        "width": 500,
+        "height": 854,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_20_Judgement.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 21,
+      "code": "major_21",
+      "name_ko": "세계",
+      "name_en": "The World",
+      "arcana": "major",
+      "suit": null,
+      "basic_meaning": "여기까지 온 나를 인정해 주세요. 오늘 끝낸 일 하나를 기록하고 스스로를 응원해 주세요.",
+      "image_asset": {
+        "id": "aa928eb6-e12d-5929-b057-70707060b3f2",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/RWS1909_-_21_World.jpeg/500px-RWS1909_-_21_World.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "e1a0fd0a7ac90dd25fb5b9527efe0ac470be77553cf92ac2d5999c00020da505",
+        "width": 500,
+        "height": 851,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_21_World.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 22,
+      "code": "wands_01",
+      "name_ko": "완드 에이스",
+      "name_en": "Ace of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 시작입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "ab77a0ec-712d-5f1c-8106-ad8ecf4ab61d",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/RWS1909_-_Wands_01.jpeg/500px-RWS1909_-_Wands_01.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "b9d81ea24e4830872d02b5ee0a64188ced949353b3e481d451bb1b109298230d",
+        "width": 500,
+        "height": 888,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_01.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 23,
+      "code": "wands_02",
+      "name_ko": "완드 2",
+      "name_en": "Two of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 균형입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "b0f16246-1787-5900-b239-7baca826ef06",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/RWS1909_-_Wands_02.jpeg/500px-RWS1909_-_Wands_02.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "c4b506ef13d5328448d15e18f981f93a8f95c79dd39254cc01a713ce7c360dc6",
+        "width": 500,
+        "height": 850,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_02.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 24,
+      "code": "wands_03",
+      "name_ko": "완드 3",
+      "name_en": "Three of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 함께하기입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "b8677085-795f-5984-b5a3-398de9cf3af4",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/RWS1909_-_Wands_03.jpeg/500px-RWS1909_-_Wands_03.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "d72f26b769c7b0ffd68f151cea55aca95f0dc54bec0ea4c4f93e6a72e0bdff13",
+        "width": 500,
+        "height": 866,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_03.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 25,
+      "code": "wands_04",
+      "name_ko": "완드 4",
+      "name_en": "Four of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 쉼입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "6ca61cd9-e868-560a-b81c-65d0be682990",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/RWS1909_-_Wands_04.jpeg/500px-RWS1909_-_Wands_04.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "f48bd4c359c7e9826427f2d61ae15710d111c72f1a1b23de11f37fa384485025",
+        "width": 500,
+        "height": 854,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_04.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 26,
+      "code": "wands_05",
+      "name_ko": "완드 5",
+      "name_en": "Five of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 다시 살피기입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "e752fbac-e1c3-516f-82ed-25fc1f2c8dd0",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/RWS1909_-_Wands_05.jpeg/500px-RWS1909_-_Wands_05.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "5ab77d4bea1ec1c65c37fe42a1f9f9a7f838628d41d2a8c663aeeb56daa743bf",
+        "width": 500,
+        "height": 882,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_05.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 27,
+      "code": "wands_06",
+      "name_ko": "완드 6",
+      "name_en": "Six of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 나눔입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "fb97e720-4a02-5d50-9e51-c04b7f9f5c04",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/RWS1909_-_Wands_06.jpeg/500px-RWS1909_-_Wands_06.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "15a18e0f58ee9bba9e4c33c8d760faf872290acf1ca81a5f4a11af77ae7349fe",
+        "width": 500,
+        "height": 857,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_06.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 28,
+      "code": "wands_07",
+      "name_ko": "완드 7",
+      "name_en": "Seven of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 점검입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "d2eece3d-b1cc-5c11-b225-0b8e7bf66c4c",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/RWS1909_-_Wands_07.jpeg/500px-RWS1909_-_Wands_07.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "db8169a2724c021df78dbec34f56b6921c630a6393f831c4151859bde188d0e2",
+        "width": 500,
+        "height": 868,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_07.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 29,
+      "code": "wands_08",
+      "name_ko": "완드 8",
+      "name_en": "Eight of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 집중입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "d501d31f-4571-548a-8b98-86fed882a981",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/RWS1909_-_Wands_08.jpeg/500px-RWS1909_-_Wands_08.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "e222780943460fd68d5632f17073dec897116b766302a8c38bf1b89bc299f9b3",
+        "width": 500,
+        "height": 848,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_08.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 30,
+      "code": "wands_09",
+      "name_ko": "완드 9",
+      "name_en": "Nine of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 돌아보기입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "31228d81-d34f-5137-a4a2-8466b1f9d971",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/RWS1909_-_Wands_09.jpeg/500px-RWS1909_-_Wands_09.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "775ce79be4dca942931460730937e5be76f956f6804e4dff1521d81ebaaf7ea2",
+        "width": 500,
+        "height": 875,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_09.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 31,
+      "code": "wands_10",
+      "name_ko": "완드 10",
+      "name_en": "Ten of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 마무리입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "9831b4f4-b039-5cee-8d3b-39e2ffae07d9",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/RWS1909_-_Wands_10.jpeg/500px-RWS1909_-_Wands_10.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "d7b7870dd8ecf84afbf1ed006195083e57ad6f0ea20d3f0dba3dad8db861de03",
+        "width": 500,
+        "height": 858,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_10.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 32,
+      "code": "wands_11",
+      "name_ko": "완드 페이지",
+      "name_en": "Page of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 호기심입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "49ccd0b7-3144-5821-964b-b43cf78adff6",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/RWS1909_-_Wands_11.jpeg/500px-RWS1909_-_Wands_11.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "632046c01c15ed18757cfed771dae367c0017f26ecd9402e4cdba290c5513b4c",
+        "width": 500,
+        "height": 868,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_11.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 33,
+      "code": "wands_12",
+      "name_ko": "완드 나이트",
+      "name_en": "Knight of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 한 걸음입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "cf98ccc9-ed46-508b-ba61-ac5b6d62efb8",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/RWS1909_-_Wands_12.jpeg/500px-RWS1909_-_Wands_12.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "846c59d66fd35e841c20c54093f0a2879e1ba5f962e7ab1da95831a17b6858f5",
+        "width": 500,
+        "height": 849,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_12.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 34,
+      "code": "wands_13",
+      "name_ko": "완드 퀸",
+      "name_en": "Queen of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 돌봄입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "a1f98b63-fc8a-56a7-9698-9e935a51be13",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/RWS1909_-_Wands_13.jpeg/500px-RWS1909_-_Wands_13.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "7bc0d0beeca242f1405143046cb53163967edee06eb832b91d8f0d5fc25e6172",
+        "width": 500,
+        "height": 880,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_13.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 35,
+      "code": "wands_14",
+      "name_ko": "완드 킹",
+      "name_en": "King of Wands",
+      "arcana": "minor",
+      "suit": "wands",
+      "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 나의 기준입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+      "image_asset": {
+        "id": "7c48038a-af67-55a7-af18-6f9822df316a",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/RWS1909_-_Wands_14.jpeg/500px-RWS1909_-_Wands_14.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "2cb908947b075d1dd39e2a89158c98befeacd6f171a92f1c89a5531dda63fd36",
+        "width": 500,
+        "height": 847,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_14.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 36,
+      "code": "cups_01",
+      "name_ko": "컵 에이스",
+      "name_en": "Ace of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 시작입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "1cb7bd54-6177-5514-a6f7-b399bed3df99",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/RWS1909_-_Cups_01.jpeg/500px-RWS1909_-_Cups_01.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "c8b012bb6ddbf3990afceffe945a204d7b9c65cb592196be6ed4ba44aac0a154",
+        "width": 500,
+        "height": 869,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_01.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 37,
+      "code": "cups_02",
+      "name_ko": "컵 2",
+      "name_en": "Two of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 균형입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "59a44fe0-88d8-5488-aee4-916bab3f6402",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/RWS1909_-_Cups_02.jpeg/500px-RWS1909_-_Cups_02.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ae908d379741e0c975dbe455aa1c35b7423000eb0184e18b1f94d451ec25538c",
+        "width": 500,
+        "height": 848,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_02.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 38,
+      "code": "cups_03",
+      "name_ko": "컵 3",
+      "name_en": "Three of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 함께하기입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "549b9cdd-ed09-58b9-af77-f1093ff53ba5",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/RWS1909_-_Cups_03.jpeg/500px-RWS1909_-_Cups_03.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "26bbf6083a6db0c248f08d00ff46f16a42149fed810fe118495889ca17bf7b37",
+        "width": 500,
+        "height": 885,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_03.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 39,
+      "code": "cups_04",
+      "name_ko": "컵 4",
+      "name_en": "Four of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 쉼입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "c3650058-c731-532d-a9f4-e88c8538300f",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/RWS1909_-_Cups_04.jpeg/500px-RWS1909_-_Cups_04.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "94cad0ee83008cfadcc93f32a52a75c52700fc6cfc46c2603d9d1c377dc92654",
+        "width": 500,
+        "height": 854,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_04.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 40,
+      "code": "cups_05",
+      "name_ko": "컵 5",
+      "name_en": "Five of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 다시 살피기입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "58262914-eaf7-5e7a-a8cf-53ffa97244fe",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/RWS1909_-_Cups_05.jpeg/500px-RWS1909_-_Cups_05.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "8dbd692e9b85a7d11c66f45c4f0e86a7ce2370e2eb5af95088eab61f5a4ddfa4",
+        "width": 500,
+        "height": 874,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_05.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 41,
+      "code": "cups_06",
+      "name_ko": "컵 6",
+      "name_en": "Six of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 나눔입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "1c8b7ae3-947d-5184-8f21-ce45e5ad0e95",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/RWS1909_-_Cups_06.jpeg/500px-RWS1909_-_Cups_06.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "2ea015628535021c3110c1ba2443682ad3d8c182c08cc54abf27803fd7b2bbad",
+        "width": 500,
+        "height": 854,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_06.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 42,
+      "code": "cups_07",
+      "name_ko": "컵 7",
+      "name_en": "Seven of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 점검입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "93b18f5e-c961-5699-a577-5a45b51efe82",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/RWS1909_-_Cups_07.jpeg/500px-RWS1909_-_Cups_07.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "96f7cb017beb85cd9a4da45fd20660a7e55ab633696f8ed40c47b0f1ea192843",
+        "width": 500,
+        "height": 888,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_07.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 43,
+      "code": "cups_08",
+      "name_ko": "컵 8",
+      "name_en": "Eight of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 집중입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "3a93b181-a5f5-5b52-b027-4032e85b6eca",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/RWS1909_-_Cups_08.jpeg/500px-RWS1909_-_Cups_08.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "2e02a02abf5da40520077e08b264b6c2db773407d41c5217c692ccb3f9a3d689",
+        "width": 500,
+        "height": 866,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_08.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 44,
+      "code": "cups_09",
+      "name_ko": "컵 9",
+      "name_en": "Nine of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 돌아보기입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "53ed9d6f-15b1-57bf-a547-e7777948a65e",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/RWS1909_-_Cups_09.jpeg/500px-RWS1909_-_Cups_09.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "9457a7aab08c2d35f6a839d4c822c5750c3d87c20df2757afde11d5b2e2bd014",
+        "width": 500,
+        "height": 869,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_09.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 45,
+      "code": "cups_10",
+      "name_ko": "컵 10",
+      "name_en": "Ten of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 마무리입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "ad39da92-fad0-5b76-8452-478595a28a33",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/RWS1909_-_Cups_10.jpeg/500px-RWS1909_-_Cups_10.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "e4a5176ca75d3e613e853bf0557579fc619b04b3b230bcca20966d163ef550cb",
+        "width": 500,
+        "height": 844,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_10.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 46,
+      "code": "cups_11",
+      "name_ko": "컵 페이지",
+      "name_en": "Page of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 호기심입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "c85e575c-4ab4-5309-98c0-8e89610e2da4",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/RWS1909_-_Cups_11.jpeg/500px-RWS1909_-_Cups_11.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "5dff00c509443778eb488b43e0fd7bbfd6176ec733ce7060e3a204340fd0e2e8",
+        "width": 500,
+        "height": 879,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_11.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 47,
+      "code": "cups_12",
+      "name_ko": "컵 나이트",
+      "name_en": "Knight of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 한 걸음입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "705d6ae1-0088-52c5-ae46-43d76114ab05",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/RWS1909_-_Cups_12.jpeg/500px-RWS1909_-_Cups_12.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "095e424fcc585dfbfc9d6b250cc9b5aa0e7ba11e9f859fcc616427a195dd1a1d",
+        "width": 500,
+        "height": 859,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_12.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 48,
+      "code": "cups_13",
+      "name_ko": "컵 퀸",
+      "name_en": "Queen of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 돌봄입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "2475a26e-6bea-59ef-8970-7fe94254fc6f",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/RWS1909_-_Cups_13.jpeg/500px-RWS1909_-_Cups_13.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "951b277318247460e9587c9a6d37402d1f605a6a53b47693dbe7dadab1fd3c40",
+        "width": 500,
+        "height": 869,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_13.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 49,
+      "code": "cups_14",
+      "name_ko": "컵 킹",
+      "name_en": "King of Cups",
+      "arcana": "minor",
+      "suit": "cups",
+      "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 나의 기준입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+      "image_asset": {
+        "id": "08278baa-1b9b-5134-a6fb-cd117713d64c",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/RWS1909_-_Cups_14.jpeg/500px-RWS1909_-_Cups_14.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "7041b85b15d318c3ab7d8f5b3ddd9e79779096709c52b76c7ef8410200399e68",
+        "width": 500,
+        "height": 850,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_14.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 50,
+      "code": "swords_01",
+      "name_ko": "소드 에이스",
+      "name_en": "Ace of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 시작입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "46becfee-cf37-5fe3-94d5-fb93ee887a30",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/RWS1909_-_Swords_01.jpeg/500px-RWS1909_-_Swords_01.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "f33d0589d680bf3af3abf85e3e4c493514f8040fa138ba8aedbdd1766b4fb26f",
+        "width": 500,
+        "height": 873,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_01.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 51,
+      "code": "swords_02",
+      "name_ko": "소드 2",
+      "name_en": "Two of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 균형입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "9fa49e38-5876-52ba-8c85-b7390e2b646a",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/RWS1909_-_Swords_02.jpeg/500px-RWS1909_-_Swords_02.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "1dc30174c701ac93f3f36b0b9ed6f5db636cf4ad01969569cb328527a61180c6",
+        "width": 500,
+        "height": 853,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_02.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 52,
+      "code": "swords_03",
+      "name_ko": "소드 3",
+      "name_en": "Three of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 함께하기입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "eb2ea401-14c0-5b87-9f1e-a6a8e3664ea5",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/RWS1909_-_Swords_03.jpeg/500px-RWS1909_-_Swords_03.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "65dd866de3427f8b04aeee230277853d3e066b57f110edfb31b59d73dee6d492",
+        "width": 500,
+        "height": 867,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_03.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 53,
+      "code": "swords_04",
+      "name_ko": "소드 4",
+      "name_en": "Four of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 쉼입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "60505939-15f4-582f-99e7-8c919ca9aabb",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/RWS1909_-_Swords_04.jpeg/500px-RWS1909_-_Swords_04.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "300a60c32ecf52c88822e4ac695a911b9fdf9d7791585adbc0dc6d2a23179c27",
+        "width": 500,
+        "height": 850,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_04.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 54,
+      "code": "swords_05",
+      "name_ko": "소드 5",
+      "name_en": "Five of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 다시 살피기입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "614eb64c-4e8a-54cb-84ed-73ab54a42fb9",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/RWS1909_-_Swords_05.jpeg/500px-RWS1909_-_Swords_05.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "9a32ea722f97db3fc27c94e9561bf75ff795ce2d9f925a4cd9b02f32864b8d4a",
+        "width": 500,
+        "height": 879,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_05.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 55,
+      "code": "swords_06",
+      "name_ko": "소드 6",
+      "name_en": "Six of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 나눔입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "853cec5e-8813-5abc-ba38-d2d5519d1fc3",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/RWS1909_-_Swords_06.jpeg/500px-RWS1909_-_Swords_06.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ac21cd183a3d48404fb78eef248debbc67eae8ed5f55884f3ddf3af3c1f5dd0e",
+        "width": 500,
+        "height": 855,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_06.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 56,
+      "code": "swords_07",
+      "name_ko": "소드 7",
+      "name_en": "Seven of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 점검입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "57dc9662-c993-56ce-bd23-79d6d8135550",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/RWS1909_-_Swords_07.jpeg/500px-RWS1909_-_Swords_07.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "f8374b883fdebe64860caa8615e48e5536dbf71f390d051eae4b57e678bd0193",
+        "width": 500,
+        "height": 878,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_07.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 57,
+      "code": "swords_08",
+      "name_ko": "소드 8",
+      "name_en": "Eight of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 집중입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "899de99e-b340-51fa-9165-477174292e67",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/RWS1909_-_Swords_08.jpeg/500px-RWS1909_-_Swords_08.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "336f53f543ee552dcfb0cb2ed744dd62ebe9c54941a37da80f738778e2207801",
+        "width": 500,
+        "height": 852,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_08.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 58,
+      "code": "swords_09",
+      "name_ko": "소드 9",
+      "name_en": "Nine of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 돌아보기입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "dad3b664-7ceb-5834-8b87-728e562d0ad2",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/RWS1909_-_Swords_09.jpeg/500px-RWS1909_-_Swords_09.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "8ed5d467a71b8566274193656c4785c64730d579d2c92952f03fe3e6e7b8d762",
+        "width": 500,
+        "height": 889,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_09.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 59,
+      "code": "swords_10",
+      "name_ko": "소드 10",
+      "name_en": "Ten of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 마무리입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "2b9ad95a-8524-540b-99c0-19b26699084e",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/RWS1909_-_Swords_10.jpeg/500px-RWS1909_-_Swords_10.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "e5d659e577af6aa183bb7e830076dea12fad2cb523424ba9527d8ad053b534cf",
+        "width": 500,
+        "height": 859,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_10.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 60,
+      "code": "swords_11",
+      "name_ko": "소드 페이지",
+      "name_en": "Page of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 호기심입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "c9f21eb8-63dc-5897-893b-a4d694f17c99",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/RWS1909_-_Swords_11.jpeg/500px-RWS1909_-_Swords_11.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "0a8ea09705056182b15ebe670bb9f706777f49c1d8d631658b654bb921d2f0b4",
+        "width": 500,
+        "height": 874,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_11.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 61,
+      "code": "swords_12",
+      "name_ko": "소드 나이트",
+      "name_en": "Knight of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 한 걸음입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "2bc5e91f-ec51-55fd-95f0-4038d83ef07e",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/RWS1909_-_Swords_12.jpeg/500px-RWS1909_-_Swords_12.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "f1d3add2546549692273126dabd1c6dc96b4432c2f0813d4d11fe71840fda709",
+        "width": 500,
+        "height": 848,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_12.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 62,
+      "code": "swords_13",
+      "name_ko": "소드 퀸",
+      "name_en": "Queen of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 돌봄입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "0d62dd39-f8a8-5650-bc31-a2c33a9d56ab",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/RWS1909_-_Swords_13.jpeg/500px-RWS1909_-_Swords_13.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ca05a12800ed6269a81460a747ec9f4c24070454f39083c64a9c4c9fe54ee3de",
+        "width": 500,
+        "height": 886,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_13.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 63,
+      "code": "swords_14",
+      "name_ko": "소드 킹",
+      "name_en": "King of Swords",
+      "arcana": "minor",
+      "suit": "swords",
+      "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 나의 기준입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+      "image_asset": {
+        "id": "a845da1a-0dfa-57dd-9f56-90e127ee8fb7",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/RWS1909_-_Swords_14.jpeg/500px-RWS1909_-_Swords_14.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "60ed2f80bc7b24edd3efc220c4dad75ac268d507e5bdf9a2f07b4089d431248e",
+        "width": 500,
+        "height": 852,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_14.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 64,
+      "code": "pentacles_01",
+      "name_ko": "펜타클 에이스",
+      "name_en": "Ace of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 시작입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "7d8bf07d-1b43-5f70-911d-f2a2f46ce046",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/RWS1909_-_Pentacles_01.jpeg/500px-RWS1909_-_Pentacles_01.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "fe521d704fc672b5c5b6ced82e46d849dc08d0a99d935c19d721c0c33a906f57",
+        "width": 500,
+        "height": 869,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_01.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 65,
+      "code": "pentacles_02",
+      "name_ko": "펜타클 2",
+      "name_en": "Two of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 균형입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "50fb9742-be30-5f44-91d2-392871486aca",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/RWS1909_-_Pentacles_02.jpeg/500px-RWS1909_-_Pentacles_02.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "bd95841776a3a4baa3ae7b5f6467b66902d00492b9c13c197b1de800779b2cd0",
+        "width": 500,
+        "height": 854,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_02.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 66,
+      "code": "pentacles_03",
+      "name_ko": "펜타클 3",
+      "name_en": "Three of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 함께하기입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "defa863d-2dab-52fe-8279-120bbda94849",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/RWS1909_-_Pentacles_03.jpeg/500px-RWS1909_-_Pentacles_03.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ec5a5cbfcc18f5c895d353dd47ee798631cd16f8637c39b5a9b044ffa58ce307",
+        "width": 500,
+        "height": 883,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_03.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 67,
+      "code": "pentacles_04",
+      "name_ko": "펜타클 4",
+      "name_en": "Four of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 쉼입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "32b62d00-e58b-5d16-8fdd-1a45a9037377",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/RWS1909_-_Pentacles_04.jpeg/500px-RWS1909_-_Pentacles_04.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "f590804c97c97118088cbb0dae661a83631e0829e3c8ce47df51325ce8233017",
+        "width": 500,
+        "height": 859,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_04.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 68,
+      "code": "pentacles_05",
+      "name_ko": "펜타클 5",
+      "name_en": "Five of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 다시 살피기입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "12407493-6e3f-504c-82c0-eaf2bfa4c99a",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/RWS1909_-_Pentacles_05.jpeg/500px-RWS1909_-_Pentacles_05.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "ace55ebd43f76974451a892990164676eddf38711a721b67c7002656ece97515",
+        "width": 500,
+        "height": 858,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_05.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 69,
+      "code": "pentacles_06",
+      "name_ko": "펜타클 6",
+      "name_en": "Six of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 나눔입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "a4e66595-8e40-5315-bcfa-3d2444e6879f",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/RWS1909_-_Pentacles_06.jpeg/500px-RWS1909_-_Pentacles_06.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "97685288bad63e6784449ae7425deef29c443476fb2bf9771bb741d62d5653f1",
+        "width": 500,
+        "height": 842,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_06.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 70,
+      "code": "pentacles_07",
+      "name_ko": "펜타클 7",
+      "name_en": "Seven of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 점검입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "ed451a36-fc53-56ea-837f-84396f2e49c8",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/RWS1909_-_Pentacles_07.jpeg/500px-RWS1909_-_Pentacles_07.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "85c554074c2fb5620b358f198e48dd1373c0162d2f384e5cc130143dcbdc5566",
+        "width": 500,
+        "height": 883,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_07.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 71,
+      "code": "pentacles_08",
+      "name_ko": "펜타클 8",
+      "name_en": "Eight of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 집중입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "b39ed4a0-699b-50a9-8f35-e4bda4dca1a2",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/RWS1909_-_Pentacles_08.jpeg/500px-RWS1909_-_Pentacles_08.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "d41aafc1b79df7f67a01a7522f035ff0ff5187c00d408dcd7210a7ee8608b075",
+        "width": 500,
+        "height": 865,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_08.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 72,
+      "code": "pentacles_09",
+      "name_ko": "펜타클 9",
+      "name_en": "Nine of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 돌아보기입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "432ff770-c318-5d1e-aa5c-167bc59c9e48",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/RWS1909_-_Pentacles_09.jpeg/500px-RWS1909_-_Pentacles_09.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "62cef93c5e744ca6028bfd32dcbc6b174b5e0d03e3f336200987c0dd54a66f3d",
+        "width": 500,
+        "height": 869,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_09.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 73,
+      "code": "pentacles_10",
+      "name_ko": "펜타클 10",
+      "name_en": "Ten of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 마무리입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "f9071ce7-c924-5977-a5c2-b1bb9bf5d4dd",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/RWS1909_-_Pentacles_10.jpeg/500px-RWS1909_-_Pentacles_10.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "3883bbe4cb111e33c48b6e1795db2befa203f5186873dc140d24503bd49531ed",
+        "width": 500,
+        "height": 860,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_10.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 74,
+      "code": "pentacles_11",
+      "name_ko": "펜타클 페이지",
+      "name_en": "Page of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 호기심입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "3ef28ba7-c6ca-54ee-8bd8-ebf312d11a4f",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/RWS1909_-_Pentacles_11.jpeg/500px-RWS1909_-_Pentacles_11.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "616f2a1bc77b9f1dc95ddde8f8811d5dda1804f553b7a3386bb6c19a41f3309e",
+        "width": 500,
+        "height": 881,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_11.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 75,
+      "code": "pentacles_12",
+      "name_ko": "펜타클 나이트",
+      "name_en": "Knight of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 한 걸음입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "129598c5-e850-55de-8f4d-98e3b43a1540",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/RWS1909_-_Pentacles_12.jpeg/500px-RWS1909_-_Pentacles_12.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "d44476d33ef0b43d010f5617cf7ec2816efc8468fcfe4ebd3d4d4ef89619f8ad",
+        "width": 500,
+        "height": 853,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_12.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 76,
+      "code": "pentacles_13",
+      "name_ko": "펜타클 퀸",
+      "name_en": "Queen of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 돌봄입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "9dfacec0-becc-5c2f-97d6-cc130cf208a5",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/RWS1909_-_Pentacles_13.jpeg/500px-RWS1909_-_Pentacles_13.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "2ddb82a1de260477c7fe540a90bb4adf801ef5fdd3393f610ca4862d223fa3ea",
+        "width": 500,
+        "height": 867,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_13.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    },
+    {
+      "id": 77,
+      "code": "pentacles_14",
+      "name_ko": "펜타클 킹",
+      "name_en": "King of Pentacles",
+      "arcana": "minor",
+      "suit": "pentacles",
+      "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 나의 기준입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+      "image_asset": {
+        "id": "8f244250-3be9-574c-9d5a-35be9b5860a2",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/RWS1909_-_Pentacles_14.jpeg/500px-RWS1909_-_Pentacles_14.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "sha256": "f5fee385dd306c9d2e2c8dd916a4fb03a21dedaf44b2ce2eda5203c47f7be599",
+        "width": 500,
+        "height": 846,
+        "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_14.jpeg",
+        "license_name": "Public domain",
+        "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+      }
+    }
+  ]
+}
