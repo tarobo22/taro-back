@@ -1,0 +1,62 @@
+[
+  {
+    "label": "RED-test_journal_domain",
+    "exit": 1,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\017-RED-test_journal_domain.txt"
+  },
+  {
+    "label": "GREEN-test_journal_domain",
+    "exit": 0,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\018-GREEN-test_journal_domain.txt"
+  },
+  {
+    "label": "RED-unit",
+    "exit": 1,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\027-RED-unit.txt"
+  },
+  {
+    "label": "GREEN-unit",
+    "exit": 0,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\028-GREEN-unit.txt"
+  },
+  {
+    "label": "RED-test_postgres_journal",
+    "exit": 1,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\037-RED-test_postgres_journal.txt"
+  },
+  {
+    "label": "GREEN-test_postgres_journal",
+    "exit": 0,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\038-GREEN-test_postgres_journal.txt"
+  },
+  {
+    "label": "RED-test_experience_domain",
+    "exit": 1,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\056-RED-test_experience_domain.txt"
+  },
+  {
+    "label": "GREEN-test_experience_domain",
+    "exit": 0,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\057-GREEN-test_experience_domain.txt"
+  },
+  {
+    "label": "RED-test_experience_http",
+    "exit": 1,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\066-RED-test_experience_http.txt"
+  },
+  {
+    "label": "GREEN-test_experience_http",
+    "exit": 0,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\067-GREEN-test_experience_http.txt"
+  },
+  {
+    "label": "RED-test_openai_boundary",
+    "exit": 1,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\077-RED-test_openai_boundary.txt"
+  },
+  {
+    "label": "GREEN-test_openai_boundary",
+    "exit": 0,
+    "log": "C:\\Users\\chang\\Documents\\ChatGPT\\0915 2\\output\\taro-repartition-20261106-011214\\taro-back\\verification\\078-GREEN-test_openai_boundary.txt"
+  }
+]

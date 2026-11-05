@@ -1,0 +1,109 @@
+[
+  {
+    "commit": "7879e529e92c92c7b606b247e2e55a9f48140e01",
+    "message": "chore: initialize FastAPI environment and versioned database schema",
+    "files": [
+      ".env.example",
+      ".gitattributes",
+      ".gitignore",
+      "AGENTS.md",
+      "README.md",
+      "api/__init__.py",
+      "api/config.py",
+      "api/migrate.py",
+      "api/migrations/0001_initial.sql",
+      "api/requirements-dev.txt",
+      "api/requirements.txt",
+      "api/schema.sql",
+      "compose.yaml",
+      "constraints-dev.txt",
+      "pytest.ini",
+      "shared/content.json",
+      "shared/journal-policy.json"
+    ],
+    "remote_verified": true
+  },
+  {
+    "commit": "d5ac8c27ca5a206c2bd30ee1169de03e4728bf58",
+    "message": "feat(journal): restore validated aggregate invariants",
+    "files": [
+      "api/domain/__init__.py",
+      "api/domain/journal.py",
+      "api/tests/unit/test_journal_domain.py"
+    ],
+    "remote_verified": true
+  },
+  {
+    "commit": "000d79763df4f53a27ac8adf96aaca90e02439c1",
+    "message": "feat(journal): restore transactional application use cases",
+    "files": [
+      "api/application/__init__.py",
+      "api/application/journal.py",
+      "api/application/ports.py",
+      "api/tests/unit/test_journal_edit.py",
+      "api/tests/unit/test_journal_use_cases.py"
+    ],
+    "remote_verified": true
+  },
+  {
+    "commit": "954b1f0b4fc64fb7db620e3e314dd2208d1f8e00",
+    "message": "feat(journal): add owner-scoped PostgreSQL persistence and rollback",
+    "files": [
+      "api/adapters/__init__.py",
+      "api/adapters/postgres.py",
+      "api/tests/conftest.py",
+      "api/tests/integration/test_postgres_journal.py"
+    ],
+    "remote_verified": true
+  },
+  {
+    "commit": "f35fb7bca631e97fb668da3c177a5a89b5f1d93c",
+    "message": "feat(journal): expose validated HTTP contracts and guest sessions",
+    "files": [
+      "api/adapters/http/__init__.py",
+      "api/adapters/http/journal.py",
+      "api/export_openapi.py",
+      "api/main.py",
+      "api/tests/integration/test_journal_http.py",
+      "docs/contracts/openapi.json"
+    ],
+    "remote_verified": true
+  },
+  {
+    "commit": "cc8b28dab31ec62dfcd9499bd7f4dd99d60327f5",
+    "message": "feat(experience): define spread selection and explicit AI consent rules",
+    "files": [
+      "api/domain/experience.py",
+      "api/tests/unit/test_experience_domain.py",
+      "shared/experience-policy.json"
+    ],
+    "remote_verified": true
+  },
+  {
+    "commit": "3cb27f133862eb63c89b744f6bf123705bd9eec4",
+    "message": "feat(experience): persist readings and conversations with request deduplication",
+    "files": [
+      "api/adapters/experience_postgres.py",
+      "api/adapters/http/experience.py",
+      "api/adapters/local_guidance.py",
+      "api/application/experience.py",
+      "api/application/experience_ports.py",
+      "api/main.py",
+      "api/migrations/0002_experience_operations.sql",
+      "api/migrations/0003_daily_history.sql",
+      "api/tests/integration/test_experience_http.py",
+      "docs/contracts/openapi.json"
+    ],
+    "remote_verified": true
+  },
+  {
+    "commit": "ced1124b844c4a674aa4cb6d03d2abe501dd8ae8",
+    "message": "feat(ai): add validated OpenAI Responses adapter and failure isolation",
+    "files": [
+      "api/adapters/openai_guidance.py",
+      "api/main.py",
+      "api/tests/unit/test_openai_boundary.py"
+    ],
+    "remote_verified": true
+  }
+]
