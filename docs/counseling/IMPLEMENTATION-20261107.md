@@ -24,13 +24,25 @@
 개인 용어와 현재 대화·카드 의미를 가져와 답변을 구성하는 RAG다. 별도의 의미 임베딩 검색과 공용 상담 벡터 저장소는 이번 구현에 포함하지 않았다.
 
 ## 검증
-- 백엔드 전체 **578 passed**. 이후 모델·토큰·재시도 변경은 관련 **38건 재검증 통과**.
+- 백엔드 최종 원격 CI **579 passed**. 상담 기능 관련 **38건도 격리 DB에서 재검증 통과**.
 - React **133 passed**, TypeScript·배포 빌드 통과.
 - RN **136 passed**, TypeScript·Android JS 번들 생성 통과.
 - 신규 검증의 의도된 RED 이후 구현했다. 기존 베이스라인 테스트의 삭제·완화·skip은 없다.
 - 전체 삭제의 FK 의존성 오류를 신규 검증으로 재현하고 삭제 순서를 고쳤다.
 - 공유 테스트 DB의 누적 200회 한도 때문에 막혔던 회귀 검사는 새 격리 DB에서 통과했다.
 - [50개 유즈케이스](USE-CASES-50.md), [JSON](../../evals/counseling-cases.json).
+
+### Git 반영과 원격 검증
+
+세 저장소의 `codex/counseling-rag-20261107` 브랜치에 기능별로 커밋·푸시했다. main 병합과 이력 강제 변경은 하지 않았다.
+
+| 저장소 | 원격 검증 | 실제 변경 파일 |
+|---|---|---|
+| taro-back | [FastAPI 전체 검사 통과](https://github.com/tarobo22/taro-back/actions/runs/42264732339) | [목록](CHANGES.md) |
+| taro-raect | [타입·테스트·웹 빌드 통과](https://github.com/tarobo22/taro-raect/actions/runs/42264741782) | [목록](https://github.com/tarobo22/taro-raect/blob/codex/counseling-rag-20261107/docs/counseling/CHANGES.md) |
+| taro | [타입·테스트·Android JS 번들 통과](https://github.com/tarobo22/taro/actions/runs/42264742288) | [목록](https://github.com/tarobo22/taro/blob/codex/counseling-rag-20261107/docs/counseling/CHANGES.md) |
+
+별도 [iOS 시뮬레이터 CI](https://github.com/tarobo22/taro/actions/runs/42264742248)는 확인 시점 실행 대기 상태다. iOS 네이티브 검증 완료로 표기하지 않는다. 원본 작업 폴더에 있던 별도 App Store 변경은 보존했다.
 
 ## 로컬 부하 측정
 **GPT 성능 수치가 아니다.** 실제 PostgreSQL·애플리케이션에 10ms 고정 합성 제공자를 연결했다. OpenAI 호출·실제 웹 검색은 0건이다. DB 풀 최대 12, 측정용 이용 한도를 사용했다.
