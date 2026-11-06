@@ -1,0 +1,474 @@
+{
+  "total_calls": 48,
+  "total_estimated_usd": 0.0748929,
+  "model_ids": [
+    "gpt-5-mini-2025-08-07"
+  ],
+  "rubric_sha256": "993ca1c999144e7e31c1aedc1977e8ecf26fb8d973f198798500c424a6c961aa",
+  "frozen_blind_scores_sha256": "85b5af1e4928de7ee4c610efb3659fee88c7e5aeb368c4bf2e51a73ef6b7cf98",
+  "variants": {
+    "before": {
+      "overall": {
+        "calls": 24,
+        "http_200": 24,
+        "delivered": 23,
+        "delivery_rate": 95.833,
+        "mean_ms": 6934.61,
+        "median_ms": 6927.42,
+        "p95_ms": 9184.62,
+        "input_tokens": 39794,
+        "cached_input_tokens": 8064,
+        "output_tokens": 14812,
+        "reasoning_tokens_included_in_output": 6784,
+        "estimated_usd": 0.0377581,
+        "estimated_usd_without_cache": 0.0395725
+      },
+      "stages": {
+        "analyze": {
+          "calls": 12,
+          "http_200": 12,
+          "delivered": 12,
+          "delivery_rate": 100.0,
+          "mean_ms": 6723.91,
+          "median_ms": 6745.16,
+          "p95_ms": 8202.86,
+          "input_tokens": 15415,
+          "cached_input_tokens": 8064,
+          "output_tokens": 6628,
+          "reasoning_tokens_included_in_output": 3648,
+          "estimated_usd": 0.01529535,
+          "estimated_usd_without_cache": 0.01710975
+        },
+        "compose": {
+          "calls": 12,
+          "http_200": 12,
+          "delivered": 11,
+          "delivery_rate": 91.667,
+          "mean_ms": 7145.31,
+          "median_ms": 7673.96,
+          "p95_ms": 9842.15,
+          "input_tokens": 24379,
+          "cached_input_tokens": 0,
+          "output_tokens": 8184,
+          "reasoning_tokens_included_in_output": 3136,
+          "estimated_usd": 0.02246275,
+          "estimated_usd_without_cache": 0.02246275
+        }
+      },
+      "quality_mean": 74.375,
+      "quality_by_stage": {
+        "analyze": 82.083,
+        "compose": 66.667
+      },
+      "axis_mean_0_to_4": {
+        "empathy": 3,
+        "context": 3.458,
+        "autonomy": 2.75,
+        "grounding": 3.208,
+        "usefulness": 2.458
+      },
+      "objective": {
+        "intent": {
+          "passed": 12,
+          "total": 12
+        },
+        "search_purpose": {
+          "passed": 12,
+          "total": 12
+        },
+        "response_mode": {
+          "passed": 5,
+          "total": 12
+        },
+        "clarification_required": {
+          "passed": 1,
+          "total": 1
+        },
+        "correct_card_ids_and_order": {
+          "passed": 10,
+          "total": 10
+        },
+        "one_small_action": {
+          "passed": 4,
+          "total": 10
+        },
+        "no_followup_question": {
+          "passed": 1,
+          "total": 2
+        },
+        "explicit_listen_mode": {
+          "passed": 2,
+          "total": 2
+        },
+        "definition_quotes_in_current_user_message": {
+          "passed": 0,
+          "total": 1
+        }
+      }
+    },
+    "after": {
+      "overall": {
+        "calls": 24,
+        "http_200": 24,
+        "delivered": 24,
+        "delivery_rate": 100.0,
+        "mean_ms": 6969.6,
+        "median_ms": 6391.5,
+        "p95_ms": 10886.72,
+        "input_tokens": 46896,
+        "cached_input_tokens": 15872,
+        "output_tokens": 14491,
+        "reasoning_tokens_included_in_output": 7616,
+        "estimated_usd": 0.0371348,
+        "estimated_usd_without_cache": 0.040706
+      },
+      "stages": {
+        "analyze": {
+          "calls": 12,
+          "http_200": 12,
+          "delivered": 12,
+          "delivery_rate": 100.0,
+          "mean_ms": 5649.0,
+          "median_ms": 5481.08,
+          "p95_ms": 7176.78,
+          "input_tokens": 18931,
+          "cached_input_tokens": 15872,
+          "output_tokens": 5777,
+          "reasoning_tokens_included_in_output": 3584,
+          "estimated_usd": 0.01271555,
+          "estimated_usd_without_cache": 0.01628675
+        },
+        "compose": {
+          "calls": 12,
+          "http_200": 12,
+          "delivered": 12,
+          "delivery_rate": 100.0,
+          "mean_ms": 8290.21,
+          "median_ms": 8142.16,
+          "p95_ms": 11897.19,
+          "input_tokens": 27965,
+          "cached_input_tokens": 0,
+          "output_tokens": 8714,
+          "reasoning_tokens_included_in_output": 4032,
+          "estimated_usd": 0.02441925,
+          "estimated_usd_without_cache": 0.02441925
+        }
+      },
+      "quality_mean": 78.958,
+      "quality_by_stage": {
+        "analyze": 83.333,
+        "compose": 74.583
+      },
+      "axis_mean_0_to_4": {
+        "empathy": 2.958,
+        "context": 3.75,
+        "autonomy": 3.042,
+        "grounding": 3.292,
+        "usefulness": 2.75
+      },
+      "objective": {
+        "intent": {
+          "passed": 12,
+          "total": 12
+        },
+        "search_purpose": {
+          "passed": 12,
+          "total": 12
+        },
+        "response_mode": {
+          "passed": 8,
+          "total": 12
+        },
+        "clarification_required": {
+          "passed": 1,
+          "total": 1
+        },
+        "correct_card_ids_and_order": {
+          "passed": 10,
+          "total": 10
+        },
+        "one_small_action": {
+          "passed": 10,
+          "total": 10
+        },
+        "no_followup_question": {
+          "passed": 2,
+          "total": 2
+        },
+        "explicit_listen_mode": {
+          "passed": 2,
+          "total": 2
+        },
+        "definition_quotes_in_current_user_message": {
+          "passed": 0,
+          "total": 1
+        }
+      }
+    }
+  },
+  "case_scores": [
+    {
+      "case_id": "AB01",
+      "category": "frustration",
+      "input": "발표 자료를 내가 거의 다 만들었는데 팀장이 자기 공인 것처럼 말했어. 따지고 싶으면서도 분위기가 깨질까 봐 망설여져.",
+      "before": {
+        "quality_points": 80.0,
+        "stages": {
+          "analyze": 90.0,
+          "compose": 70.0
+        }
+      },
+      "after": {
+        "quality_points": 80.0,
+        "stages": {
+          "analyze": 80.0,
+          "compose": 80.0
+        }
+      },
+      "delta_points": 0.0
+    },
+    {
+      "case_id": "AB02",
+      "category": "uncertainty_about_others",
+      "input": "약속을 두 번 취소한 친구가 미안하다고는 하는데, 내가 귀찮아진 건가 싶어. 바로 물어보면 부담 줄까 봐 고민이야.",
+      "before": {
+        "quality_points": 80.0,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 75.0
+        }
+      },
+      "after": {
+        "quality_points": 85.0,
+        "stages": {
+          "analyze": 95.0,
+          "compose": 75.0
+        }
+      },
+      "delta_points": 5.0
+    },
+    {
+      "case_id": "AB03",
+      "category": "listening",
+      "input": "계약이 끝난 뒤로 내가 쓸모없어진 느낌이 들어. 오늘은 방법을 알려주기보다 그냥 내 말을 들어줬으면 해.",
+      "before": {
+        "quality_points": 85.0,
+        "stages": {
+          "analyze": 90.0,
+          "compose": 80.0
+        }
+      },
+      "after": {
+        "quality_points": 85.0,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 85.0
+        }
+      },
+      "delta_points": 0.0
+    },
+    {
+      "case_id": "AB04",
+      "category": "correction",
+      "input": "돈이 부족한 게 아니라, 지난번처럼 실수해서 동료한테 피해를 줄까 봐 두려운 거야.",
+      "before": {
+        "quality_points": 75.0,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 65.0
+        }
+      },
+      "after": {
+        "quality_points": 82.5,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 80.0
+        }
+      },
+      "delta_points": 7.5
+    },
+    {
+      "case_id": "AB05",
+      "category": "ambiguous_personal_term",
+      "input": "모래 때문에 요즘 마음이 복잡해.",
+      "before": {
+        "quality_points": 75.0,
+        "stages": {
+          "analyze": 80.0,
+          "compose": 70.0
+        }
+      },
+      "after": {
+        "quality_points": 75.0,
+        "stages": {
+          "analyze": 75.0,
+          "compose": 75.0
+        }
+      },
+      "delta_points": 0.0
+    },
+    {
+      "case_id": "AB06",
+      "category": "personal_rag",
+      "input": "오름에서 처음 진행을 맡았는데, 경험 많은 사람들 앞에서 말을 시작할 생각만 해도 주눅 들어.",
+      "before": {
+        "quality_points": 70.0,
+        "stages": {
+          "analyze": 70.0,
+          "compose": 70.0
+        }
+      },
+      "after": {
+        "quality_points": 67.5,
+        "stages": {
+          "analyze": 60.0,
+          "compose": 75.0
+        }
+      },
+      "delta_points": -2.5
+    },
+    {
+      "case_id": "AB07",
+      "category": "mixed_positive_emotion",
+      "input": "나는 합격했는데 같이 준비한 친구는 떨어졌어. 기쁜데 그 친구 앞에서는 미안해서 아무 말도 못 하겠어.",
+      "before": {
+        "quality_points": 57.5,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 30.0
+        }
+      },
+      "after": {
+        "quality_points": 75.0,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 65.0
+        }
+      },
+      "delta_points": 17.5
+    },
+    {
+      "case_id": "AB08",
+      "category": "caregiving_autonomy",
+      "input": "가족을 돌보느라 내가 배우고 싶던 걸 계속 미뤘어. 가족이 소중한데 나한테는 아무 시간도 안 남는 것 같아.",
+      "before": {
+        "quality_points": 77.5,
+        "stages": {
+          "analyze": 80.0,
+          "compose": 75.0
+        }
+      },
+      "after": {
+        "quality_points": 77.5,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 70.0
+        }
+      },
+      "delta_points": 0.0
+    },
+    {
+      "case_id": "AB09",
+      "category": "boundaries",
+      "input": "주말 약속을 취소하고 혼자 쉬고 싶어. 약속한 사람이 실망할까 봐 내내 죄책감이 들어.",
+      "before": {
+        "quality_points": 75.0,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 65.0
+        }
+      },
+      "after": {
+        "quality_points": 75.0,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 65.0
+        }
+      },
+      "delta_points": 0.0
+    },
+    {
+      "case_id": "AB10",
+      "category": "listening_no_question",
+      "input": "지금은 설명을 더 하거나 질문에 대답할 힘이 없어. 조언도 잠깐 멈추고 내 마음만 한두 문장으로 받아줘.",
+      "before": {
+        "quality_points": 85.0,
+        "stages": {
+          "analyze": 90.0,
+          "compose": 80.0
+        }
+      },
+      "after": {
+        "quality_points": 90.0,
+        "stages": {
+          "analyze": 95.0,
+          "compose": 85.0
+        }
+      },
+      "delta_points": 5.0
+    },
+    {
+      "case_id": "AB11",
+      "category": "tarot_uncertainty",
+      "input": "면접 결과 기다리는 게 너무 불안해. 카드로 합격할지 확실하게 알려줄 수 있어?",
+      "before": {
+        "quality_points": 62.5,
+        "stages": {
+          "analyze": 60.0,
+          "compose": 65.0
+        }
+      },
+      "after": {
+        "quality_points": 82.5,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 80.0
+        }
+      },
+      "delta_points": 20.0
+    },
+    {
+      "case_id": "AB12",
+      "category": "previous_advice_failed",
+      "input": "잠깐 쉬어보라는 말대로 해봤는데 다시 자리에 오면 똑같아. 내가 제대로 못 해서 그런 건가?",
+      "before": {
+        "quality_points": 70.0,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 55.00000000000001
+        }
+      },
+      "after": {
+        "quality_points": 72.5,
+        "stages": {
+          "analyze": 85.0,
+          "compose": 60.0
+        }
+      },
+      "delta_points": 2.5
+    }
+  ],
+  "case_wins": {
+    "after_better": 6,
+    "tie": 5,
+    "before_better": 1
+  },
+  "delta": {
+    "quality_points": 4.583,
+    "cost_percent": -1.651,
+    "latency_mean_percent": 0.505,
+    "input_tokens_percent": 17.847,
+    "output_tokens_percent": -2.167
+  },
+  "card_meaning_repetition": {
+    "cards": 78,
+    "normalized_templates": 26,
+    "largest_template_counts": [
+      14,
+      14,
+      14,
+      14,
+      1
+    ]
+  }
+}
