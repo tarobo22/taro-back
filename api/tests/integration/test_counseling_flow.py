@@ -136,12 +136,12 @@ def test_unknown_personal_term_is_clarified_without_search_or_draw(counseling):
 
 def test_web_sources_are_clickable_and_model_gets_only_confirmed_cards(counseling):
     s,m,_,owners,_,_=counseling;sid=start(counseling)
-    m.analysis.unknown_terms=[{'term':'국민취업지원제도','kind':'public'}];m.analysis=Analysis.model_validate(m.analysis.model_dump())
+    m.analysis.unknown_terms=[{'term':'거절 민감성','kind':'public'}];m.analysis.search_purpose='clarify_counseling_term';m.analysis=Analysis.model_validate(m.analysis.model_dump())
     message(counseling,sid);s.run_next();confirmed(counseling,sid);s.run_next()
     v=s.get(owners[0],sid)
     assert v['result']['facts'][0]['source_ids']==['web:official']
     assert any(d['url']=='https://www.work24.go.kr/' for d in v['sources'])
-    assert m.calls[1]==('search','국민취업지원제도 공식 자료')
+    assert m.calls[1]==('search','거절 민감성 공식 자료')
     assert [c['card_id'] for c in m.calls[2][1]['cards']]==[0,1,2]
 
 
@@ -191,3 +191,34 @@ def test_deleting_session_during_model_io_discards_result(counseling):
     m.on_analyze=lambda:s.delete(owners[0],sid)
     message(counseling,sid);assert s.run_next()
     with pytest.raises(CounselingError,match='NOT_FOUND'):s.get(owners[0],sid)
+
+
+def test_general_information_requests_are_gently_redirected_without_search_or_draw(counseling):
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+    m.analysis.intent='general_information';m.analysis.search_purpose='clarify_counseling_term'
+    message(counseling,sid,'장학금 목록을 검색해줘.');s.run_next()
+    v=s.get(owners[0],sid)
+    assert v['phase']=='clarifying' and v['clarification_question'] and not v['search_queries'] and not v['cards']
+    assert [call[0] for call in m.calls]==['analyze']
+    with pytest.raises(CounselingError,match='CONFIRMATION_REQUIRED'):confirmed(counseling,sid)
+
+
+def test_normal_emotional_counseling_does_not_trigger_web_search(counseling):
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+    message(counseling,sid,'취업 준비가 길어져서 마음이 조급해요.');s.run_next()
+    confirmed(counseling,sid);s.run_next()
+    assert [call[0] for call in m.calls]==['analyze','compose']
+    assert s.get(owners[0],sid)['phase']=='advice'
+
+
+def test_reply_retry_reuses_an_already_obtained_term_reference(counseling):
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+    m.analysis=Analysis.model_validate({**m.analysis.model_dump(),
+        'unknown_terms':[{'term':'거절 민감성','kind':'public'}],'search_purpose':'clarify_counseling_term'})
+    message(counseling,sid);s.run_next();original=m.compose
+    def failed_reply(payload):raise CounselingError('AI_PROVIDER_ERROR',502)
+    m.compose=failed_reply;confirmed(counseling,sid);s.run_next()
+    assert s.get(owners[0],sid)['job']['state']=='failed'
+    m.compose=original;confirmed(counseling,sid);s.run_next()
+    assert s.get(owners[0],sid)['phase']=='advice'
+    assert sum(call[0]=='search' for call in m.calls)==1

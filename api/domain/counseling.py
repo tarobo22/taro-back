@@ -33,9 +33,9 @@ class UnknownTerm(StrictModel):
 
 
 class Analysis(StrictModel):
-    acknowledgement:str=Field(default='',max_length=120)
-    understanding:str=Field(min_length=1,max_length=700)
-    clarification_question:str|None=Field(max_length=300)
+    acknowledgement:str=Field(default='',max_length=100)
+    understanding:str=Field(min_length=1,max_length=240)
+    clarification_question:str|None=Field(max_length=160)
     explicit_definitions:list[DefinitionProposal]=Field(max_length=5)
     unknown_terms:list[UnknownTerm]=Field(max_length=5)
     perspective:str|None=Field(default=None,max_length=100)
@@ -43,6 +43,8 @@ class Analysis(StrictModel):
     response_mode:Literal['advice','listen']='advice'
     memory_scope:Literal['personal','conversation']='personal'
     needs_immediate_support:bool=False
+    intent:Literal['tarot_counseling','general_information']='tarot_counseling'
+    search_purpose:Literal['none','clarify_counseling_term']='none'
 
 
 class GroundedClaim(StrictModel):
@@ -57,7 +59,7 @@ class Reflection(StrictModel):
 
 class CounselResult(StrictModel):
     empathy:str=Field(min_length=1,max_length=160)
-    facts:list[GroundedClaim]=Field(max_length=3)
+    facts:list[GroundedClaim]=Field(max_length=1)
     tarot:list[Reflection]=Field(max_length=3)
     advice:str=Field(min_length=1,max_length=300)
     actions:list[str]=Field(max_length=3)

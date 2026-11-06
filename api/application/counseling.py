@@ -158,14 +158,18 @@ class CounselingService:
                     self._guard(command,snapshot)
                     a=Analysis.model_validate(self.model.analyze({'text':text,'history':history,
                         'dictionary':[public_definition(d) for d in retrieved]}))
+                    if a.intent=='general_information':
+                        a.search_purpose='none';a.explicit_definitions=[];a.unknown_terms=[]
+                        if not a.clarification_question:
+                            a.clarification_question='그 일과 관련해서 어떤 마음이나 고민이 있으셨는지 조금 들려주실래요?'
                     proposals=personal_definitions(a,text)
                     unresolved=[t for t in a.unknown_terms if t.kind!='public' and not retrieve_definitions(t.term,[*known,*proposals])]
                     if unresolved and not a.clarification_question:
                         a.clarification_question=f'괜찮으시면, 말씀하신 “{unresolved[0].term}”가 어떤 뜻인지 알려주실래요?'
-                    question=a.clarification_question or '제가 이해한 내용이 맞을까요?'
+                    question=a.clarification_question or ('' if a.understanding.rstrip().endswith(('?','？')) else '제가 이해한 내용이 맞을까요?')
                     temporary_only=a.memory_scope=='conversation' or not command['payload'].get('remember_definitions',True)
                     state={'phase':'clarifying' if a.clarification_question else 'confirmation',
-                        'analysis':a.model_dump(),'search_queries':search_queries(a,[*known,*proposals]),
+                        'analysis':a.model_dump(),'search_queries':search_queries(a,[*known,*proposals])[:1] if a.search_purpose=='clarify_counseling_term' and a.intent=='tarot_counseling' else [],
                         'session_definitions':[*state.get('session_definitions',[]),*(proposals if temporary_only else [])][-20:],
                         'glossary_used':[public_definition(d) for d in retrieved],
                         'evidence_cache':state.get('evidence_cache',[]),
@@ -178,7 +182,7 @@ class CounselingService:
                 sources=[{'id':'personal:'+str(d['id']),'kind':'user_definition','title':d['term']+' · 말씀해주신 의미',
                     'url':None,'text':d['definition']} for d in retrieve_definitions(
                         ' '.join(v['text'] for v in state.get('history',[])),[*definitions,*temporary])]
-                search_status='not_requested';cache=state.get('evidence_cache',[])
+                search_status='not_requested';cache=list(state.get('evidence_cache',[]));cache_updated=False
                 if mode!='listen' and command['payload'].get('web_search') and state.get('search_queries'):
                     search_status='completed'
                     for query in state['search_queries']:
@@ -188,7 +192,7 @@ class CounselingService:
                         try:
                             found=self.model.search(query);now=datetime.now(timezone.utc).isoformat()
                             found=[{**s,'retrieved_at':now} for s in found]
-                            sources.extend(found);cache.append({'query':query,'at':time.time(),'sources':found})
+                            sources.extend(found);cache.append({'query':query,'at':time.time(),'sources':found});cache_updated=True
                         except CounselingError as e:
                             if e.code in ('AI_UNAVAILABLE','AI_RATE_LIMITED','AI_PROVIDER_ERROR','UNKNOWN_PROVIDER_OUTCOME','AI_OUTPUT_INVALID'):search_status='unavailable'
                             else:raise
@@ -199,6 +203,12 @@ class CounselingService:
                     'text':c['card'].get('basic_meaning','생각을 돌아보는 상징이에요.')} for c in cards)
                 sources=list({s['id']:s for s in sources}.values())
                 state={**state,'evidence_cache':cache[-12:],'cards':cards}
+                if cache_updated:
+                    # Preserve only scoped evidence before generation: a reply retry must not buy the same search again.
+                    with self.store.transaction(owner) as r:
+                        self._check(r,command)
+                        if snapshot!=memory_revision(r.definitions(owner)):raise CounselingError('GLOSSARY_CHANGED',409)
+                        r.update_session(owner,sid,state)
                 self._guard(command,snapshot)
                 output=self.model.compose({'understanding':state['analysis']['understanding'],
                     'perspective':state['analysis'].get('perspective'),'response_mode':mode,
