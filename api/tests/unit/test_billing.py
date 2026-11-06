@@ -87,3 +87,21 @@ def test_unknown_receipt_cannot_move_between_owners_and_guest_must_link_before_p
     with pytest.raises(BillingRejected):service.verify(owner, 'test.deck', 'owned-store-receipt')
     service.owner_kind = lambda c,o:'guest'
     with pytest.raises(BillingRejected):service.verify(owner, 'test.deck', 'new-store-receipt')
+
+
+def test_pending_or_cancelled_subscription_replacement_keeps_the_previous_paid_interval():
+    from dataclasses import replace
+    owner, service, verifier, rows, _ = context()
+    service.products = {'test.month': Product('test.month', 'subs', 'feature:test')}
+    verifier.expires = NOW + timedelta(days=10)
+    original = verifier.verify
+    verifier.verify = lambda product,token:replace(original(product,token), linked_token='old-subscription' if token=='replacement' else None)
+    service.verify(owner, 'test.month', 'old-subscription')
+    for state in ('pending', 'revoked'):
+        verifier.state = state
+        result = service.verify(owner, 'test.month', 'replacement')
+        assert result['entitlements'][0]['key'] == 'feature:test'
+        assert rows[service.digest('old-subscription')]['state'] == 'active'
+    verifier.state = 'purchased'
+    assert service.verify(owner, 'test.month', 'replacement')['state'] == 'active'
+    assert rows[service.digest('old-subscription')]['state'] == 'revoked'

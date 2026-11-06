@@ -72,7 +72,7 @@ class BillingService:
                 linked_hash = self.digest(purchase.linked_token)
                 linked = uow.receipts.get(linked_hash)
                 if linked and linked['owner_id'] != owner:raise BillingRejected('linked_receipt_owner_mismatch')
-                uow.receipts.revoke_linked(owner, linked_hash)
+                if state == 'active':uow.receipts.revoke_linked(owner, linked_hash)
             values = {'token_hash': token_hash, 'owner_id': owner, 'product_id': product.product_id,
                       'product_kind': product.kind, 'entitlement_key': product.entitlement_key,
                       'token_ciphertext': self.cipher.seal(token), 'state': state,
