@@ -18,7 +18,7 @@ from api.domain.data_privacy import DataConflict, DataExpired, DataNotFound, Dat
 
 class DataPrivacyUseCases:
     def __init__(self, uow_factory, policy, catalog, *, export_callbacks=(), erase_callbacks=(),
-                 feedback_target_exists=None, clock=None, owner_kind=None):
+                 feedback_target_exists=None, clock=None, owner_kind=None, catalog_source=None):
         self.uow_factory = uow_factory
         self.policy = policy
         self.catalog = deepcopy(catalog)
@@ -26,6 +26,7 @@ class DataPrivacyUseCases:
         self.erase_callbacks = tuple(erase_callbacks)
         self.feedback_target_exists = feedback_target_exists
         self.owner_kind = owner_kind
+        self.catalog_source = catalog_source
         self.clock = clock or (lambda: datetime.now(timezone.utc))
 
     @staticmethod
@@ -59,12 +60,17 @@ class DataPrivacyUseCases:
             uow.commit()
             return result
 
-    def _catalog_page(self, items, kind, cursor, limit, filters):
+    def _catalog_snapshot(self):
+        # A failed registry read must propagate. Returning the template here
+        # could silently restore a withdrawn publication.
+        return deepcopy(self.catalog_source()) if self.catalog_source is not None else self.catalog
+
+    def _catalog_page(self, items, kind, cursor, limit, filters, *, manifest=None):
         if limit is None:
             return {'items': deepcopy(items), 'next_cursor': None}
         if type(limit) is not int or not 1 <= limit <= self.policy.catalog_page_max:
             raise InvalidDataInput('invalid_page_limit')
-        binding = {'kind': kind, 'version': self.catalog['source_manifest_sha256'], 'filters': filters}
+        binding = {'kind': kind, 'version': manifest if manifest is not None else self.catalog['source_manifest_sha256'], 'filters': filters}
         start = 0
         if cursor is not None:
             try:
@@ -84,10 +90,15 @@ class DataPrivacyUseCases:
         return {'items': deepcopy(items[start:end]), 'next_cursor': next_cursor}
 
     def list_decks(self, *, cursor=None, limit=None):
-        return self._catalog_page(self.catalog['decks'], 'decks', cursor, limit, {})
+        catalog = self._catalog_snapshot()
+        return self._catalog_page(catalog['decks'], 'decks', cursor, limit, {}, manifest=catalog['source_manifest_sha256'])
 
     def get_deck(self, deck_id):
-        for deck in self.catalog['decks']:
+        return self._deck(self._catalog_snapshot(), deck_id)
+
+    @staticmethod
+    def _deck(catalog, deck_id):
+        for deck in catalog['decks']:
             if deck['id'] == str(deck_id):
                 return deepcopy(deck)
         raise DataNotFound('deck_not_found')
@@ -96,20 +107,25 @@ class DataPrivacyUseCases:
         if deck_id is not None and deck_version_id is not None and str(deck_id) != str(deck_version_id):
             raise InvalidDataInput('conflicting_deck_version')
         deck_id = deck_version_id or deck_id
+        catalog = self._catalog_snapshot()
         if deck_id is not None:
-            self.get_deck(deck_id)
+            self._deck(catalog, deck_id)
         if arcana not in (None, 'major', 'minor') or suit not in (None, 'wands', 'cups', 'swords', 'pentacles'):
             raise InvalidDataInput('invalid_card_filter')
-        cards = [card for card in self.catalog['cards']
+        source = catalog['cards_by_deck'][str(deck_id)] if deck_id is not None and 'cards_by_deck' in catalog else catalog['cards']
+        cards = [card for card in source
                           if (arcana is None or card['arcana'] == arcana)
                           and (suit is None or card['suit'] == suit)]
         return self._catalog_page(cards, 'cards', cursor, limit,
-                                  {'deck': str(deck_id) if deck_id else None, 'arcana': arcana, 'suit': suit})
+                                  {'deck': str(deck_id) if deck_id else None, 'arcana': arcana, 'suit': suit},
+                                  manifest=catalog['source_manifest_sha256'])
 
     def get_card(self, card_id, *, deck_version_id=None):
+        catalog = self._catalog_snapshot()
         if deck_version_id is not None:
-            self.get_deck(deck_version_id)
-        for card in self.catalog['cards']:
+            self._deck(catalog, deck_version_id)
+        source = catalog['cards_by_deck'][str(deck_version_id)] if deck_version_id is not None and 'cards_by_deck' in catalog else catalog['cards']
+        for card in source:
             if card['id'] == card_id:
                 return deepcopy(card)
         raise DataNotFound('card_not_found')
