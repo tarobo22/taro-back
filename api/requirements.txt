@@ -7,3 +7,4 @@ python-multipart==0.0.22
 av==19.0.2
 google-auth[requests]==2.62.1
 cryptography==50.0.2
+PyJWT[crypto]==2.15.1
