@@ -56,7 +56,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SessionInput"
+                "$ref": "#/components/schemas/api__adapters__http__identity__SessionInput"
               }
             }
           },
@@ -4449,6 +4449,699 @@
         }
       }
     },
+    "/v2/counseling/capabilities": {
+      "get": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Capabilities",
+        "operationId": "capabilities_v2_counseling_capabilities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/counseling/sessions": {
+      "post": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Create",
+        "operationId": "create_v2_counseling_sessions_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "X-Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Idempotency-Key"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api__adapters__http__counseling__SessionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Sessions",
+        "operationId": "sessions_v2_counseling_sessions_get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/counseling/sessions/{session_id}": {
+      "get": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Session",
+        "operationId": "session_v2_counseling_sessions__session_id__get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Delete",
+        "operationId": "delete_v2_counseling_sessions__session_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/counseling/sessions/{session_id}/messages": {
+      "post": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Message",
+        "operationId": "message_v2_counseling_sessions__session_id__messages_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Idempotency-Key"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/counseling/sessions/{session_id}/confirmation": {
+      "post": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Confirm",
+        "operationId": "confirm_v2_counseling_sessions__session_id__confirmation_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Idempotency-Key"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/counseling/glossary": {
+      "get": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Glossary",
+        "operationId": "glossary_v2_counseling_glossary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Define",
+        "operationId": "define_v2_counseling_glossary_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefinitionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinitionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
+      }
+    },
+    "/v2/counseling/glossary/{definition_id}": {
+      "delete": {
+        "tags": [
+          "counseling"
+        ],
+        "summary": "Forget",
+        "operationId": "forget_v2_counseling_glossary__definition_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "definition_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Definition Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Input validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v2/readings": {
       "post": {
         "tags": [
@@ -7612,6 +8305,84 @@
         ],
         "title": "ChoiceAnswer"
       },
+      "CommandView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed"
+            ],
+            "title": "State"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "state",
+          "error_code"
+        ],
+        "title": "CommandView"
+      },
+      "ConfirmationInput": {
+        "properties": {
+          "confirmed": {
+            "type": "boolean",
+            "title": "Confirmed"
+          },
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "consent_event_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Consent Event Id"
+          },
+          "web_search": {
+            "type": "boolean",
+            "title": "Web Search",
+            "default": false
+          },
+          "card_count": {
+            "type": "integer",
+            "enum": [
+              1,
+              3
+            ],
+            "title": "Card Count",
+            "default": 3
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "confirmed",
+          "expected_version",
+          "consent_event_id"
+        ],
+        "title": "ConfirmationInput"
+      },
       "ConsentEvent": {
         "properties": {
           "id": {
@@ -7972,6 +8743,78 @@
         ],
         "title": "CounselResponse"
       },
+      "CounselResult": {
+        "properties": {
+          "empathy": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Empathy"
+          },
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/GroundedClaim"
+            },
+            "type": "array",
+            "maxItems": 1,
+            "title": "Facts"
+          },
+          "tarot": {
+            "items": {
+              "$ref": "#/components/schemas/Reflection"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Tarot"
+          },
+          "advice": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Advice"
+          },
+          "actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Actions"
+          },
+          "follow_up_question": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Follow Up Question"
+          },
+          "safety_mode": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "support"
+            ],
+            "title": "Safety Mode"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "empathy",
+          "facts",
+          "tarot",
+          "advice",
+          "actions",
+          "follow_up_question",
+          "safety_mode"
+        ],
+        "title": "CounselResult"
+      },
       "CreateEntry": {
         "properties": {
           "day": {
@@ -8255,6 +9098,58 @@
         ],
         "title": "DeckList"
       },
+      "DefinitionInput": {
+        "properties": {
+          "term": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Term"
+          },
+          "definition": {
+            "type": "string",
+            "maxLength": 400,
+            "minLength": 1,
+            "title": "Definition"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "term",
+          "definition"
+        ],
+        "title": "DefinitionInput"
+      },
+      "DefinitionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "term": {
+            "type": "string",
+            "title": "Term"
+          },
+          "definition": {
+            "type": "string",
+            "title": "Definition"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "term",
+          "definition",
+          "version"
+        ],
+        "title": "DefinitionView"
+      },
       "DeleteResponse": {
         "properties": {
           "deleted": {
@@ -8267,6 +9162,36 @@
           "deleted"
         ],
         "title": "DeleteResponse"
+      },
+      "DrawView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "at": {
+            "type": "string",
+            "title": "At"
+          },
+          "without_replacement": {
+            "type": "boolean",
+            "title": "Without Replacement"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "method",
+          "at",
+          "without_replacement"
+        ],
+        "title": "DrawView"
       },
       "DrawnCard": {
         "properties": {
@@ -8787,6 +9712,32 @@
         ],
         "title": "FeedbackPage"
       },
+      "GroundedClaim": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "source_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Source Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text",
+          "source_ids"
+        ],
+        "title": "GroundedClaim"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -8823,6 +9774,29 @@
           "api_version"
         ],
         "title": "Health"
+      },
+      "HistoryItem": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "role",
+          "text"
+        ],
+        "title": "HistoryItem"
       },
       "Insight": {
         "properties": {
@@ -9582,6 +10556,39 @@
         ],
         "title": "Me"
       },
+      "MessageInput": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "consent_event_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Consent Event Id"
+          },
+          "remember_definitions": {
+            "type": "boolean",
+            "title": "Remember Definitions",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text",
+          "expected_version",
+          "consent_event_id"
+        ],
+        "title": "MessageInput"
+      },
       "MoodCounts": {
         "properties": {
           "calm": {
@@ -10209,6 +11216,29 @@
         ],
         "title": "ReadingSelection"
       },
+      "Reflection": {
+        "properties": {
+          "card_id": {
+            "type": "integer",
+            "maximum": 77.0,
+            "minimum": 0.0,
+            "title": "Card Id"
+          },
+          "reflection": {
+            "type": "string",
+            "maxLength": 400,
+            "minLength": 1,
+            "title": "Reflection"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "card_id",
+          "reflection"
+        ],
+        "title": "Reflection"
+      },
       "RenewalResponse": {
         "properties": {
           "session_id": {
@@ -10322,34 +11352,170 @@
         ],
         "title": "SelectedCard"
       },
-      "SessionInput": {
+      "SessionView": {
         "properties": {
-          "platform": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "topic": {
+            "type": "string",
+            "title": "Topic"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "phase": {
             "type": "string",
             "enum": [
-              "android",
-              "ios",
-              "web"
+              "listening",
+              "clarifying",
+              "confirmation",
+              "advice",
+              "support"
             ],
-            "title": "Platform"
+            "title": "Phase"
           },
-          "locale": {
-            "type": "string",
-            "title": "Locale",
-            "default": "ko-KR"
+          "understanding": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Understanding"
           },
-          "timezone": {
+          "acknowledgement": {
             "type": "string",
-            "title": "Timezone",
-            "default": "Asia/Seoul"
+            "title": "Acknowledgement"
+          },
+          "perspective": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Perspective"
+          },
+          "response_mode": {
+            "type": "string",
+            "enum": [
+              "advice",
+              "listen"
+            ],
+            "title": "Response Mode"
+          },
+          "clarification_question": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clarification Question"
+          },
+          "search_queries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Search Queries"
+          },
+          "search_status": {
+            "type": "string",
+            "title": "Search Status"
+          },
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/SelectedCard"
+            },
+            "type": "array",
+            "title": "Cards"
+          },
+          "draw": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DrawView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CounselResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceView"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "glossary_used": {
+            "items": {
+              "$ref": "#/components/schemas/DefinitionView"
+            },
+            "type": "array",
+            "title": "Glossary Used"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/HistoryItem"
+            },
+            "type": "array",
+            "title": "History"
+          },
+          "job": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CommandView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "platform"
+          "id",
+          "topic",
+          "version",
+          "phase",
+          "understanding",
+          "acknowledgement",
+          "perspective",
+          "response_mode",
+          "clarification_question",
+          "search_queries",
+          "search_status",
+          "cards",
+          "draw",
+          "result",
+          "sources",
+          "glossary_used",
+          "history",
+          "job"
         ],
-        "title": "SessionInput"
+        "title": "SessionView"
       },
       "Slot": {
         "properties": {
@@ -10648,6 +11814,59 @@
           "expires_at"
         ],
         "title": "SocialStarted"
+      },
+      "SourceView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "web",
+              "user_definition",
+              "tarot_reference"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "retrieved_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieved At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "url",
+          "retrieved_at"
+        ],
+        "title": "SourceView"
       },
       "Spread": {
         "properties": {
@@ -11415,6 +12634,55 @@
           "expected_version"
         ],
         "title": "VersionInput"
+      },
+      "api__adapters__http__counseling__SessionInput": {
+        "properties": {
+          "topic": {
+            "type": "string",
+            "enum": [
+              "relationship",
+              "work",
+              "self",
+              "daily",
+              "care",
+              "start"
+            ],
+            "title": "Topic",
+            "default": "care"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SessionInput"
+      },
+      "api__adapters__http__identity__SessionInput": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "android",
+              "ios",
+              "web"
+            ],
+            "title": "Platform"
+          },
+          "locale": {
+            "type": "string",
+            "title": "Locale",
+            "default": "ko-KR"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "Asia/Seoul"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform"
+        ],
+        "title": "SessionInput"
       },
       "api__adapters__http__identity__SessionResponse": {
         "properties": {

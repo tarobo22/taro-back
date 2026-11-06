@@ -20,6 +20,10 @@ from psycopg_pool import ConnectionPool
 from api.adapters.ai_audio import PrivateAudioStore
 from api.adapters.ai_jobs_postgres import PostgresAIJobsUnitOfWork
 from api.adapters.ai_openai import OpenAIResultProvider, OpenAITranscriptionProvider
+from api.adapters.counseling_openai import OpenAICounselingModel
+from api.adapters.counseling_postgres import PostgresCounselingStore
+from api.adapters.http.counseling import create_counseling_router
+from api.application.counseling import CounselingService
 from api.adapters.data_privacy_postgres import PostgresDataPrivacyUnitOfWork, initialize_profile, owner_guard
 from api.adapters.experience_postgres import PostgresExperienceUnitOfWork
 from api.adapters.favorites_postgres import PostgresFavoritesUnitOfWork
@@ -95,7 +99,8 @@ def read_shared(filename):
 
 
 def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription_provider=DEFAULT_PROVIDER,
-               audio_store=None, workers_enabled=True, social_provider=None, social_return_uris=None):
+               audio_store=None, workers_enabled=True, social_provider=None, social_return_uris=None,
+               counseling_model=DEFAULT_PROVIDER):
     settings = settings or Settings.from_env()
     content, rules = read_shared('content.json'), read_shared('journal-policy.json')
     experience_rules, identity_rules = read_shared('experience-policy.json'), read_shared('identity-policy.json')
@@ -107,6 +112,18 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     ai_client = httpx.Client(timeout=ai_policy['provider_deadline_seconds'],
                             limits=httpx.Limits(max_connections=2), transport=httpx.HTTPTransport(retries=0))
     runtime_key = lambda: os.environ.get('OPENAI_API_KEY')
+    counseling_runtime = read_shared('counseling-runtime.json')
+    counseling_client = httpx.Client(timeout=60, limits=httpx.Limits(max_connections=4),
+                                     transport=httpx.HTTPTransport(retries=0))
+    if counseling_model is DEFAULT_PROVIDER:
+        model_name = os.environ.get('OPENAI_COUNSELING_MODEL') or settings.openai_model or counseling_runtime['model']
+        effort = os.environ.get('OPENAI_COUNSELING_REASONING_EFFORT')
+        if not effort and model_name == counseling_runtime['model']:
+            effort = counseling_runtime['reasoning_effort']
+        counseling_model = OpenAICounselingModel(counseling_client, model_name, runtime_key,
+            policy=counseling_runtime, reasoning_effort=effort)
+    counseling = CounselingService(PostgresCounselingStore(pool), counseling_model,
+                                   read_shared('data-catalog.json')['cards'])
     if result_provider is DEFAULT_PROVIDER:
         result_provider = OpenAIResultProvider(ai_client, settings.openai_model, runtime_key,
             ai_policy['max_output_tokens'], ai_policy['provider_deadline_seconds'])
@@ -161,8 +178,9 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     ai_jobs.insight_source = insights
     data.export_callbacks = (ai_jobs.export_owner, readings.export_owner, journals_v2.export_owner,
                              favorites.export_owner, insights.export_owner, billing.export_owner,
-                             auth.export_owner, admin.export_owner, story.export_owner)
-    data.erase_callbacks = (readings.erase_owner, ai_jobs.erase_owner, journals_v2.erase_owner,
+                             auth.export_owner, admin.export_owner, story.export_owner,
+                             PostgresCounselingStore.export_owner)
+    data.erase_callbacks = (PostgresCounselingStore.erase_owner, readings.erase_owner, ai_jobs.erase_owner, journals_v2.erase_owner,
                             favorites.erase_owner, insights.erase_owner, billing.erase_owner, admin.erase_owner,
                             auth.erase_owner, story.erase_owner)
 
@@ -209,6 +227,9 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
             if workers_enabled:
                 tasks = [asyncio.create_task(run_loop(stop, lambda: ai_jobs.run_next('api-worker'), settings.worker_poll_seconds)),
                          asyncio.create_task(run_loop(stop, maintain, settings.maintenance_seconds))]
+                worker_count = max(1, min(4, int(os.environ.get('COUNSELING_WORKERS', '2'))))
+                tasks.extend(asyncio.create_task(run_loop(stop, counseling.run_next, settings.worker_poll_seconds))
+                             for _ in range(worker_count))
             yield
         finally:
             stop.set()
@@ -217,6 +238,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
             pool.close()
             catalog_pool.close()
             ai_client.close()
+            counseling_client.close()
             store_client.close()
             auth_client.close()
 
@@ -292,6 +314,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         ota_policy=admin.ota_policy_for_bootstrap))
     app.include_router(data_privacy_router(data, current_session, status_owner_dependency=status_session))
     app.include_router(create_ai_jobs_router(ai_jobs, current_session))
+    app.include_router(create_counseling_router(counseling, current_session))
     app.include_router(create_reading_v2_router(readings, current_session))
     app.include_router(journal_v2_router(journals_v2, current_session))
     app.include_router(journal_summary_router(summary, current_session))

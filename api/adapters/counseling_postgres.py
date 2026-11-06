@@ -129,3 +129,15 @@ class PostgresCounselingStore:
         with self.pool.connection() as connection:
             connection.execute('SET LOCAL ROLE yeoun_counseling_app')
             return connection.execute('SELECT * FROM public.claim_counseling_command()').fetchone()
+
+    @staticmethod
+    def export_owner(connection, owner):
+        connection.execute("SELECT set_config('yeoun.owner',%s,true)", (str(owner),))
+        return {name: connection.execute(f'SELECT * FROM {name} WHERE owner_id=%s', (owner,)).fetchall()
+                for name in ('counseling_sessions', 'personal_glossary')}
+
+    @staticmethod
+    def erase_owner(connection, owner):
+        connection.execute("SELECT set_config('yeoun.owner',%s,true)", (str(owner),))
+        connection.execute('DELETE FROM counseling_sessions WHERE owner_id=%s', (owner,))
+        connection.execute('DELETE FROM personal_glossary WHERE owner_id=%s', (owner,))

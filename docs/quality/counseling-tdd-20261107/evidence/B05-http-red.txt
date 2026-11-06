@@ -1,0 +1,35 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+__________________ test_private_responses_are_not_cacheable ___________________
+api\tests\integration\test_counseling_http.py:17: in test_private_responses_are_not_cacheable
+    assert r.status_code==200 and r.headers.get('cache-control')=='no-store'
+E   assert (404 == 200)
+E    +  where 404 = <Response [404 Not Found]>.status_code
+______ test_client_cannot_choose_owner_and_cannot_access_another_session ______
+api\tests\integration\test_counseling_http.py:22: in test_client_cannot_choose_owner_and_cannot_access_another_session
+    assert c.post('/v2/counseling/sessions',headers={'X-Idempotency-Key':str(uuid4())},json={'topic':'care','owner_id':str(b)}).status_code==422
+E   AssertionError: assert 404 == 422
+E    +  where 404 = <Response [404 Not Found]>.status_code
+E    +    where <Response [404 Not Found]> = post('/v2/counseling/sessions', headers={'X-Idempotency-Key': '278bfe88-2622-48dd-9229-f5738c750167'}, json={'topic': 'care', 'owner_id': 'bf9d660c-9343-4427-bd5b-18d280747e7a'})
+E    +      where post = <starlette.testclient.TestClient object at 0x0000020B1318D490>.post
+_______ test_http_message_is_queued_then_requires_explicit_confirmation _______
+api\tests\integration\test_counseling_http.py:31: in test_http_message_is_queued_then_requires_explicit_confirmation
+    r=c.post('/v2/counseling/sessions/'+v['id']+'/messages',headers={'X-Idempotency-Key':str(uuid4())},
+                                        ^^^^^^^
+E   KeyError: 'id'
+______ test_full_account_erasure_also_removes_queued_counseling_records _______
+api\tests\integration\test_counseling_http.py:47: in test_full_account_erasure_also_removes_queued_counseling_records
+    app=create_app(Settings(os.environ['YEOUN_TEST_DATABASE_URL'],()),result_provider=None,
+E   TypeError: create_app() got an unexpected keyword argument 'counseling_model'
+============================== warnings summary ===============================
+..\..\..\taro-back\.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\chang\Documents\ChatGPT\0915 2\taro-back\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED api/tests/integration/test_counseling_http.py::test_private_responses_are_not_cacheable
+FAILED api/tests/integration/test_counseling_http.py::test_client_cannot_choose_owner_and_cannot_access_another_session
+FAILED api/tests/integration/test_counseling_http.py::test_http_message_is_queued_then_requires_explicit_confirmation
+FAILED api/tests/integration/test_counseling_http.py::test_full_account_erasure_also_removes_queued_counseling_records
+4 failed, 1 warning in 1.53s
