@@ -38,6 +38,18 @@ from api.adapters.http.journal_v2 import journal_v2_router
 from api.adapters.http.reading_v2 import create_reading_v2_router
 from api.adapters.identity_postgres import PostgresIdentityUnitOfWork
 from api.adapters.journal_v2_postgres import PostgresJournalV2UnitOfWork
+from api.adapters.journal_source_postgres import PostgresJournalSourceLookup
+from api.adapters.billing_postgres import PostgresBillingUnitOfWork
+from api.adapters.google_play_billing import GooglePlayVerifier, GoogleApplicationCredentials, FernetReceiptCipher
+from api.adapters.http.billing import billing_router
+from api.adapters.social_auth_postgres import PostgresSocialUnitOfWork
+from api.adapters.social_auth_runtime import runtime_social_provider, runtime_return_uris
+from api.adapters.http.social_auth import social_auth_router
+from api.adapters.story_postgres import PostgresStoryUnitOfWork
+from api.adapters.story_catalog import load_story_catalog
+from api.adapters.http.story import story_router
+from api.adapters.admin_postgres import PostgresAdminUnitOfWork
+from api.adapters.http.admin import admin_router
 from api.adapters.local_guidance import LocalGuidance
 from api.adapters.openai_guidance import OpenAIGuidance
 from api.adapters.owned_references import PostgresOwnedReferences
@@ -52,6 +64,10 @@ from api.application.journal_insights import JournalInsightsService
 from api.application.identity import IdentityUseCases
 from api.application.journal import InactiveOwnerError, JournalUseCases
 from api.application.journal_v2 import JournalV2UseCases
+from api.application.billing import BillingService
+from api.application.social_auth import SocialAuthService
+from api.application.story import StoryService
+from api.application.admin import AdminService
 from api.application.reading_v2 import ReadingV2Service
 from api.config import ROOT, Settings
 from api.domain.ai_jobs import load_policy
@@ -60,6 +76,9 @@ from api.domain.experience import ExperiencePolicy
 from api.domain.identity import IdentityPolicy, SessionRejected
 from api.domain.journal import JournalPolicy
 from api.domain.journal_v2 import JournalV2Policy
+from api.domain.billing import Product
+from api.domain.social_auth import SocialAuthPolicy
+from api.domain.admin import AdminPolicy
 
 DEFAULT_PROVIDER = object()
 logger = logging.getLogger('yeoun')
@@ -74,13 +93,15 @@ def read_shared(filename):
 
 
 def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription_provider=DEFAULT_PROVIDER,
-               audio_store=None, workers_enabled=True):
+               audio_store=None, workers_enabled=True, social_provider=None, social_return_uris=None):
     settings = settings or Settings.from_env()
     content, rules = read_shared('content.json'), read_shared('journal-policy.json')
     experience_rules, identity_rules = read_shared('experience-policy.json'), read_shared('identity-policy.json')
     data_policy, ai_policy = DataPolicy.from_mapping(read_shared('data-policy.json')), load_policy()
     pool = ConnectionPool(settings.database_url, open=False, min_size=1, max_size=6,
                           kwargs={'row_factory': dict_row})
+    catalog_pool = ConnectionPool(settings.database_url, open=False, min_size=0, max_size=2,
+                                 kwargs={'row_factory': dict_row})
     ai_client = httpx.Client(timeout=ai_policy['provider_deadline_seconds'],
                             limits=httpx.Limits(max_connections=2), transport=httpx.HTTPTransport(retries=0))
     runtime_key = lambda: os.environ.get('OPENAI_API_KEY')
@@ -94,11 +115,33 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
 
     data = DataPrivacyUseCases(lambda: PostgresDataPrivacyUnitOfWork(pool), data_policy,
         read_shared('data-catalog.json'))
+    auth_client = httpx.Client(timeout=15, transport=httpx.HTTPTransport(retries=0), follow_redirects=False)
+    auth = SocialAuthService(lambda: PostgresSocialUnitOfWork(pool), social_provider or runtime_social_provider(auth_client),
+        SocialAuthPolicy(tuple(social_return_uris) if social_return_uris is not None else runtime_return_uris()))
+    data.owner_kind = auth.owner_kind
+    retention = os.environ.get('ADMIN_AUDIT_RETENTION_DAYS', '').strip()
+    admin = AdminService(lambda: PostgresAdminUnitOfWork(pool), auth, data.catalog,
+        query_uow_factory=lambda: PostgresAdminUnitOfWork(catalog_pool),
+        ota_defaults={'channel': settings.ota_channel, 'min_native_version': settings.min_native_version,
+                      'updates_enabled': settings.ota_updates_enabled},
+        policy=AdminPolicy(audit_retention_days=int(retention) if retention else None))
+    data.catalog_source = admin.catalog_source
+    story = StoryService(lambda: PostgresStoryUnitOfWork(pool), load_story_catalog())
     identity = IdentityUseCases(lambda: PostgresIdentityUnitOfWork(pool, initialize_profile, owner_guard),
         IdentityPolicy(identity_rules['session_days'], tuple(identity_rules['locales'])),
         lambda: datetime.now(timezone.utc), uuid4)
+    store_rules = read_shared('billing-catalog.json')
+    store_client = httpx.Client(timeout=10, transport=httpx.HTTPTransport(retries=0))
+    billing = BillingService(lambda: PostgresBillingUnitOfWork(pool),
+        [Product(**item) for item in store_rules['products']],
+        GooglePlayVerifier(store_client, store_rules['package_name'], GoogleApplicationCredentials(),
+                           enabled=os.environ.get('BILLING_PLAY_ENABLED') == 'true'),
+        FernetReceiptCipher(lambda: os.environ.get('BILLING_RECEIPT_KEY')),
+        owner_kind=lambda connection, owner: data.owner_kind(connection, owner) if getattr(data, 'owner_kind', None) else 'guest',
+        max_receipts=store_rules['max_receipts_per_owner'], reverify_seconds=store_rules['reverify_seconds'],
+        package_name=store_rules['package_name'])
     readings = ReadingV2Service(lambda: PostgresReadingV2UnitOfWork(pool), data,
-        owner_guard=owner_guard, allow_candidate=settings.allow_candidate_decks)
+        owner_guard=owner_guard, allow_candidate=settings.allow_candidate_decks, deck_access=billing.deck_access)
     ai_jobs = AIJobsService(lambda: PostgresAIJobsUnitOfWork(pool), provider=result_provider,
         transcription_provider=transcription_provider, reading_source=readings, owner_guard=owner_guard,
         audio_store=audio_store or PrivateAudioStore(settings.private_audio_dir), policy=ai_policy)
@@ -107,16 +150,19 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     data.feedback_target_exists = references.exists
     journal_v2_policy = JournalV2Policy.from_legacy(content['moods'], rules, read_shared('journal-v2-policy.json'))
     journals_v2 = JournalV2UseCases(lambda: PostgresJournalV2UnitOfWork(pool), journal_v2_policy,
-        source_exists=references.exists, invalidate_context=ai_jobs.cancel_for_journal)
+        source_exists=references.exists, invalidate_context=ai_jobs.cancel_for_journal,
+        source_lookup=PostgresJournalSourceLookup().resolve)
     summary = JournalSummaryUseCases(lambda: PostgresJournalSummaryUnitOfWork(pool), journal_v2_policy)
     favorites = FavoritesUseCases(lambda: PostgresFavoritesUnitOfWork(pool))
     insights = JournalInsightsService(lambda: PostgresJournalInsightsUnitOfWork(pool), ai_jobs=ai_jobs,
         owner_guard=owner_guard, policy=ai_policy)
     ai_jobs.insight_source = insights
     data.export_callbacks = (ai_jobs.export_owner, readings.export_owner, journals_v2.export_owner,
-                             favorites.export_owner, insights.export_owner)
+                             favorites.export_owner, insights.export_owner, billing.export_owner,
+                             auth.export_owner, admin.export_owner, story.export_owner)
     data.erase_callbacks = (readings.erase_owner, ai_jobs.erase_owner, journals_v2.erase_owner,
-                            favorites.erase_owner, insights.erase_owner)
+                            favorites.erase_owner, insights.erase_owner, billing.erase_owner, admin.erase_owner,
+                            auth.erase_owner, story.erase_owner)
 
     policy = JournalPolicy(frozenset(content['moods']), rules['maxBodyLength'])
     journals = JournalUseCases(lambda: PostgresJournalUnitOfWork(pool), policy, uuid4, owner_guard=owner_guard)
@@ -148,12 +194,16 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         data.purge_expired()
         readings.purge_expired()
         journals_v2.purge_expired_idempotency()
+        billing.reconcile()
+        auth.purge_expired()
+        admin.purge_expired()
 
     @asynccontextmanager
     async def lifespan(app):
         stop, tasks = asyncio.Event(), []
         try:
             await asyncio.to_thread(pool.open, wait=True)
+            await asyncio.to_thread(catalog_pool.open, wait=True)
             if workers_enabled:
                 tasks = [asyncio.create_task(run_loop(stop, lambda: ai_jobs.run_next('api-worker'), settings.worker_poll_seconds)),
                          asyncio.create_task(run_loop(stop, maintain, settings.maintenance_seconds))]
@@ -163,7 +213,10 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
             if tasks:
                 await asyncio.gather(*tasks)
             pool.close()
+            catalog_pool.close()
             ai_client.close()
+            store_client.close()
+            auth_client.close()
 
     app = FastAPI(title='여운 API', version='2.0.0', lifespan=lifespan)
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins),
@@ -200,7 +253,8 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
 
     def current_session(authorization: Annotated[str | None, Header()] = None):
         try:
-            return identity.authenticate(authorization)
+            owner = auth.authenticate(authorization)
+            return identity.authenticate(authorization) if owner is None else owner
         except SessionRejected as error:
             raise HTTPException(401, {'code': str(error), 'message': '기록 연결을 확인해 주세요. 새 연결로 자동 교체하지 않아요.',
                                       'retryable': False}) from None
@@ -222,13 +276,16 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     def create_session():
         return {'token': identity.create('web', data_policy.default_locale, data_policy.default_timezone).access_token}
 
-    app.include_router(identity_router(identity, current_session))
+    app.include_router(identity_router(identity, current_session,
+        session_renewal=lambda authorization, owner: auth.refresh(authorization) or identity.refresh(owner)))
+    app.include_router(social_auth_router(auth, current_session))
+    app.include_router(admin_router(admin))
+    app.include_router(story_router(story, current_session))
     app.include_router(bootstrap_router(data, ai_jobs, current_session, check_database,
         limits={'daily_ai_requests': ai_policy['owner_daily_limit'], 'question_max_chars': experience_rules['maxTarotQuestion'],
                 'journal_max_chars': policy.max_body_length, 'audio_max_seconds': ai_policy['audio_max_duration_ms'] // 1000,
                 'audio_max_bytes': ai_policy['audio_max_bytes']},
-        ota_policy={'channel': settings.ota_channel, 'min_native_version': settings.min_native_version,
-                    'updates_enabled': settings.ota_updates_enabled}))
+        ota_policy=admin.ota_policy_for_bootstrap))
     app.include_router(data_privacy_router(data, current_session, status_owner_dependency=status_session))
     app.include_router(create_ai_jobs_router(ai_jobs, current_session))
     app.include_router(create_reading_v2_router(readings, current_session))
@@ -236,7 +293,8 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     app.include_router(journal_summary_router(summary, current_session))
     app.include_router(favorites_router(favorites, current_session))
     app.include_router(create_journal_insights_router(insights, current_session))
-    app.include_router(journal_router(journals, policy, current_session))
+    app.include_router(journal_router(journals, policy, current_session, mood_codes=journal_v2_policy.mood_labels))
+    app.include_router(billing_router(billing, current_session))
     app.include_router(experience_router(experiences, configuration, current_session))
     return app
 

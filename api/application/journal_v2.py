@@ -9,10 +9,11 @@ from api.domain.journal_v2 import JournalV2Conflict, JournalV2Gone, JournalV2Inv
 
 
 class JournalV2UseCases:
-    def __init__(self, uow_factory, policy, *, source_exists=None, invalidate_context=None, clock=None):
+    def __init__(self, uow_factory, policy, *, source_exists=None, invalidate_context=None, clock=None, source_lookup=None):
         self.uow_factory = uow_factory
         self.policy = policy
         self.source_exists = source_exists
+        self.source_lookup = source_lookup
         self.invalidate_context = invalidate_context
         self.clock = clock or (lambda: datetime.now(timezone.utc))
 
@@ -84,6 +85,24 @@ class JournalV2UseCases:
                 raise JournalV2Conflict('stale_journal')
             uow.commit()
             return self._dto(changed)
+
+    def source(self, owner, entry_id):
+        """Resolve an owned journal's source in the same, read-only transaction."""
+        with self.uow_factory() as uow:
+            uow.journals.lock(owner)
+            uow.journals.active(owner)
+            row = uow.journals.get(owner, entry_id)
+            if row is None:
+                raise JournalV2NotFound('journal_not_found')
+            if self.source_lookup is None:
+                raise JournalV2NotFound('journal_source_not_found')
+            for kind in ('reading', 'turn'):
+                source_id = row.get('source_' + kind + '_id')
+                if source_id is not None:
+                    resolved = self.source_lookup(uow.connection, owner, kind, source_id)
+                    if resolved is not None:
+                        return resolved
+            raise JournalV2NotFound('journal_source_not_found')
 
     def list(self, owner, *, cursor=None, limit=None, start=None, end=None, mood=None):
         limit = self.policy.page_default if limit is None else limit

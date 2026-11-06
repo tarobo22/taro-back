@@ -1,12 +1,13 @@
 from typing import Annotated, Literal, Union
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from pydantic import Field, StrictInt
 
 from api.adapters.http.ai_jobs import InputModel, call, idempotency_key
 from api.adapters.http.data_privacy import Card
 from api.domain.ai_jobs import AIResult
+from api.domain.reading_v2 import DeckAccessDenied
 
 
 class DailyReadingInput(InputModel):
@@ -83,7 +84,10 @@ def create_reading_v2_router(service, owner_dependency):
 
     @router.post('/readings', status_code=201, response_model=Reading)
     def create(body: ReadingInput, owner: Owner, key: Key):
-        return call(lambda: service.create(owner, key, body.model_dump(mode='json')))
+        try:
+            return call(lambda: service.create(owner, key, body.model_dump(mode='json')))
+        except DeckAccessDenied:
+            raise HTTPException(403, {'code': 'DECK_PURCHASE_REQUIRED', 'message': '이 덱의 이용 권한을 확인해 주세요. 구매 복원에서 다시 확인할 수 있어요.', 'retryable': False}) from None
 
     @router.get('/readings', response_model=ReadingList)
     def readings(owner: Owner, limit: Annotated[int, Query(ge=1, le=50)] = 20,

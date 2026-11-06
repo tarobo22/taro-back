@@ -1,0 +1,47 @@
+{
+  "tests": {
+    "backend": 532,
+    "rn": 133,
+    "web": 130,
+    "browser": 39,
+    "jvm": 6
+  },
+  "native_perf": {
+    "frames": 1166,
+    "jank_percent": 0.6,
+    "p95_ms": 18,
+    "pss_mib": 101.3623046875,
+    "duration_seconds": 19.596,
+    "measurement": "Android HWUI gfxinfo, emulator home idle only; not JS FPS or production/device performance"
+  },
+  "apk": {
+    "version": "1.4.0",
+    "code": 5,
+    "package": "com.yeoun.app.nonai14",
+    "bytes": 41238969,
+    "sha256": "8bd17873a66ff0221e46663293f0ed2da95a6e9af08c54648d6e07f3fa85191c",
+    "final_tarot_motion_rebuild": "BUILD SUCCESSFUL, android-delivery-build.log"
+  },
+  "ai_external_calls": 0,
+  "baseline_tests_modified": 0,
+  "finality": "final product snapshot; report and repository documentation commits follow",
+  "native_smoke": {
+    "guest_preserved_across_reinstall": true,
+    "daily_original_front": true,
+    "story_left_no_right_yes_and_button": true,
+    "story_back_resume_count_1_and_3_choice_ending": true,
+    "unconfigured_providers_disabled": true,
+    "unconfigured_products_no_prices": true,
+    "os_font_scale_2_dial": {
+      "status": "visually confirmed; center index and full-width selected text",
+      "screenshot": "native/final-font2-dial.png",
+      "restored_original_font_scale": "1.0"
+    },
+    "old_packages_preserved": [
+      "com.yeoun.app",
+      "com.yeoun.app.p1verify"
+    ],
+    "actual_microphone_recorded": false
+  },
+  "ui_dump_limit": "uiautomator can fail to reach idle during continuous animation; helper now rejects stale XML, screenshots independently visually verified"
+}

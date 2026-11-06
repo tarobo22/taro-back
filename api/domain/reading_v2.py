@@ -9,6 +9,10 @@ TOPICS = ('relationship', 'work', 'self', 'daily', 'care', 'start')
 POSITIONS = ('지금의 마음', '주변의 흐름', '다음 한 걸음')
 
 
+class DeckAccessDenied(Exception):
+    pass
+
+
 def reading_input(body):
     if not isinstance(body, dict) or body.get('kind') not in ('daily', 'three_card'):
         raise AIError('INVALID_READING')

@@ -64,6 +64,6 @@ def bootstrap_router(data_service, ai_service, owner_dependency, check_database,
                 break
         return {'api_version': '2.0', 'policy_version': ai_service.policy['policy_version'],
                 'server_time': datetime.now(timezone.utc), 'user': data_call(lambda: data_service.get_me(owner)),
-                'consents': list(latest.values()), 'ota_policy': ota_policy, 'limits': limits}
+                'consents': list(latest.values()), 'ota_policy': ota_policy() if callable(ota_policy) else ota_policy, 'limits': limits}
 
     return router

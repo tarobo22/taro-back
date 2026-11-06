@@ -1,0 +1,47 @@
+[
+  {
+    "repo": "taro",
+    "baseline": "49ea3586ae88eaf37e0148b0967ccb62fa8f2a8d",
+    "head": "e24133de5657f15b2bca0e962b0092ef5333d7e5",
+    "changed_paths": 108,
+    "status_counts": {
+      "A": 66,
+      "M": 42
+    },
+    "new_test_related_files": 12,
+    "existing_test_changes": [],
+    "existing_test_M_or_D": 0,
+    "working_tree_status_snapshot": [],
+    "scope_note": "Final delivery heads include three new CI workflows and one generated OpenAPI refresh beyond the separately preserved product cut. Later docs commits are excluded. New task test files are additions relative to baseline, not weakened existing tests."
+  },
+  {
+    "repo": "taro-raect",
+    "baseline": "942dc08d7027f331f7098949a1216be7e8cca39d",
+    "head": "a1ddc2983c3f97aebc51b109b7c07d8169449133",
+    "changed_paths": 111,
+    "status_counts": {
+      "A": 75,
+      "M": 36
+    },
+    "new_test_related_files": 23,
+    "existing_test_changes": [],
+    "existing_test_M_or_D": 0,
+    "working_tree_status_snapshot": [],
+    "scope_note": "Final delivery heads include three new CI workflows and one generated OpenAPI refresh beyond the separately preserved product cut. Later docs commits are excluded. New task test files are additions relative to baseline, not weakened existing tests."
+  },
+  {
+    "repo": "taro-back",
+    "baseline": "930b0c0e717271592d8827028582bfc2892ccb29",
+    "head": "65fce63ae3bd556393f047ec0a76db14f67a6ccb",
+    "changed_paths": 70,
+    "status_counts": {
+      "A": 57,
+      "M": 13
+    },
+    "new_test_related_files": 23,
+    "existing_test_changes": [],
+    "existing_test_M_or_D": 0,
+    "working_tree_status_snapshot": [],
+    "scope_note": "Final delivery heads include three new CI workflows and one generated OpenAPI refresh beyond the separately preserved product cut. Later docs commits are excluded. New task test files are additions relative to baseline, not weakened existing tests."
+  }
+]

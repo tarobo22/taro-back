@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "package_name": "com.yeoun.app",
+  "max_receipts_per_owner": 100,
+  "reverify_seconds": 300,
+  "products": []
+}

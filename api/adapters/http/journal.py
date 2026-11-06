@@ -37,6 +37,7 @@ class EntryResponse(BaseModel):
 class JournalPolicyResponse(BaseModel):
     moods: list[str]
     maxBodyLength: int
+    moodCodes: dict[str, str] | None = None
 
 
 class DeleteResponse(BaseModel):
@@ -56,13 +57,22 @@ def domain_call(operation):
         raise HTTPException(422, '선택한 마음과 글자 수를 확인해 주세요.') from None
 
 
-def journal_router(service, policy, owner_dependency):
+def journal_router(service, policy, owner_dependency, *, mood_codes=None):
     router = APIRouter(prefix='/v1', tags=['journal'])
     Owner = Annotated[UUID, Depends(owner_dependency)]
+    mapping = dict(mood_codes) if mood_codes is not None else None
+    if mapping is not None and (
+        set(mapping) != {'calm', 'happy', 'thinking', 'settled', 'talk'}
+        or any(not isinstance(label, str) or not label for label in mapping.values())
+        or len(set(mapping.values())) != 5
+        or set(mapping.values()) != policy.moods
+    ):
+        raise ValueError('mood_codes must match the five journal policy labels')
 
-    @router.get('/journal-policy', response_model=JournalPolicyResponse)
+    @router.get('/journal-policy', response_model=JournalPolicyResponse, response_model_exclude_none=True)
     def journal_policy():
-        return {'moods': sorted(policy.moods), 'maxBodyLength': policy.max_body_length}
+        return {'moods': sorted(policy.moods), 'maxBodyLength': policy.max_body_length,
+                **({'moodCodes': mapping} if mapping is not None else {})}
 
     @router.get('/entries', response_model=list[EntryResponse])
     def entries(owner: Owner):

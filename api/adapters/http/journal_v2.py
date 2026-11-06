@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, create_model, model_validator
 
 from api.adapters.http.data_privacy import request_identity
+from api.adapters.http.experience import ReadingResponse, CounselResponse
 from api.domain.data_privacy import DataNotFound, OwnerDeleting
 from api.domain.journal_v2 import JournalV2Conflict, JournalV2Gone, JournalV2Invalid, JournalV2NotFound
 
@@ -56,6 +57,31 @@ class JournalList(StrictJournalModel):
     next_cursor: str | None
 
 
+class JournalReadingSource(StrictJournalModel):
+    kind: Literal['reading_v2']
+    reading_id: UUID
+
+
+class JournalTurnSource(StrictJournalModel):
+    kind: Literal['turn_v2']
+    conversation_id: UUID
+    turn_id: UUID
+
+
+class JournalLegacyReadingSource(StrictJournalModel):
+    kind: Literal['legacy_reading']
+    reading: ReadingResponse
+
+
+class JournalLegacyCounselSource(StrictJournalModel):
+    kind: Literal['legacy_counsel']
+    counsel: CounselResponse
+
+
+JournalSource = Annotated[JournalReadingSource | JournalTurnSource | JournalLegacyReadingSource |
+                          JournalLegacyCounselSource, Field(discriminator='kind')]
+
+
 def journal_v2_call(operation):
     try:
         return operation()
@@ -92,6 +118,11 @@ def journal_v2_router(service, owner_dependency):
     @router.get('/journal-entries/{entry_id}', response_model=Journal, operation_id='getJournal')
     def get(entry_id: UUID, owner: Owner):
         return journal_v2_call(lambda: service.get(owner, entry_id))
+
+    @router.get('/journal-entries/{entry_id}/source', response_model=JournalSource, operation_id='getJournalSource')
+    def source(entry_id: UUID, owner: Owner, response: Response):
+        response.headers['Cache-Control'] = 'no-store'
+        return journal_v2_call(lambda: service.source(owner, entry_id))
 
     @router.patch('/journal-entries/{entry_id}', response_model=Journal, operation_id='updateJournal')
     def update(entry_id: UUID, body: PatchBody, owner: Owner):
