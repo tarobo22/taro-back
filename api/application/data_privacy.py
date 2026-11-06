@@ -18,26 +18,33 @@ from api.domain.data_privacy import DataConflict, DataExpired, DataNotFound, Dat
 
 class DataPrivacyUseCases:
     def __init__(self, uow_factory, policy, catalog, *, export_callbacks=(), erase_callbacks=(),
-                 feedback_target_exists=None, clock=None):
+                 feedback_target_exists=None, clock=None, owner_kind=None):
         self.uow_factory = uow_factory
         self.policy = policy
         self.catalog = deepcopy(catalog)
         self.export_callbacks = tuple(export_callbacks)
         self.erase_callbacks = tuple(erase_callbacks)
         self.feedback_target_exists = feedback_target_exists
+        self.owner_kind = owner_kind
         self.clock = clock or (lambda: datetime.now(timezone.utc))
 
     @staticmethod
-    def _me(profile):
-        return {'id': str(profile['owner_id']), 'kind': 'guest', 'locale': profile['locale'],
+    def _me(profile, kind='guest'):
+        return {'id': str(profile['owner_id']), 'kind': kind, 'locale': profile['locale'],
                 'timezone': profile['timezone'], 'preferences': {key: profile[key]
                     for key in ('tone', 'reduced_motion', 'voice_mode')}}
+
+    def _kind(self, transaction, owner):
+        kind = self.owner_kind(transaction, owner) if self.owner_kind is not None else 'guest'
+        if kind not in ('guest', 'member'):
+            raise DataConflict('invalid_owner_kind')
+        return kind
 
     def get_me(self, owner):
         with self.uow_factory() as uow:
             uow.data.lock(owner)
             uow.data.active(owner)
-            result = self._me(uow.data.profile(owner, self.policy))
+            result = self._me(uow.data.profile(owner, self.policy), self._kind(uow.connection, owner))
             uow.commit()
             return result
 
@@ -48,7 +55,7 @@ class DataPrivacyUseCases:
             uow.data.active(owner)
             uow.data.profile(owner, self.policy)
             uow.data.update_profile(owner, values)
-            result = self._me(uow.data.profile(owner, self.policy))
+            result = self._me(uow.data.profile(owner, self.policy), self._kind(uow.connection, owner))
             uow.commit()
             return result
 
@@ -284,7 +291,7 @@ class DataPrivacyUseCases:
                     return False
                 if row['kind'] == 'export':
                     uow.data.active(owner)
-                    collections = {'profile': self._me(uow.data.profile(owner, self.policy)),
+                    collections = {'profile': self._me(uow.data.profile(owner, self.policy), self._kind(uow.connection, owner)),
                                    **uow.data.export_legacy(owner)}
                     for callback in self.export_callbacks:
                         addition = callback(uow.connection, owner)
