@@ -277,6 +277,9 @@ class AdminService:
     def erase_owner(self,transaction,owner):
         self.uow_factory().repository_for(transaction).erase_owner(owner)
 
+    def export_owner(self,transaction,owner):
+        return self.uow_factory().repository_for(transaction).export_owner(owner)
+
 
 class AdminRoleManager:
     """Local operator capability. This class is never exposed by an HTTP route."""

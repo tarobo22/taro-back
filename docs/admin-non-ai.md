@@ -23,6 +23,7 @@ admin = AdminService(
 data = DataPrivacyUseCases(
     data_factory, data_policy, catalog_template,
     catalog_source=admin.catalog_source,
+    export_callbacks=(admin.export_owner, social_auth.export_owner, ...),
     erase_callbacks=(admin.erase_owner, social_auth.erase_owner, ...),
 )
 app.include_router(admin_router(admin))
@@ -125,6 +126,17 @@ created_at`. They record mutations and explicit role/session actions without
 copying feedback text or credentials. Owner erasure removes roles/admin
 sessions and anonymizes audit owner references and role target IDs in the same
 privacy transaction; publication and nonpersonal operation history remain.
+
+`admin.export_owner(transaction, owner)` is the privacy export callback and uses
+the caller's existing transaction without committing. It adds three unique
+datasets: `admin_roles` (role, updated_at), `admin_sessions` (id, role,
+expires_at, source_session_id), and `admin_audit` (id, action, target_type,
+target_id, created_at). Only that owner's role/sessions and actions explicitly
+attributed to that owner are selected. Anonymous/unspecified actors are excluded.
+Feedback target IDs owned by someone else, deleted feedback target IDs, and
+unknown target types are exported as null. Token hashes, original credentials,
+audit details, review notes, and feedback contents are excluded. After owner
+erasure all three personal datasets are empty; other owners remain unaffected.
 
 ## Retention and deployment boundaries
 
