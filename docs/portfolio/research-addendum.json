@@ -1,0 +1,191 @@
+{
+  "date": "2026-11-07",
+  "pages": [
+    {
+      "title": "논문을 상담 규칙으로",
+      "lead": "RAG의 문맥 참조와 ESConv의 지지 전략을 결합했습니다. 이 장부터는 2026-11-07에 추가한 상담 연구·구현 기록입니다.",
+      "blocks": [
+        {
+          "kind": "table",
+          "headers": [
+            "근거",
+            "검토한 내용",
+            "적용과 한계"
+          ],
+          "rows": [
+            [
+              "RAG · NeurIPS 2020",
+              "검색한 자료를 생성에 연결",
+              "본인 사전·대화·카드 의미 참조. 원 논문의 공동 학습 재현은 아님"
+            ],
+            [
+              "ESConv · ACL 2021",
+              "탐색·위로·행동과 지지 전략",
+              "전략별 프롬프트 분리. 학습된 전략 토큰은 사용하지 않음"
+            ],
+            [
+              "MI 반영 평가 · HuCLLM 2024",
+              "적절성·구체성·자연스러움·참여성",
+              "사람 평가 기준 참고. 영어·다른 도메인의 결과를 전이 성과로 주장하지 않음"
+            ]
+          ],
+          "widths": [
+            0.25,
+            0.3,
+            0.45
+          ]
+        },
+        {
+          "kind": "sub",
+          "text": "선정 패턴: 전략별 프롬프트 + 기존 RAG"
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "선택 전략",
+            "요구하는 응답",
+            "강제한 계약"
+          ],
+          "rows": [
+            [
+              "탐색",
+              "감정 반영 → 의미 확인. 이미 답한 내용은 반복 질문하지 않기",
+              "기존 Analysis 스키마·확인 단계"
+            ],
+            [
+              "경청",
+              "구체적인 부담·노력 반영. 질문과 해결 강요 없이 듣기",
+              "행동·카드·정보 없음, 후속 질문 null"
+            ],
+            [
+              "조언",
+              "확인한 고민·카드에 연결한 작은 행동",
+              "행동 정확히 1개, 카드·출처 ID 검사 유지"
+            ]
+          ],
+          "widths": [
+            0.16,
+            0.48,
+            0.36
+          ]
+        },
+        {
+          "kind": "code",
+          "text": "mode = payload.get(\"response_mode\", \"advice\")\nstrategy = reply_strategy(mode)\nresult = self._structured(strategy.render(COMPOSE),\n                          payload, CounselResult)\nreturn validate_reply_strategy(result, mode)"
+        },
+        {
+          "kind": "note",
+          "text": "새 계약 9개의 RED 확인 후 관련 28개 검사 통과. 경청 계약은 확인 후 최종 응답에 적용하며 진입·확인 동선은 유지합니다. 실제 모델 공감 점수는 미측정입니다. 허구적 자기 경험 공유·숨겨진 사고 과정 출력은 추가하지 않았습니다."
+        },
+        {
+          "kind": "link",
+          "text": "RAG 원문 · §2",
+          "url": "https://arxiv.org/pdf/2005.11401"
+        },
+        {
+          "kind": "link",
+          "text": "ESConv 원문 · §3.2 / Appendix B",
+          "url": "https://aclanthology.org/2021.acl-long.269.pdf"
+        },
+        {
+          "kind": "link",
+          "text": "구현·선택 근거·한계 전체 기록",
+          "url": "https://github.com/tarobo22/taro-back/blob/codex/counseling-rag-20261107/docs/counseling/RESEARCH-COUNSELING-20261107.md"
+        }
+      ]
+    },
+    {
+      "title": "튜닝 선택과 검증의 기준",
+      "lead": "현재 적용은 텍스트 프롬프트·문맥 설계입니다. 실제 가중치 학습과 모델 품질 검증은 별도 단계로 구분합니다.",
+      "blocks": [
+        {
+          "kind": "table",
+          "headers": [
+            "방법",
+            "선택",
+            "목적 / 조건"
+          ],
+          "rows": [
+            [
+              "전략 프롬프트 + RAG",
+              "적용",
+              "말하는 방식과 참고할 개인 정보·카드를 분리"
+            ],
+            [
+              "SFT",
+              "후속 후보",
+              "검수한 한국어 정답 응답으로 반복 오류 학습. 학습 가능 환경 확인이 먼저"
+            ],
+            [
+              "DPO",
+              "후속 후보",
+              "동일 맥락의 선호·비선호 쌍으로 말투·선택권 정렬"
+            ],
+            [
+              "Soft prompt / LoRA",
+              "미적용",
+              "학습 가능한 벡터·파라미터를 최적화. 텍스트 지침 변경과 구분"
+            ]
+          ],
+          "widths": [
+            0.29,
+            0.17,
+            0.54
+          ]
+        },
+        {
+          "kind": "sub",
+          "text": "실제 모델 평가를 위한 통제"
+        },
+        {
+          "kind": "p",
+          "text": "기준선 f93bb9e와 개선판 4e80d4b를 같은 모델·입력·카드·자료, 동시성 1로 비교합니다. 첫 공감과 최종 조언을 분리해 지연·토큰·검색 수를 기록하고, 적절성·구체성·자연스러움·사연 왜곡·선택권을 사람이 평가합니다."
+        },
+        {
+          "kind": "note",
+          "text": "기존 50개는 개발·회귀 사례이며 프롬프트 예시와 겹치는 문항이 있습니다. 이를 블라인드 평가나 학습 데이터로 동시에 사용하지 않습니다. 별도 문항 고정·사람의 독립 비교는 아직 실행하지 않았습니다."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "확인한 것",
+            "아직 확인하지 못한 것"
+          ],
+          "rows": [
+            [
+              "전략 선택·요청 경계·출력 계약 28개 검사 및 원격 CI 통과",
+              "실제 GPT A/B 품질·응답시간·환각 감소율"
+            ],
+            [
+              "기존 RAG·랜덤 카드·사용자 격리 경계 유지",
+              "가중치 학습·임베딩 검색·상담 효과"
+            ]
+          ],
+          "widths": [
+            0.5,
+            0.5
+          ]
+        },
+        {
+          "kind": "note",
+          "text": "현재 OpenAI 공식 일정은 신규 조직의 셀프서비스 파인튜닝을 제한합니다. 이 계정의 학습 이용 이력을 확인하지 않았으므로 API 결제만으로 SFT·DPO가 가능하다고 가정하지 않습니다. 이번 실제 GPT 호출·학습·부하 테스트는 0건입니다."
+        },
+        {
+          "kind": "link",
+          "text": "Prompt Tuning 용어 근거 · EMNLP 2021",
+          "url": "https://aclanthology.org/2021.emnlp-main.243.pdf"
+        },
+        {
+          "kind": "link",
+          "text": "OpenAI 파인튜닝 제공 일정 · 2026-11-07 확인",
+          "url": "https://developers.openai.com/api/docs/deprecations#update-to-openais-self-serve-fine-tuning"
+        },
+        {
+          "kind": "link",
+          "text": "기능 커밋 4e80d4b · 전체 CI 통과",
+          "url": "https://github.com/tarobo22/taro-back/actions/runs/42269331242"
+        }
+      ]
+    }
+  ]
+}

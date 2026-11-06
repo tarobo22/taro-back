@@ -4,6 +4,7 @@
 
 - .env.example
 - api/adapters/counseling_openai.py
+- api/adapters/counseling_strategy.py
 - api/adapters/counseling_postgres.py
 - api/adapters/http/counseling.py
 - api/application/counseling.py
@@ -15,10 +16,16 @@
 - api/tests/integration/test_counseling_http.py
 - api/tests/unit/test_counseling_openai.py
 - api/tests/unit/test_counseling_rag.py
+- api/tests/unit/test_counseling_strategy.py
 - docs/contracts/openapi.json
 - docs/counseling/CHANGES.md
 - docs/counseling/IMPLEMENTATION-20261107.md
 - docs/counseling/STATUS-20261107.pdf
+- docs/counseling/RESEARCH-COUNSELING-20261107.md
+- docs/portfolio/AI-COUNSELING.md
+- docs/portfolio/research-addendum.json
+- docs/portfolio/verification.json
+- docs/portfolio/yeoun-development-portfolio.pdf
 - docs/counseling/USE-CASES-50.md
 - docs/counseling/live-evaluation-status.json
 - docs/counseling/local-benchmark.json
@@ -34,3 +41,11 @@
 - CHANGES.md: 이번 문서 변경 범위를 기록했다.
 
 이번 보고서 요청에서는 제품 코드·설정·테스트를 변경하지 않았고 부하 테스트를 실행하지 않았다. 이전 부하 기록은 삭제하지 않고 이번 성능 평가에서 제외했다.
+
+## 후속 요청: RAG·상담 연구와 포트폴리오
+
+- 제품 코드: counseling_strategy.py 신규, counseling_openai.py의 전략 선택·출력 계약 적용.
+- 새 테스트: test_counseling_strategy.py 9건. 기존 테스트는 수정하지 않았다.
+- 문서: RESEARCH-COUNSELING-20261107.md, 본 변경 목록, docs/portfolio/ 아래 연구 포트폴리오 자료.
+- 로컬 포트폴리오: 연구 추가 장·생성 원본·MD·PDF·검수 기록을 갱신했다.
+- 실제 모델 호출·가중치 학습·부하 테스트는 실행하지 않았다.
