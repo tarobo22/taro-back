@@ -1,0 +1,166 @@
+FFFFFFFFFFFFFFF                                                          [100%]
+================================== FAILURES ===================================
+___________ test_confirmation_precedes_random_draw_and_final_advice ___________
+api\tests\integration\test_counseling_flow.py:80: in test_confirmation_precedes_random_draw_and_final_advice
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+______ test_owner_isolation_is_enforced_by_both_service_and_database_rls ______
+api\tests\integration\test_counseling_flow.py:93: in test_owner_isolation_is_enforced_by_both_service_and_database_rls
+    sa=UUID(s.create(a,uuid4())['id']);sb=UUID(s.create(b,uuid4())['id'])
+            ^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_______ test_twenty_repeated_requests_return_one_job_and_one_model_call _______
+api\tests\integration\test_counseling_flow.py:107: in test_twenty_repeated_requests_return_one_job_and_one_model_call
+    s,m,_,owners,_,_=counseling;sid=start(counseling);key=uuid4()
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_ test_personal_definitions_persist_but_conversation_only_definitions_do_not __
+api\tests\integration\test_counseling_flow.py:116: in test_personal_definitions_persist_but_conversation_only_definitions_do_not
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_______ test_unknown_personal_term_is_clarified_without_search_or_draw ________
+api\tests\integration\test_counseling_flow.py:129: in test_unknown_personal_term_is_clarified_without_search_or_draw
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_____ test_web_sources_are_clickable_and_model_gets_only_confirmed_cards ______
+api\tests\integration\test_counseling_flow.py:138: in test_web_sources_are_clickable_and_model_gets_only_confirmed_cards
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+____________ test_failed_generation_retry_keeps_the_original_draw _____________
+api\tests\integration\test_counseling_flow.py:149: in test_failed_generation_retry_keeps_the_original_draw
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_______ test_consent_revocation_during_provider_io_prevents_publishing ________
+api\tests\integration\test_counseling_flow.py:158: in test_consent_revocation_during_provider_io_prevents_publishing
+    s,m,_,owners,_,consent_service=counseling;sid=start(counseling)
+                                                  ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+__________ test_listening_mode_respects_user_choice_and_skips_cards ___________
+api\tests\integration\test_counseling_flow.py:166: in test_listening_mode_respects_user_choice_and_skips_cards
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_____________ test_urgent_safety_message_bypasses_model_and_cards _____________
+api\tests\integration\test_counseling_flow.py:174: in test_urgent_safety_message_bypasses_model_and_cards
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+________ test_forgetting_definition_invalidates_old_retrieval_context _________
+api\tests\integration\test_counseling_flow.py:180: in test_forgetting_definition_invalidates_old_retrieval_context
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+____________ test_deleting_session_during_model_io_discards_result ____________
+api\tests\integration\test_counseling_flow.py:190: in test_deleting_session_during_model_io_discards_result
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_ test_general_information_requests_are_gently_redirected_without_search_or_draw _
+api\tests\integration\test_counseling_flow.py:197: in test_general_information_requests_are_gently_redirected_without_search_or_draw
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+________ test_normal_emotional_counseling_does_not_trigger_web_search _________
+api\tests\integration\test_counseling_flow.py:207: in test_normal_emotional_counseling_does_not_trigger_web_search
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+_________ test_reply_retry_reuses_an_already_obtained_term_reference __________
+api\tests\integration\test_counseling_flow.py:215: in test_reply_retry_reuses_an_already_obtained_term_reference
+    s,m,_,owners,_,_=counseling;sid=start(counseling)
+                                    ^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_flow.py:76: in start
+    return UUID(s.create(owners[0],uuid4())['id'])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+api\application\counseling.py:10: in create
+    raise NotImplementedError('B03 confirmation workflow')
+E   NotImplementedError: B03 confirmation workflow
+=========================== short test summary info ===========================
+FAILED api/tests/integration/test_counseling_flow.py::test_confirmation_precedes_random_draw_and_final_advice
+FAILED api/tests/integration/test_counseling_flow.py::test_owner_isolation_is_enforced_by_both_service_and_database_rls
+FAILED api/tests/integration/test_counseling_flow.py::test_twenty_repeated_requests_return_one_job_and_one_model_call
+FAILED api/tests/integration/test_counseling_flow.py::test_personal_definitions_persist_but_conversation_only_definitions_do_not
+FAILED api/tests/integration/test_counseling_flow.py::test_unknown_personal_term_is_clarified_without_search_or_draw
+FAILED api/tests/integration/test_counseling_flow.py::test_web_sources_are_clickable_and_model_gets_only_confirmed_cards
+FAILED api/tests/integration/test_counseling_flow.py::test_failed_generation_retry_keeps_the_original_draw
+FAILED api/tests/integration/test_counseling_flow.py::test_consent_revocation_during_provider_io_prevents_publishing
+FAILED api/tests/integration/test_counseling_flow.py::test_listening_mode_respects_user_choice_and_skips_cards
+FAILED api/tests/integration/test_counseling_flow.py::test_urgent_safety_message_bypasses_model_and_cards
+FAILED api/tests/integration/test_counseling_flow.py::test_forgetting_definition_invalidates_old_retrieval_context
+FAILED api/tests/integration/test_counseling_flow.py::test_deleting_session_during_model_io_discards_result
+FAILED api/tests/integration/test_counseling_flow.py::test_general_information_requests_are_gently_redirected_without_search_or_draw
+FAILED api/tests/integration/test_counseling_flow.py::test_normal_emotional_counseling_does_not_trigger_web_search
+FAILED api/tests/integration/test_counseling_flow.py::test_reply_retry_reuses_an_already_obtained_term_reference
+15 failed in 1.30s

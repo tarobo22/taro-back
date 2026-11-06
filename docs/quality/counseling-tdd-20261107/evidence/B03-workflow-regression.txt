@@ -1,0 +1,19 @@
+..........................................................               [100%]
+============================== warnings summary ===============================
+api/tests/integration/test_counseling_flow.py::test_personal_definitions_persist_but_conversation_only_definitions_do_not
+  C:\Users\chang\Documents\ChatGPT\0915 2\taro-back\.venv\Lib\site-packages\pydantic\main.py:520: UserWarning: Pydantic serializer warnings:
+    PydanticSerializationUnexpectedValue(Expected `DefinitionProposal` - serialized value may not be as expected [field_name='explicit_definitions', input_value={'term': '반짝', 'defin...리 독서모임이야'}, input_type=dict])
+    return self.__pydantic_serializer__.to_python(
+
+api/tests/integration/test_counseling_flow.py::test_unknown_personal_term_is_clarified_without_search_or_draw
+  C:\Users\chang\Documents\ChatGPT\0915 2\taro-back\.venv\Lib\site-packages\pydantic\main.py:520: UserWarning: Pydantic serializer warnings:
+    PydanticSerializationUnexpectedValue(Expected `UnknownTerm` - serialized value may not be as expected [field_name='unknown_terms', input_value={'term': '초록', 'kind': 'personal'}, input_type=dict])
+    return self.__pydantic_serializer__.to_python(
+
+api/tests/integration/test_counseling_flow.py::test_web_sources_are_clickable_and_model_gets_only_confirmed_cards
+  C:\Users\chang\Documents\ChatGPT\0915 2\taro-back\.venv\Lib\site-packages\pydantic\main.py:520: UserWarning: Pydantic serializer warnings:
+    PydanticSerializationUnexpectedValue(Expected `UnknownTerm` - serialized value may not be as expected [field_name='unknown_terms', input_value={'term': '거절 민감성', 'kind': 'public'}, input_type=dict])
+    return self.__pydantic_serializer__.to_python(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+58 passed, 3 warnings in 3.61s

@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from psycopg.types.json import Jsonb
 
-from api.adapters.ai_jobs_postgres import default_owner_guard, owner_lock
+from api.adapters.ai_jobs_postgres import PostgresAIJobsRepository, default_owner_guard, owner_lock
 from api.domain.counseling import CounselingError, normalized
 
 
@@ -17,6 +17,27 @@ class PostgresCounselingRepository:
             'INSERT INTO counseling_sessions(id,owner_id,topic,state,create_key) '
             'VALUES(%s,%s,%s,%s,%s) RETURNING *',
             (session_id, owner, topic, Jsonb(state), key)).fetchone()
+
+    def session(self, owner, session_id):
+        return self.connection.execute('SELECT * FROM counseling_sessions WHERE owner_id=%s AND id=%s',
+                                       (owner, session_id)).fetchone()
+
+    def session_for_key(self, owner, key):
+        return self.connection.execute('SELECT * FROM counseling_sessions WHERE owner_id=%s AND create_key=%s',
+                                       (owner, key)).fetchone()
+
+    def update_session(self, owner, session_id, state):
+        return self.connection.execute(
+            'UPDATE counseling_sessions SET state=%s,version=version+1,updated_at=clock_timestamp() '
+            'WHERE owner_id=%s AND id=%s RETURNING *', (Jsonb(state), owner, session_id)).fetchone()
+
+    def sessions(self, owner):
+        return self.connection.execute(
+            'SELECT * FROM counseling_sessions WHERE owner_id=%s ORDER BY updated_at DESC,id DESC LIMIT 50',
+            (owner,)).fetchall()
+
+    def delete_session(self, owner, session_id):
+        self.connection.execute('DELETE FROM counseling_sessions WHERE owner_id=%s AND id=%s', (owner, session_id))
 
     def definitions(self, owner):
         return self.connection.execute(
@@ -48,6 +69,29 @@ class PostgresCounselingRepository:
             INSERT INTO counseling_commands(id,owner_id,session_id,request_key,fingerprint,kind,payload,consent_event_id)
             VALUES(%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''',
             (command_id or uuid4(), owner, session_id, key, fingerprint, kind, Jsonb(payload), consent)).fetchone()
+
+    def command(self, owner, key):
+        return self.connection.execute('SELECT * FROM counseling_commands WHERE owner_id=%s AND request_key=%s',
+                                       (owner, key)).fetchone()
+
+    def consent(self, owner, event_id, policy_version):
+        latest = PostgresAIJobsRepository(self.connection).latest_consent(owner, 'ai_processing')
+        if not (latest and latest['granted'] and latest['policy_version'] == policy_version
+                and str(latest['id']) == str(event_id)):
+            raise CounselingError('CONSENT_REQUIRED', 403, 'AI 이용 동의를 확인해 주세요.')
+
+    def reserve(self, owner, command_id, policy):
+        pending = self.connection.execute(
+            "SELECT 1 FROM counseling_commands WHERE owner_id=%s AND state IN ('queued','running') LIMIT 1",
+            (owner,)).fetchone()
+        if pending:
+            raise CounselingError('COUNSELING_BUSY', 409, '앞선 이야기를 살펴보고 있어요. 잠시만 기다려 주세요.')
+        usage = PostgresAIJobsRepository(self.connection)
+        usage.lock_usage()
+        counts = usage.usage(owner)
+        if counts['owned'] >= policy['owner_daily_limit'] or counts['total'] >= policy['global_daily_limit']:
+            raise CounselingError('AI_DAILY_LIMIT', 429, '오늘의 AI 이용 한도에 도달했어요.')
+        usage.reserve_usage(command_id, owner)
 
     def claimed(self, command_id):
         return self.connection.execute("SELECT * FROM counseling_commands WHERE id=%s AND state='running'",
