@@ -1,0 +1,37 @@
+
+=================================== ERRORS ====================================
+___________ ERROR collecting api/tests/unit/test_p1_composition.py ____________
+api\tests\unit\test_p1_composition.py:5: in <module>
+    from api.main import create_app
+api\main.py:307: in <module>
+    app = create_app()
+          ^^^^^^^^^^^^
+api\main.py:99: in create_app
+    settings = settings or Settings.from_env()
+                           ^^^^^^^^^^^^^^^^^^^
+api\config.py:29: in from_env
+    raise RuntimeError('DATABASE_URL is required. Copy .env.example to .env.local for local development.')
+E   RuntimeError: DATABASE_URL is required. Copy .env.example to .env.local for local development.
+______ ERROR collecting api/tests/unit/test_runtime_openapi_contract.py _______
+api\tests\unit\test_runtime_openapi_contract.py:8: in <module>
+    from api.main import create_app
+api\main.py:307: in <module>
+    app = create_app()
+          ^^^^^^^^^^^^
+api\main.py:99: in create_app
+    settings = settings or Settings.from_env()
+                           ^^^^^^^^^^^^^^^^^^^
+api\config.py:29: in from_env
+    raise RuntimeError('DATABASE_URL is required. Copy .env.example to .env.local for local development.')
+E   RuntimeError: DATABASE_URL is required. Copy .env.example to .env.local for local development.
+============================== warnings summary ===============================
+..\..\..\taro-back\.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\chang\Documents\ChatGPT\0915 2\taro-back\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR api/tests/unit/test_p1_composition.py - RuntimeError: DATABASE_URL is r...
+ERROR api/tests/unit/test_runtime_openapi_contract.py - RuntimeError: DATABAS...
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!
+1 warning, 2 errors in 2.16s

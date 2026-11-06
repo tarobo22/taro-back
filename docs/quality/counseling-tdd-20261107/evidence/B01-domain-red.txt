@@ -1,0 +1,409 @@
+FFFFFFFFFFFFFFFFFFF                                                      [100%]
+================================== FAILURES ===================================
+__ test_draw_is_python_random_without_replacement_and_keeps_catalog_artwork ___
+
+    def test_draw_is_python_random_without_replacement_and_keeps_catalog_artwork():
+        cards=[{'id':i,'name_ko':str(i),'basic_meaning':'의미','image_asset':{'id':str(i)}} for i in range(78)]
+        calls=[]
+        def sample(population,count):
+            calls.append((population,count));return [population[77],population[2],population[31]]
+>       result=draw_cards(cards,sample=sample)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rag.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0, 'name_ko': '0', 'basic_meaning': '의미', 'image_asset': {'id': '0'}}, {'id': 1, 'name_ko': '1', 'basic_meanin...: '의미', 'image_asset': {'id': '4'}}, {'id': 5, 'name_ko': '5', 'basic_meaning': '의미', 'image_asset': {'id': '5'}}, ...]
+count = 3
+sample = <function test_draw_is_python_random_without_replacement_and_keeps_catalog_artwork.<locals>.sample at 0x0000019E51F498A0>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+______ test_random_source_cannot_return_duplicates_or_cards_outside_deck ______
+
+    def test_random_source_cannot_return_duplicates_or_cards_outside_deck():
+        cards=[{'id':i} for i in range(78)]
+        for invalid in ([1,1,2],[0,1,78]):
+            with pytest.raises(CounselingError,match='DRAW_INVALID'):
+>               draw_cards(cards,sample=lambda p,n:invalid)
+
+api\tests\unit\test_counseling_rag.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0}, {'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}, {'id': 5}, ...]
+count = 3
+sample = <function test_random_source_cannot_return_duplicates_or_cards_outside_deck.<locals>.<lambda> at 0x0000019E51F48C20>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+___ test_user_definition_requires_verbatim_evidence_in_current_user_message ___
+
+    def test_user_definition_requires_verbatim_evidence_in_current_user_message():
+        a=analysis(explicit_definitions=[{'term':'반짝','definition':'우리 동아리 이름',
+            'evidence_quote':'반짝은 우리 동아리 이름이야'}])
+>       assert personal_definitions(a,'반짝은 우리 동아리 이름이야')[0]['term']=='반짝'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rag.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+analysis = Analysis(acknowledgement='', understanding='새 출발이 걱정되는 마음이에요.', clarification_question=None, explicit_definitions=[Def...ode='advice', memory_scope='personal', needs_immediate_support=False, intent='tarot_counseling', search_purpose='none')
+text = '반짝은 우리 동아리 이름이야'
+
+    def personal_definitions(analysis,text):
+>       raise NotImplementedError('B01 personal evidence')
+E       NotImplementedError: B01 personal evidence
+
+api\domain\counseling.py:78: NotImplementedError
+___ test_dictionary_retrieval_is_relevant_and_does_not_invent_missing_terms ___
+
+    def test_dictionary_retrieval_is_relevant_and_does_not_invent_missing_terms():
+        entries=[{'id':str(uuid4()),'term':'반짝','definition':'내 동아리'},
+                 {'id':str(uuid4()),'term':'초록','definition':'친구 별명'}]
+>       assert [v['term'] for v in retrieve_definitions('반짝 모임이 고민이에요',entries)]==['반짝']
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rag.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = '반짝 모임이 고민이에요'
+entries = [{'id': '7a41536f-65c9-493b-ad1d-b19a2756014e', 'term': '반짝', 'definition': '내 동아리'}, {'id': 'e0b7868c-397c-49ef-aba1-fb00dfa3743a', 'term': '초록', 'definition': '친구 별명'}]
+limit = 8
+
+    def retrieve_definitions(text,entries,limit=8):
+>       raise NotImplementedError('B01 retrieval')
+E       NotImplementedError: B01 retrieval
+
+api\domain\counseling.py:81: NotImplementedError
+____ test_private_or_ambiguous_unknown_terms_are_never_sent_to_web_search _____
+
+    def test_private_or_ambiguous_unknown_terms_are_never_sent_to_web_search():
+        a=analysis(unknown_terms=[{'term':'반짝','kind':'personal'},
+                                {'term':'그 모임','kind':'unclear'},
+                                {'term':'국민취업지원제도','kind':'public'}])
+>       assert search_queries(a,[])==['국민취업지원제도 공식 자료']
+               ^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rag.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+analysis = Analysis(acknowledgement='', understanding='새 출발이 걱정되는 마음이에요.', clarification_question=None, explicit_definitions=[], ...ode='advice', memory_scope='personal', needs_immediate_support=False, intent='tarot_counseling', search_purpose='none')
+definitions = []
+
+    def search_queries(analysis,definitions):
+>       raise NotImplementedError('B01 public query')
+E       NotImplementedError: B01 public query
+
+api\domain\counseling.py:84: NotImplementedError
+_ test_dictionary_hit_and_private_contact_information_are_not_search_queries __
+
+    def test_dictionary_hit_and_private_contact_information_are_not_search_queries():
+        a=analysis(unknown_terms=[{'term':'반짝','kind':'public'},
+                                {'term':'me@example.com','kind':'public'},
+                                {'term':'010-1234-5678','kind':'public'}])
+>       assert search_queries(a,[{'term':'반짝','definition':'우리 모임'}])==[]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rag.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+analysis = Analysis(acknowledgement='', understanding='새 출발이 걱정되는 마음이에요.', clarification_question=None, explicit_definitions=[], ...ode='advice', memory_scope='personal', needs_immediate_support=False, intent='tarot_counseling', search_purpose='none')
+definitions = [{'term': '반짝', 'definition': '우리 모임'}]
+
+    def search_queries(analysis,definitions):
+>       raise NotImplementedError('B01 public query')
+E       NotImplementedError: B01 public query
+
+api\domain\counseling.py:84: NotImplementedError
+_______ test_advice_rejects_invented_citations_and_model_selected_cards _______
+
+    def test_advice_rejects_invented_citations_and_model_selected_cards():
+>       cards=draw_cards([{'id':i} for i in range(78)],sample=lambda p,n:[0,1,2])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rag.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0}, {'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}, {'id': 5}, ...]
+count = 3
+sample = <function test_advice_rejects_invented_citations_and_model_selected_cards.<locals>.<lambda> at 0x0000019E51FD9620>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+__________ test_card_is_not_accepted_as_a_source_for_factual_claims ___________
+
+    def test_card_is_not_accepted_as_a_source_for_factual_claims():
+>       cards=draw_cards([{'id':i} for i in range(78)],sample=lambda p,n:[0,1,2])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rag.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0}, {'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}, {'id': 5}, ...]
+count = 3
+sample = <function test_card_is_not_accepted_as_a_source_for_factual_claims.<locals>.<lambda> at 0x0000019E51FD99E0>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+_ test_matching_private_memory_is_normalized_bounded_and_never_changes_the_input _
+
+    def test_matching_private_memory_is_normalized_bounded_and_never_changes_the_input():
+        entries = [{'term': 'ＲＡＧ', 'definition': '내 모임'},
+                   {'term': 'rag 모임', 'definition': '더 구체적인 의미'},
+                   {'term': '별개', 'definition': '가져오지 않을 기억'}]
+>       found = retrieve_definitions('RAG 모임 때문에 고민이에요', entries, limit=1)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rebuild_domain.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = 'RAG 모임 때문에 고민이에요'
+entries = [{'term': 'ＲＡＧ', 'definition': '내 모임'}, {'term': 'rag 모임', 'definition': '더 구체적인 의미'}, {'term': '별개', 'definition': '가져오지 않을 기억'}]
+limit = 1
+
+    def retrieve_definitions(text,entries,limit=8):
+>       raise NotImplementedError('B01 retrieval')
+E       NotImplementedError: B01 retrieval
+
+api\domain\counseling.py:81: NotImplementedError
+___ test_model_cannot_store_a_definition_quoted_only_from_retrieved_context ___
+
+    def test_model_cannot_store_a_definition_quoted_only_from_retrieved_context():
+        value = Analysis(understanding='모임 일이 마음에 걸리시는군요.', clarification_question=None,
+            explicit_definitions=[{'term': '반짝', 'definition': '내 독서 모임',
+                                   'evidence_quote': '반짝은 내 독서 모임이야'}], unknown_terms=[])
+>       assert personal_definitions(value, '반짝 때문에 속상해요') == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rebuild_domain.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+analysis = Analysis(acknowledgement='', understanding='모임 일이 마음에 걸리시는군요.', clarification_question=None, explicit_definitions=[Def...ode='advice', memory_scope='personal', needs_immediate_support=False, intent='tarot_counseling', search_purpose='none')
+text = '반짝 때문에 속상해요'
+
+    def personal_definitions(analysis,text):
+>       raise NotImplementedError('B01 personal evidence')
+E       NotImplementedError: B01 personal evidence
+
+api\domain\counseling.py:78: NotImplementedError
+_ test_server_draw_rejects_unsupported_counts_before_calling_random_source[True] _
+
+count = True
+
+    @pytest.mark.parametrize('count', [True, 0, 2, 5])
+    def test_server_draw_rejects_unsupported_counts_before_calling_random_source(count):
+        calls = []
+        with pytest.raises(CounselingError, match='DECK_INVALID'):
+>           draw_cards([{'id': i} for i in range(78)], count,
+                       sample=lambda population, n: calls.append(n))
+
+api\tests\unit\test_counseling_rebuild_domain.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0}, {'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}, {'id': 5}, ...]
+count = True
+sample = <function test_server_draw_rejects_unsupported_counts_before_calling_random_source.<locals>.<lambda> at 0x0000019E51FD9BC0>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+_ test_server_draw_rejects_unsupported_counts_before_calling_random_source[0] _
+
+count = 0
+
+    @pytest.mark.parametrize('count', [True, 0, 2, 5])
+    def test_server_draw_rejects_unsupported_counts_before_calling_random_source(count):
+        calls = []
+        with pytest.raises(CounselingError, match='DECK_INVALID'):
+>           draw_cards([{'id': i} for i in range(78)], count,
+                       sample=lambda population, n: calls.append(n))
+
+api\tests\unit\test_counseling_rebuild_domain.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0}, {'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}, {'id': 5}, ...]
+count = 0
+sample = <function test_server_draw_rejects_unsupported_counts_before_calling_random_source.<locals>.<lambda> at 0x0000019E51FDA020>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+_ test_server_draw_rejects_unsupported_counts_before_calling_random_source[2] _
+
+count = 2
+
+    @pytest.mark.parametrize('count', [True, 0, 2, 5])
+    def test_server_draw_rejects_unsupported_counts_before_calling_random_source(count):
+        calls = []
+        with pytest.raises(CounselingError, match='DECK_INVALID'):
+>           draw_cards([{'id': i} for i in range(78)], count,
+                       sample=lambda population, n: calls.append(n))
+
+api\tests\unit\test_counseling_rebuild_domain.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0}, {'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}, {'id': 5}, ...]
+count = 2
+sample = <function test_server_draw_rejects_unsupported_counts_before_calling_random_source.<locals>.<lambda> at 0x0000019E51FD9D00>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+_ test_server_draw_rejects_unsupported_counts_before_calling_random_source[5] _
+
+count = 5
+
+    @pytest.mark.parametrize('count', [True, 0, 2, 5])
+    def test_server_draw_rejects_unsupported_counts_before_calling_random_source(count):
+        calls = []
+        with pytest.raises(CounselingError, match='DECK_INVALID'):
+>           draw_cards([{'id': i} for i in range(78)], count,
+                       sample=lambda population, n: calls.append(n))
+
+api\tests\unit\test_counseling_rebuild_domain.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cards = [{'id': 0}, {'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}, {'id': 5}, ...]
+count = 5
+sample = <function test_server_draw_rejects_unsupported_counts_before_calling_random_source.<locals>.<lambda> at 0x0000019E51FDA480>
+
+    def draw_cards(cards,count=3,sample=None):
+>       raise NotImplementedError('B01 server draw')
+E       NotImplementedError: B01 server draw
+
+api\domain\counseling.py:75: NotImplementedError
+_ test_structured_contract_requires_nested_fields_and_forbids_extra_properties _
+
+    def test_structured_contract_requires_nested_fields_and_forbids_extra_properties():
+>       schema = strict_schema(Analysis)
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rebuild_domain.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+model = <class 'api.domain.counseling.Analysis'>
+
+    def strict_schema(model):
+>       raise NotImplementedError('B01 schema')
+E       NotImplementedError: B01 schema
+
+api\domain\counseling.py:93: NotImplementedError
+_ test_private_or_ambiguous_reference_links_cannot_be_published[https://example.com:8443/] _
+
+url = 'https://example.com:8443/'
+
+    @pytest.mark.parametrize('url', ['https://example.com:8443/', 'https://a.local/',
+                                    'https://[::1]/', 'https://example.com/\nprivate'])
+    def test_private_or_ambiguous_reference_links_cannot_be_published(url):
+>       assert safe_public_url(url) is False
+               ^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rebuild_domain.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = 'https://example.com:8443/'
+
+    def safe_public_url(value):
+>       raise NotImplementedError('B01 public link')
+E       NotImplementedError: B01 public link
+
+api\domain\counseling.py:87: NotImplementedError
+_ test_private_or_ambiguous_reference_links_cannot_be_published[https://a.local/] _
+
+url = 'https://a.local/'
+
+    @pytest.mark.parametrize('url', ['https://example.com:8443/', 'https://a.local/',
+                                    'https://[::1]/', 'https://example.com/\nprivate'])
+    def test_private_or_ambiguous_reference_links_cannot_be_published(url):
+>       assert safe_public_url(url) is False
+               ^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rebuild_domain.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = 'https://a.local/'
+
+    def safe_public_url(value):
+>       raise NotImplementedError('B01 public link')
+E       NotImplementedError: B01 public link
+
+api\domain\counseling.py:87: NotImplementedError
+_ test_private_or_ambiguous_reference_links_cannot_be_published[https://[::1]/] _
+
+url = 'https://[::1]/'
+
+    @pytest.mark.parametrize('url', ['https://example.com:8443/', 'https://a.local/',
+                                    'https://[::1]/', 'https://example.com/\nprivate'])
+    def test_private_or_ambiguous_reference_links_cannot_be_published(url):
+>       assert safe_public_url(url) is False
+               ^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rebuild_domain.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = 'https://[::1]/'
+
+    def safe_public_url(value):
+>       raise NotImplementedError('B01 public link')
+E       NotImplementedError: B01 public link
+
+api\domain\counseling.py:87: NotImplementedError
+_ test_private_or_ambiguous_reference_links_cannot_be_published[https://example.com/\nprivate] _
+
+url = 'https://example.com/\nprivate'
+
+    @pytest.mark.parametrize('url', ['https://example.com:8443/', 'https://a.local/',
+                                    'https://[::1]/', 'https://example.com/\nprivate'])
+    def test_private_or_ambiguous_reference_links_cannot_be_published(url):
+>       assert safe_public_url(url) is False
+               ^^^^^^^^^^^^^^^^^^^^
+
+api\tests\unit\test_counseling_rebuild_domain.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = 'https://example.com/\nprivate'
+
+    def safe_public_url(value):
+>       raise NotImplementedError('B01 public link')
+E       NotImplementedError: B01 public link
+
+api\domain\counseling.py:87: NotImplementedError
+=========================== short test summary info ===========================
+FAILED api/tests/unit/test_counseling_rag.py::test_draw_is_python_random_without_replacement_and_keeps_catalog_artwork
+FAILED api/tests/unit/test_counseling_rag.py::test_random_source_cannot_return_duplicates_or_cards_outside_deck
+FAILED api/tests/unit/test_counseling_rag.py::test_user_definition_requires_verbatim_evidence_in_current_user_message
+FAILED api/tests/unit/test_counseling_rag.py::test_dictionary_retrieval_is_relevant_and_does_not_invent_missing_terms
+FAILED api/tests/unit/test_counseling_rag.py::test_private_or_ambiguous_unknown_terms_are_never_sent_to_web_search
+FAILED api/tests/unit/test_counseling_rag.py::test_dictionary_hit_and_private_contact_information_are_not_search_queries
+FAILED api/tests/unit/test_counseling_rag.py::test_advice_rejects_invented_citations_and_model_selected_cards
+FAILED api/tests/unit/test_counseling_rag.py::test_card_is_not_accepted_as_a_source_for_factual_claims
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_matching_private_memory_is_normalized_bounded_and_never_changes_the_input
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_model_cannot_store_a_definition_quoted_only_from_retrieved_context
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_server_draw_rejects_unsupported_counts_before_calling_random_source[True]
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_server_draw_rejects_unsupported_counts_before_calling_random_source[0]
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_server_draw_rejects_unsupported_counts_before_calling_random_source[2]
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_server_draw_rejects_unsupported_counts_before_calling_random_source[5]
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_structured_contract_requires_nested_fields_and_forbids_extra_properties
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_private_or_ambiguous_reference_links_cannot_be_published[https://example.com:8443/]
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_private_or_ambiguous_reference_links_cannot_be_published[https://a.local/]
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_private_or_ambiguous_reference_links_cannot_be_published[https://[::1]/]
+FAILED api/tests/unit/test_counseling_rebuild_domain.py::test_private_or_ambiguous_reference_links_cannot_be_published[https://example.com/\nprivate]
+19 failed in 0.37s
