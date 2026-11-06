@@ -10,18 +10,23 @@ from typing import Callable
 from api.application.reading_v2_ports import ReadingCatalog, ReadingRepository, ReadingUnitOfWork
 from api.domain.ai_jobs import AIError, fingerprint, validate_result
 from api.domain.data_privacy import DataNotFound
-from api.domain.reading_v2 import TOPICS, private_pool, reading_input, select_cards, selected_card
+from api.domain.reading_v2 import TOPICS, DeckAccessDenied, private_pool, reading_input, select_cards, selected_card
 
 
 class ReadingV2Service:
     def __init__(self, uow_factory: Callable[[], ReadingUnitOfWork], catalog: ReadingCatalog,
                  *, owner_guard=None, clock=None, random_sample=None, ai_jobs=None,
-                 allow_candidate=True):
+                 allow_candidate=True, deck_access=None):
         self._uow, self.catalog = uow_factory, catalog
         self.owner_guard = owner_guard
         self.clock = clock or (lambda: datetime.now(timezone.utc))
         self.sample = random_sample or random.SystemRandom().sample
         self.ai_jobs, self.allow_candidate = ai_jobs, allow_candidate
+        self.deck_access = deck_access
+
+    def _allow_deck(self, transaction, owner, deck_id):
+        if self.deck_access is not None and not self.deck_access(transaction, owner, deck_id):
+            raise DeckAccessDenied('deck_purchase_required')
 
     def _owner(self, repository: ReadingRepository, owner):
         repository.lock_owner(owner)
@@ -77,6 +82,7 @@ class ReadingV2Service:
             previous = self._once(repository, owner, 'create', key, body)
             if previous:
                 return previous
+            self._allow_deck(repository.transaction, owner, body['deck_version_id'])
             deck, cards = self._catalog(body['deck_version_id'])
             name, tz = self._timezone(repository, owner)
             now, day, slots, selected = self.clock(), None, [], []
@@ -96,6 +102,8 @@ class ReadingV2Service:
                                                          body['deck_version_id'], name, expires)
                 # The fixed card, deck and captured zone survive deletion of the reading body.
                 deck_id, name = str(anchor.deck_version_id), anchor.captured_timezone
+                if deck_id != body['deck_version_id']:
+                    self._allow_deck(repository.transaction, owner, deck_id)
                 cards = self.catalog.list_cards(deck_version_id=deck_id)['items']
                 selected = [selected_card(next(card for card in cards if card['id'] == anchor.card_id))]
                 state = 'selected'

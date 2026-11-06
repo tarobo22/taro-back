@@ -117,6 +117,15 @@ class BillingService:
             completed += 1
         return completed
 
+    def deck_access(self, connection, owner, deck_id):
+        """Use the reading transaction; never acquire another pool connection or call a store here."""
+        key = 'deck:' + str(deck_id)
+        if not any(p.entitlement_key == key for p in self.products.values()):return True
+        fresh_after = self.clock() - timedelta(seconds=self.reverify_seconds)
+        rows = self.uow_factory().repository_for(connection).list(owner)
+        return any(r['entitlement_key'] == key and r['state'] == 'active' and r['verified_at'] >= fresh_after and
+                   (r['expires_at'] is None or r['expires_at'] > self.clock()) for r in rows)
+
     def export_owner(self, connection, owner):
         rows = self.uow_factory().repository_for(connection).list(owner)
         fields = ('product_id', 'product_kind', 'entitlement_key', 'state', 'expires_at', 'acknowledged', 'verified_at')
