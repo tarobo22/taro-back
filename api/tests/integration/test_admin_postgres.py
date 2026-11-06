@@ -306,3 +306,43 @@ def test_a_request_waiting_on_an_owner_lock_observes_a_committed_admin_logout(ad
             c.execute('DELETE FROM admin_sessions WHERE owner_id=%s',(ctx.owner,));c.commit()
             with pytest.raises(AdminError,match='ADMIN_SESSION_INVALID'):future.result(timeout=5)
         finally:c.rollback()
+
+
+def test_admin_personal_export_is_owner_scoped_metadata_only_and_disappears_after_erasure(admin_pg):
+    ctx=admin_pg;bearer=issued(ctx);foreign_normal=uuid4().hex+uuid4().hex;foreign_source=uuid4()
+    with ctx.pool.connection() as c:
+        c.execute('INSERT INTO social_accounts(owner_id) VALUES(%s)',(ctx.guest,))
+        c.execute('''INSERT INTO social_device_sessions(id,owner_id,token_hash,platform,expires_at)
+            VALUES(%s,%s,%s,'web',%s)''',(foreign_source,ctx.guest,digest(foreign_normal),NOW+timedelta(days=2)))
+    ctx.manager.grant(ctx.guest,'viewer')
+    foreign_grant=ctx.service.issue('Bearer '+foreign_normal)
+    own_feedback,foreign_feedback=add_feedback(ctx,ctx.owner),add_feedback(ctx,ctx.guest)
+    ctx.service.triage(bearer,own_feedback,0,'resolved')
+    ctx.service.triage(bearer,foreign_feedback,0,'reviewing')
+    with ctx.pool.connection() as c:
+        exported=ctx.service.export_owner(c,ctx.owner)
+    assert set(exported)=={'admin_roles','admin_sessions','admin_audit'}
+    assert len(exported['admin_roles'])==1 and exported['admin_roles'][0]['role']=='publisher'
+    assert set(exported['admin_roles'][0])=={'role','updated_at'}
+    assert isinstance(exported['admin_roles'][0]['updated_at'],datetime)
+    assert len(exported['admin_sessions'])==1
+    session=exported['admin_sessions'][0]
+    assert set(session)=={'id','role','expires_at','source_session_id'}
+    assert session['source_session_id']==ctx.source and session['role']=='publisher'
+    assert session['id']!=UUID(foreign_grant['session_id'])
+    assert len(exported['admin_audit'])==3
+    assert all(set(row)=={'id','action','target_type','target_id','created_at'} for row in exported['admin_audit'])
+    feedback_targets=[row['target_id'] for row in exported['admin_audit'] if row['target_type']=='feedback']
+    assert str(own_feedback) in feedback_targets and None in feedback_targets
+    encoded=json.dumps(DataPrivacyUseCases._export_value(exported),sort_keys=True)
+    for forbidden in ('token_hash','token','details','private fixture comment',str(ctx.guest),str(foreign_feedback),
+                      str(foreign_source),foreign_grant['session_id'],ctx.normal,foreign_normal,
+                      bearer.removeprefix('Bearer '),digest(bearer.removeprefix('Bearer '))):
+        assert forbidden not in encoded
+    with ctx.pool.connection() as c:
+        lock_owner(c,ctx.owner);ctx.service.erase_owner(c,ctx.owner)
+    with ctx.pool.connection() as c:
+        assert ctx.service.export_owner(c,ctx.owner)=={'admin_roles':[],'admin_sessions':[],'admin_audit':[]}
+        foreign=ctx.service.export_owner(c,ctx.guest)
+        assert foreign['admin_roles'][0]['role']=='viewer' and len(foreign['admin_sessions'])==1
+        assert len(foreign['admin_audit'])==1

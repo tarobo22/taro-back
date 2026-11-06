@@ -146,6 +146,19 @@ class PostgresAdminRepository:
         if cutoff is not None:
             self.connection.execute('DELETE FROM admin_audit WHERE created_at<=%s', (cutoff,))
 
+    def export_owner(self, owner):
+        roles = self.connection.execute('SELECT role,updated_at FROM admin_roles WHERE owner_id=%s',
+                                        (owner,)).fetchall()
+        sessions = self.connection.execute('''SELECT id,role,expires_at,source_session_id FROM admin_sessions
+            WHERE owner_id=%s ORDER BY expires_at,id''', (owner,)).fetchall()
+        actions = self.connection.execute('''SELECT a.id,a.action,a.target_type,
+            CASE WHEN a.target_type IN ('catalog','ota_policy','admin_session') THEN a.target_id
+                 WHEN a.target_type='feedback' AND EXISTS
+                    (SELECT 1 FROM data_privacy_feedback f WHERE f.id::text=a.target_id AND f.owner_id=%s)
+                 THEN a.target_id ELSE NULL END AS target_id,a.created_at
+            FROM admin_audit a WHERE a.actor_owner_id=%s ORDER BY a.created_at,a.id''', (owner,owner)).fetchall()
+        return {'admin_roles':roles, 'admin_sessions':sessions, 'admin_audit':actions}
+
     def erase_owner(self, owner):
         self.revoke_role(owner)
         self.delete_owner_sessions(owner)
