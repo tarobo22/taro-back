@@ -1,0 +1,100 @@
+﻿path,method,operation_id,security_declared,header_parameters,runtime_auth_boundary,auth_basis
+/health,GET,health_health_get,[],,public,route source + actual OpenAPI parameters
+/v1/counsel,GET,list_counsel_v1_counsel_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/counsel,POST,counsel_v1_counsel_post,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/counsel/{counsel_id},DELETE,delete_counsel_v1_counsel__counsel_id__delete,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/daily,POST,daily_v1_daily_post,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/entries,GET,entries_v1_entries_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/entries,POST,create_v1_entries_post,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/entries/{entry_id},GET,detail_v1_entries__entry_id__get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/entries/{entry_id},PUT,update_v1_entries__entry_id__put,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/entries/{entry_id},DELETE,delete_v1_entries__entry_id__delete,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/experience-config,GET,config_v1_experience_config_get,[],,public,route source + actual OpenAPI parameters
+/v1/journal-policy,GET,journal_policy_v1_journal_policy_get,[],,public,route source + actual OpenAPI parameters
+/v1/readings,GET,list_readings_v1_readings_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/readings,POST,create_reading_v1_readings_post,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/readings/{reading_id},DELETE,delete_reading_v1_readings__reading_id__delete,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v1/session,POST,create_session_v1_session_post,[],,public,route source + actual OpenAPI parameters
+/v2/admin/audit,GET,listAdminAudit,[],authorization,separate expiring admin session; viewer or publisher,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/catalog,GET,getAdminCatalog,[],authorization,separate expiring admin session; viewer or publisher,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/catalog/{version_id}/publish,POST,publishAdminCatalog,[],authorization,separate expiring admin session; publisher write,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/catalog/{version_id}/review,POST,reviewAdminCatalog,[],authorization,separate expiring admin session; publisher write,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/catalog/{version_id}/rollback,POST,rollbackAdminCatalog,[],authorization,separate expiring admin session; publisher write,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/eligibility,GET,getAdminEligibility,[],authorization,"optional normal session; missing or invalid returns eligible:false, role:null",api/application/admin.py eligibility
+/v2/admin/feedback,GET,listAdminFeedback,[],authorization,separate expiring admin session; viewer or publisher,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/feedback/{feedback_id}/triage,PATCH,triageAdminFeedback,[],authorization,separate expiring admin session; publisher write,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/me,GET,getAdminSession,[],authorization,separate expiring admin session; viewer or publisher,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/ota-policy,GET,getAdminOtaPolicy,[],authorization,separate expiring admin session; viewer or publisher,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/ota-policy,PUT,updateAdminOtaPolicy,[],authorization,separate expiring admin session; publisher write,api/adapters/http/admin.py + api/application/admin.py
+/v2/admin/sessions,POST,createAdminSession,[],authorization,valid social member/source session plus explicit viewer/publisher role; otherwise403,api/application/admin.py issue
+/v2/admin/sessions/current,DELETE,deleteAdminSession,[],authorization,separate expiring admin session; viewer or publisher,api/adapters/http/admin.py + api/application/admin.py
+/v2/ai/jobs/{job_id},GET,job_v2_ai_jobs__job_id__get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/ai/jobs/{job_id}/cancel,POST,cancel_v2_ai_jobs__job_id__cancel_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/ai/jobs/{job_id}/events,GET,events_v2_ai_jobs__job_id__events_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/ai/jobs/{job_id}/retry,POST,retry_v2_ai_jobs__job_id__retry_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/auth/account,GET,getSocialAccount,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/auth/logout,POST,logoutAccountSession,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/auth/logout-all,POST,logoutAllAccountSessions,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/auth/providers,GET,listSocialProviders,[],,public,route source + actual OpenAPI parameters
+/v2/auth/sessions,GET,listAccountSessions,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/auth/sessions/{session_id},DELETE,revokeAccountSession,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/auth/social/exchange,POST,exchangeSocialTicket,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/auth/social/{provider}/callback,GET,completeSocialLoginQuery,[],,provider callback state/code; no application bearer,api/adapters/http/social_auth.py
+/v2/auth/social/{provider}/callback,POST,completeSocialLoginForm,[],,provider callback state/code; no application bearer,api/adapters/http/social_auth.py
+/v2/auth/social/{provider}/start,POST,startSocialLogin,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/billing/catalog,GET,getBillingCatalog,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/billing/entitlements,GET,getBillingEntitlements,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/billing/purchases/verify,POST,verifyStorePurchase,[],authorization,owner session + member account required,api/application/billing.py
+/v2/bootstrap,GET,bootstrap,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/cards,GET,listCards,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/cards/{card_id},GET,getCard,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations,GET,conversations_v2_conversations_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations,POST,create_v2_conversations_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations/{conversation_id},GET,conversation_v2_conversations__conversation_id__get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations/{conversation_id},DELETE,delete_v2_conversations__conversation_id__delete,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations/{conversation_id}/close,POST,close_v2_conversations__conversation_id__close_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations/{conversation_id}/turns,GET,turns_v2_conversations__conversation_id__turns_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations/{conversation_id}/turns,POST,create_turn_v2_conversations__conversation_id__turns_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/conversations/{conversation_id}/turns/{turn_id},GET,turn_v2_conversations__conversation_id__turns__turn_id__get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/data-requests/{request_id},GET,getDataRequest,[],"X-Data-Receipt,authorization",owner session OR X-Data-Receipt,api/main.py status_session + data_privacy router
+/v2/data-requests/{request_id}/download,GET,downloadExport,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/decks,GET,listDecks,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/decks/{deck_id},GET,getDeck,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/favorites,GET,listFavorites,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/favorites,POST,addFavorite,[],"X-Idempotency-Key,authorization",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/favorites/{reading_id},DELETE,removeFavorite,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/feedback,POST,createFeedback,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/health,GET,health,[],,public,route source + actual OpenAPI parameters
+/v2/journal-entries,GET,listJournals,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-entries,POST,createJournal,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-entries/{entry_id},GET,getJournal,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-entries/{entry_id},PATCH,updateJournal,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-entries/{entry_id},DELETE,deleteJournal,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-entries/{entry_id}/source,GET,getJournalSource,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-insights,POST,createInsight,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-insights/{insight_id},GET,getInsight,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/journal-summary,GET,getJournalSummary,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/me,GET,getMe,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/me/consents,GET,consents_v2_me_consents_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/me/consents,POST,record_v2_me_consents_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/me/data-requests,POST,createDataRequest,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/me/preferences,PATCH,updatePreferences,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings,GET,readings_v2_readings_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings,POST,create_v2_readings_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings/{reading_id},GET,reading_v2_readings__reading_id__get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings/{reading_id},DELETE,delete_v2_readings__reading_id__delete,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings/{reading_id}/basic,GET,basic_v2_readings__reading_id__basic_get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings/{reading_id}/interpretations,POST,interpretation_v2_readings__reading_id__interpretations_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings/{reading_id}/selection,POST,select_v2_readings__reading_id__selection_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/readings/{reading_id}/shuffle,POST,shuffle_v2_readings__reading_id__shuffle_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/sessions,POST,create_v2_sessions_post,[],,public,route source + actual OpenAPI parameters
+/v2/sessions/refresh,POST,refresh_v2_sessions_refresh_post,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/story-episodes,GET,listStoryEpisodes,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/story-progress,GET,getStoryProgress,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/story-runs,POST,startStory,[],"X-Idempotency-Key,authorization",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/story-runs/{run_id},GET,getStoryRun,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/story-runs/{run_id}/choices,POST,chooseStory,[],"X-Idempotency-Key,authorization",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/story-runs/{run_id}/restart,POST,restartStory,[],"X-Idempotency-Key,authorization",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/transcriptions,POST,transcribe_v2_transcriptions_post,[],"authorization,X-Idempotency-Key,Idempotency-Key",owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/transcriptions/{transcription_id},GET,transcription_v2_transcriptions__transcription_id__get,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
+/v2/transcriptions/{transcription_id},DELETE,delete_transcription_v2_transcriptions__transcription_id__delete,[],authorization,owner session header; optional in OpenAPI but enforced by dependency,api/main.py current_session + router dependency
