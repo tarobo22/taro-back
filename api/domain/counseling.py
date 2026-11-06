@@ -2,6 +2,8 @@
 import random
 import re
 import unicodedata
+import ipaddress
+from urllib.parse import urlsplit
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -31,14 +33,20 @@ class UnknownTerm(StrictModel):
 
 
 class Analysis(StrictModel):
+    acknowledgement:str=Field(default='',max_length=120)
     understanding:str=Field(min_length=1,max_length=700)
     clarification_question:str|None=Field(max_length=300)
     explicit_definitions:list[DefinitionProposal]=Field(max_length=5)
     unknown_terms:list[UnknownTerm]=Field(max_length=5)
+    perspective:str|None=Field(default=None,max_length=100)
+    goal:str|None=Field(default=None,max_length=200)
+    response_mode:Literal['advice','listen']='advice'
+    memory_scope:Literal['personal','conversation']='personal'
+    needs_immediate_support:bool=False
 
 
 class GroundedClaim(StrictModel):
-    text:str=Field(min_length=1,max_length=600)
+    text:str=Field(min_length=1,max_length=180)
     source_ids:list[str]=Field(min_length=1,max_length=4)
 
 
@@ -48,11 +56,11 @@ class Reflection(StrictModel):
 
 
 class CounselResult(StrictModel):
-    empathy:str=Field(min_length=1,max_length=300)
-    facts:list[GroundedClaim]=Field(max_length=5)
+    empathy:str=Field(min_length=1,max_length=160)
+    facts:list[GroundedClaim]=Field(max_length=3)
     tarot:list[Reflection]=Field(max_length=3)
-    advice:str=Field(min_length=1,max_length=800)
-    actions:list[str]=Field(min_length=1,max_length=3)
+    advice:str=Field(min_length=1,max_length=300)
+    actions:list[str]=Field(max_length=3)
     follow_up_question:str|None=Field(max_length=200)
     safety_mode:Literal['standard','support']
 
@@ -104,20 +112,53 @@ def search_queries(analysis,definitions):
     return queries[:2]
 
 
-def grounded_result(value,cards,sources):
+def safe_public_url(value):
+    """Only browser-safe public HTTPS links. This never fetches arbitrary URLs."""
+    try:
+        u=urlsplit(value)
+        host=(u.hostname or '').lower().rstrip('.')
+        if u.scheme!='https' or not host or u.username or u.password or u.port not in (None,443):return False
+        if '.' not in host or host.endswith(('.localhost','.local','.internal')) or host=='localhost':return False
+        try:return ipaddress.ip_address(host).is_global
+        except ValueError:return not any(c.isspace() for c in value) and len(value)<=2048
+    except (TypeError,ValueError):return False
+
+
+def urgent_risk(text):
+    return bool(re.search(r'(?:죽고\s*싶|나를\s*해(?:치|칠)|(?:내\s*몸|스스로)(?:을|를)?\s*(?:다치|다칠|해치|해칠)|자해(?:할|하고\s*싶)|자살(?:할|하고\s*싶))',text))
+
+
+def strict_schema(model):
+    schema=model.model_json_schema()
+    def visit(v):
+        if isinstance(v,dict):
+            if v.get('type')=='object':
+                v['additionalProperties']=False;v['required']=list(v.get('properties',{}))
+            v.pop('default',None)
+            for child in v.values():visit(child)
+        elif isinstance(v,list):
+            for child in v:visit(child)
+    visit(schema);return schema
+
+
+def grounded_result(value,cards,sources,mode='advice'):
     try:
         result=CounselResult.model_validate(value).model_dump()
         if [v['card_id'] for v in result['tarot']] != [v['card_id'] for v in cards]:
             raise ValueError()
         factual={v['id'] for v in sources if v['kind'] in ('web','user_definition')}
         if any(not set(v['source_ids'])<=factual for v in result['facts']):raise ValueError()
+        if any(s['kind']=='web' and not safe_public_url(s.get('url')) for s in sources):raise ValueError()
+        if any(not a.strip() or len(a)>120 for a in result['actions']):raise ValueError()
+        if mode=='advice' and not result['actions']:raise ValueError()
+        if mode=='listen' and (cards or result['actions']):raise ValueError()
         # Reuse the established output policy for diagnosis/prediction/guarantees.
         validate_result({'kind':'tarot','empathy':result['empathy'],
             'summary':' '.join(v['text'] for v in result['facts']) or '지금의 마음을 함께 살펴봐요.',
             'card_insights':[{'card_id':c['card_id'],'position':c['position'],
                 'meaning':c['card'].get('basic_meaning','생각을 돌아보는 상징이에요.'),
                 'reflection':r['reflection']} for c,r in zip(cards,result['tarot'])],
-            'advice':result['advice'],'actions':result['actions'],'expression':'listen',
+            'advice':result['advice'],'actions':result['actions'] or ['편하게 이야기를 이어가세요.'],'expression':'listen',
             'follow_up_questions':[result['follow_up_question']] if result['follow_up_question'] else [],
             'safety_mode':result['safety_mode']},'tarot',cards)
         return result
