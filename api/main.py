@@ -48,6 +48,8 @@ from api.adapters.http.social_auth import social_auth_router
 from api.adapters.story_postgres import PostgresStoryUnitOfWork
 from api.adapters.story_catalog import load_story_catalog
 from api.adapters.http.story import story_router
+from api.adapters.admin_postgres import PostgresAdminUnitOfWork
+from api.adapters.http.admin import admin_router
 from api.adapters.local_guidance import LocalGuidance
 from api.adapters.openai_guidance import OpenAIGuidance
 from api.adapters.owned_references import PostgresOwnedReferences
@@ -65,6 +67,7 @@ from api.application.journal_v2 import JournalV2UseCases
 from api.application.billing import BillingService
 from api.application.social_auth import SocialAuthService
 from api.application.story import StoryService
+from api.application.admin import AdminService
 from api.application.reading_v2 import ReadingV2Service
 from api.config import ROOT, Settings
 from api.domain.ai_jobs import load_policy
@@ -75,6 +78,7 @@ from api.domain.journal import JournalPolicy
 from api.domain.journal_v2 import JournalV2Policy
 from api.domain.billing import Product
 from api.domain.social_auth import SocialAuthPolicy
+from api.domain.admin import AdminPolicy
 
 DEFAULT_PROVIDER = object()
 logger = logging.getLogger('yeoun')
@@ -96,6 +100,8 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     data_policy, ai_policy = DataPolicy.from_mapping(read_shared('data-policy.json')), load_policy()
     pool = ConnectionPool(settings.database_url, open=False, min_size=1, max_size=6,
                           kwargs={'row_factory': dict_row})
+    catalog_pool = ConnectionPool(settings.database_url, open=False, min_size=0, max_size=2,
+                                 kwargs={'row_factory': dict_row})
     ai_client = httpx.Client(timeout=ai_policy['provider_deadline_seconds'],
                             limits=httpx.Limits(max_connections=2), transport=httpx.HTTPTransport(retries=0))
     runtime_key = lambda: os.environ.get('OPENAI_API_KEY')
@@ -113,6 +119,13 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     auth = SocialAuthService(lambda: PostgresSocialUnitOfWork(pool), social_provider or runtime_social_provider(auth_client),
         SocialAuthPolicy(tuple(social_return_uris) if social_return_uris is not None else runtime_return_uris()))
     data.owner_kind = auth.owner_kind
+    retention = os.environ.get('ADMIN_AUDIT_RETENTION_DAYS', '').strip()
+    admin = AdminService(lambda: PostgresAdminUnitOfWork(pool), auth, data.catalog,
+        query_uow_factory=lambda: PostgresAdminUnitOfWork(catalog_pool),
+        ota_defaults={'channel': settings.ota_channel, 'min_native_version': settings.min_native_version,
+                      'updates_enabled': settings.ota_updates_enabled},
+        policy=AdminPolicy(audit_retention_days=int(retention) if retention else None))
+    data.catalog_source = admin.catalog_source
     story = StoryService(lambda: PostgresStoryUnitOfWork(pool), load_story_catalog())
     identity = IdentityUseCases(lambda: PostgresIdentityUnitOfWork(pool, initialize_profile, owner_guard),
         IdentityPolicy(identity_rules['session_days'], tuple(identity_rules['locales'])),
@@ -145,9 +158,11 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         owner_guard=owner_guard, policy=ai_policy)
     ai_jobs.insight_source = insights
     data.export_callbacks = (ai_jobs.export_owner, readings.export_owner, journals_v2.export_owner,
-                             favorites.export_owner, insights.export_owner, billing.export_owner, auth.export_owner, story.export_owner)
+                             favorites.export_owner, insights.export_owner, billing.export_owner,
+                             auth.export_owner, admin.export_owner, story.export_owner)
     data.erase_callbacks = (readings.erase_owner, ai_jobs.erase_owner, journals_v2.erase_owner,
-                            favorites.erase_owner, insights.erase_owner, billing.erase_owner, auth.erase_owner, story.erase_owner)
+                            favorites.erase_owner, insights.erase_owner, billing.erase_owner, admin.erase_owner,
+                            auth.erase_owner, story.erase_owner)
 
     policy = JournalPolicy(frozenset(content['moods']), rules['maxBodyLength'])
     journals = JournalUseCases(lambda: PostgresJournalUnitOfWork(pool), policy, uuid4, owner_guard=owner_guard)
@@ -181,12 +196,14 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         journals_v2.purge_expired_idempotency()
         billing.reconcile()
         auth.purge_expired()
+        admin.purge_expired()
 
     @asynccontextmanager
     async def lifespan(app):
         stop, tasks = asyncio.Event(), []
         try:
             await asyncio.to_thread(pool.open, wait=True)
+            await asyncio.to_thread(catalog_pool.open, wait=True)
             if workers_enabled:
                 tasks = [asyncio.create_task(run_loop(stop, lambda: ai_jobs.run_next('api-worker'), settings.worker_poll_seconds)),
                          asyncio.create_task(run_loop(stop, maintain, settings.maintenance_seconds))]
@@ -196,6 +213,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
             if tasks:
                 await asyncio.gather(*tasks)
             pool.close()
+            catalog_pool.close()
             ai_client.close()
             store_client.close()
             auth_client.close()
@@ -261,13 +279,13 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     app.include_router(identity_router(identity, current_session,
         session_renewal=lambda authorization, owner: auth.refresh(authorization) or identity.refresh(owner)))
     app.include_router(social_auth_router(auth, current_session))
+    app.include_router(admin_router(admin))
     app.include_router(story_router(story, current_session))
     app.include_router(bootstrap_router(data, ai_jobs, current_session, check_database,
         limits={'daily_ai_requests': ai_policy['owner_daily_limit'], 'question_max_chars': experience_rules['maxTarotQuestion'],
                 'journal_max_chars': policy.max_body_length, 'audio_max_seconds': ai_policy['audio_max_duration_ms'] // 1000,
                 'audio_max_bytes': ai_policy['audio_max_bytes']},
-        ota_policy={'channel': settings.ota_channel, 'min_native_version': settings.min_native_version,
-                    'updates_enabled': settings.ota_updates_enabled}))
+        ota_policy=admin.ota_policy_for_bootstrap))
     app.include_router(data_privacy_router(data, current_session, status_owner_dependency=status_session))
     app.include_router(create_ai_jobs_router(ai_jobs, current_session))
     app.include_router(create_reading_v2_router(readings, current_session))

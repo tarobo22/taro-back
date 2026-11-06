@@ -43,6 +43,34 @@ class SocialGrant(AuthInput):
     guest_records_preserved: Literal[True]
 
 
+class SocialProviderStatus(AuthInput):
+    provider: Literal['google', 'apple']
+    available: bool
+    reason: Literal['provider_not_configured'] | None
+
+
+class SocialProviders(AuthInput):
+    providers: list[SocialProviderStatus]
+
+
+class SocialAccount(AuthInput):
+    user_id: UUID
+    kind: Literal['guest', 'member']
+    providers: list[Literal['google', 'apple']]
+
+
+class SocialDeviceSession(AuthInput):
+    id: UUID
+    platform: Literal['web', 'android', 'ios']
+    created_at: datetime
+    expires_at: datetime
+    current: bool
+
+
+class SocialDeviceSessions(AuthInput):
+    items: list[SocialDeviceSession]
+
+
 def social_call(operation):
     try:
         return operation()
@@ -62,7 +90,7 @@ def social_auth_router(service, owner_dependency):
     Owner = Annotated[UUID, Depends(owner_dependency)]
     Authorization = Annotated[str | None, Header()]
 
-    @router.get('/providers', operation_id='listSocialProviders')
+    @router.get('/providers', response_model=SocialProviders, operation_id='listSocialProviders')
     def providers(response: Response):
         response.headers['Cache-Control'] = 'no-store'
         return service.providers()
@@ -115,12 +143,12 @@ def social_auth_router(service, owner_dependency):
         response.headers['Cache-Control'] = 'no-store'
         return social_call(lambda: service.exchange(owner, body.ticket, body.code_verifier))
 
-    @router.get('/account', operation_id='getSocialAccount')
+    @router.get('/account', response_model=SocialAccount, operation_id='getSocialAccount')
     def account(owner: Owner, response: Response):
         response.headers['Cache-Control'] = 'no-store'
         return social_call(lambda: service.account(owner))
 
-    @router.get('/sessions', operation_id='listAccountSessions')
+    @router.get('/sessions', response_model=SocialDeviceSessions, operation_id='listAccountSessions')
     def sessions(owner: Owner, response: Response, authorization: Authorization = None):
         response.headers['Cache-Control'] = 'no-store'
         return social_call(lambda: service.sessions(owner, authorization))
