@@ -1,0 +1,54 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+______ test_glossary_rls_filters_even_queries_without_an_owner_predicate ______
+api\tests\integration\test_counseling_rebuild_store.py:21: in test_glossary_rls_filters_even_queries_without_an_owner_predicate
+    with store.transaction(a) as repo:
+         ^^^^^^^^^^^^^^^^^^^^
+C:\Users\chang\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+api\adapters\counseling_postgres.py:11: in transaction
+    raise NotImplementedError('B02 owner transaction')
+E   NotImplementedError: B02 owner transaction
+_ test_definition_correction_updates_one_normalized_entry_and_rolls_back_on_error _
+api\tests\integration\test_counseling_rebuild_store.py:33: in test_definition_correction_updates_one_normalized_entry_and_rolls_back_on_error
+    with store.transaction(owner) as repo:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\chang\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+api\adapters\counseling_postgres.py:11: in transaction
+    raise NotImplementedError('B02 owner transaction')
+E   NotImplementedError: B02 owner transaction
+____ test_dispatcher_returns_identifiers_only_and_never_claims_a_job_twice ____
+api\tests\integration\test_counseling_rebuild_store.py:57: in test_dispatcher_returns_identifiers_only_and_never_claims_a_job_twice
+    command_id, session_id = queued(store, owners[0])
+                             ^^^^^^^^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_rebuild_store.py:48: in queued
+    with store.transaction(owner) as repo:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\chang\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+api\adapters\counseling_postgres.py:11: in transaction
+    raise NotImplementedError('B02 owner transaction')
+E   NotImplementedError: B02 owner transaction
+_______ test_expired_model_work_is_failed_without_automatic_paid_replay _______
+api\tests\integration\test_counseling_rebuild_store.py:68: in test_expired_model_work_is_failed_without_automatic_paid_replay
+    command_id, _ = queued(store, owners[0])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_rebuild_store.py:48: in queued
+    with store.transaction(owner) as repo:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\chang\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+api\adapters\counseling_postgres.py:11: in transaction
+    raise NotImplementedError('B02 owner transaction')
+E   NotImplementedError: B02 owner transaction
+=========================== short test summary info ===========================
+FAILED api/tests/integration/test_counseling_rebuild_store.py::test_glossary_rls_filters_even_queries_without_an_owner_predicate
+FAILED api/tests/integration/test_counseling_rebuild_store.py::test_definition_correction_updates_one_normalized_entry_and_rolls_back_on_error
+FAILED api/tests/integration/test_counseling_rebuild_store.py::test_dispatcher_returns_identifiers_only_and_never_claims_a_job_twice
+FAILED api/tests/integration/test_counseling_rebuild_store.py::test_expired_model_work_is_failed_without_automatic_paid_replay
+4 failed in 0.62s

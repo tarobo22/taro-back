@@ -1,0 +1,24 @@
+..FF                                                                     [100%]
+================================== FAILURES ===================================
+____ test_dispatcher_returns_identifiers_only_and_never_claims_a_job_twice ____
+api\tests\integration\test_counseling_rebuild_store.py:57: in test_dispatcher_returns_identifiers_only_and_never_claims_a_job_twice
+    command_id, session_id = queued(store, owners[0])
+                             ^^^^^^^^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_rebuild_store.py:49: in queued
+    repo.connection.execute('INSERT INTO ai_consent_events(id,owner_id,kind,policy_version,granted) VALUES(%s,%s,%s,%s,true)',
+..\..\..\taro-back\.venv\Lib\site-packages\psycopg\connection.py:304: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.InsufficientPrivilege: permission denied for table ai_consent_events
+_______ test_expired_model_work_is_failed_without_automatic_paid_replay _______
+api\tests\integration\test_counseling_rebuild_store.py:68: in test_expired_model_work_is_failed_without_automatic_paid_replay
+    command_id, _ = queued(store, owners[0])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+api\tests\integration\test_counseling_rebuild_store.py:49: in queued
+    repo.connection.execute('INSERT INTO ai_consent_events(id,owner_id,kind,policy_version,granted) VALUES(%s,%s,%s,%s,true)',
+..\..\..\taro-back\.venv\Lib\site-packages\psycopg\connection.py:304: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.InsufficientPrivilege: permission denied for table ai_consent_events
+=========================== short test summary info ===========================
+FAILED api/tests/integration/test_counseling_rebuild_store.py::test_dispatcher_returns_identifiers_only_and_never_claims_a_job_twice
+FAILED api/tests/integration/test_counseling_rebuild_store.py::test_expired_model_work_is_failed_without_automatic_paid_replay
+2 failed, 2 passed in 0.55s
