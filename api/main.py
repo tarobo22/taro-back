@@ -38,6 +38,7 @@ from api.adapters.http.journal_v2 import journal_v2_router
 from api.adapters.http.reading_v2 import create_reading_v2_router
 from api.adapters.identity_postgres import PostgresIdentityUnitOfWork
 from api.adapters.journal_v2_postgres import PostgresJournalV2UnitOfWork
+from api.adapters.journal_source_postgres import PostgresJournalSourceLookup
 from api.adapters.local_guidance import LocalGuidance
 from api.adapters.openai_guidance import OpenAIGuidance
 from api.adapters.owned_references import PostgresOwnedReferences
@@ -107,7 +108,8 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     data.feedback_target_exists = references.exists
     journal_v2_policy = JournalV2Policy.from_legacy(content['moods'], rules, read_shared('journal-v2-policy.json'))
     journals_v2 = JournalV2UseCases(lambda: PostgresJournalV2UnitOfWork(pool), journal_v2_policy,
-        source_exists=references.exists, invalidate_context=ai_jobs.cancel_for_journal)
+        source_exists=references.exists, invalidate_context=ai_jobs.cancel_for_journal,
+        source_lookup=PostgresJournalSourceLookup().resolve)
     summary = JournalSummaryUseCases(lambda: PostgresJournalSummaryUnitOfWork(pool), journal_v2_policy)
     favorites = FavoritesUseCases(lambda: PostgresFavoritesUnitOfWork(pool))
     insights = JournalInsightsService(lambda: PostgresJournalInsightsUnitOfWork(pool), ai_jobs=ai_jobs,
@@ -236,7 +238,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     app.include_router(journal_summary_router(summary, current_session))
     app.include_router(favorites_router(favorites, current_session))
     app.include_router(create_journal_insights_router(insights, current_session))
-    app.include_router(journal_router(journals, policy, current_session))
+    app.include_router(journal_router(journals, policy, current_session, mood_codes=journal_v2_policy.mood_labels))
     app.include_router(experience_router(experiences, configuration, current_session))
     return app
 
