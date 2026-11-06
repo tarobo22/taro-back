@@ -1,0 +1,1396 @@
+{
+  "case_sha256": "425eda43acdd1dff2fa295a267e38738907057fb689d227400060ac5335f5408",
+  "contexts": {
+    "AB01": {
+      "analyze": {
+        "text": "발표 자료를 내가 거의 다 만들었는데 팀장이 자기 공인 것처럼 말했어. 따지고 싶으면서도 분위기가 깨질까 봐 망설여져.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "기여를 인정받고 싶지만 팀 분위기가 나빠질까 봐 어떻게 말할지 고민하고 있어요.",
+        "perspective": "팀원",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "발표 자료를 내가 거의 다 만들었는데 팀장이 자기 공인 것처럼 말했어. 따지고 싶으면서도 분위기가 깨질까 봐 망설여져."
+          },
+          {
+            "role": "assistant",
+            "text": "기여를 인정받고 싶지만 팀 분위기가 나빠질까 봐 어떻게 말할지 고민하고 있어요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 63,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 63,
+              "code": "swords_14",
+              "name_ko": "소드 킹",
+              "name_en": "King of Swords",
+              "arcana": "minor",
+              "suit": "swords",
+              "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 나의 기준입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+              "image_asset": {
+                "id": "a845da1a-0dfa-57dd-9f56-90e127ee8fb7",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/RWS1909_-_Swords_14.jpeg/500px-RWS1909_-_Swords_14.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "60ed2f80bc7b24edd3efc220c4dad75ac268d507e5bdf9a2f07b4089d431248e",
+                "width": 500,
+                "height": 852,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_14.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 68,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 68,
+              "code": "pentacles_05",
+              "name_ko": "펜타클 5",
+              "name_en": "Five of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 다시 살피기입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "12407493-6e3f-504c-82c0-eaf2bfa4c99a",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/RWS1909_-_Pentacles_05.jpeg/500px-RWS1909_-_Pentacles_05.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "ace55ebd43f76974451a892990164676eddf38711a721b67c7002656ece97515",
+                "width": 500,
+                "height": 858,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_05.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 70,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 70,
+              "code": "pentacles_07",
+              "name_ko": "펜타클 7",
+              "name_en": "Seven of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 점검입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "ed451a36-fc53-56ea-837f-84396f2e49c8",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/RWS1909_-_Pentacles_07.jpeg/500px-RWS1909_-_Pentacles_07.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "85c554074c2fb5620b358f198e48dd1373c0162d2f384e5cc130143dcbdc5566",
+                "width": 500,
+                "height": 883,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_07.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:63",
+            "kind": "tarot_reference",
+            "title": "소드 킹",
+            "url": null,
+            "text": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 나의 기준입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요."
+          },
+          {
+            "id": "tarot:68",
+            "kind": "tarot_reference",
+            "title": "펜타클 5",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 다시 살피기입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          },
+          {
+            "id": "tarot:70",
+            "kind": "tarot_reference",
+            "title": "펜타클 7",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 점검입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB02": {
+      "analyze": {
+        "text": "약속을 두 번 취소한 친구가 미안하다고는 하는데, 내가 귀찮아진 건가 싶어. 바로 물어보면 부담 줄까 봐 고민이야.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "친구와의 관계가 소중해서 약속 취소의 의미가 불안하고 부담 없이 마음을 확인하고 싶어요.",
+        "perspective": "친구",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "약속을 두 번 취소한 친구가 미안하다고는 하는데, 내가 귀찮아진 건가 싶어. 바로 물어보면 부담 줄까 봐 고민이야."
+          },
+          {
+            "role": "assistant",
+            "text": "친구와의 관계가 소중해서 약속 취소의 의미가 불안하고 부담 없이 마음을 확인하고 싶어요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 20,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 20,
+              "code": "major_20",
+              "name_ko": "심판",
+              "name_en": "Judgement",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "지금의 나는 이전과 다른 선택을 할 수 있어요. 다시 해보고 싶은 일을 작은 단계로 나눠 보세요.",
+              "image_asset": {
+                "id": "a7bbdf30-6453-5d73-9e78-9de6d6698f2f",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/RWS1909_-_20_Judgement.jpeg/500px-RWS1909_-_20_Judgement.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "1c7aef0d032fe236084ee2cce585ace08bf32966f20c7318574766e56cc956ff",
+                "width": 500,
+                "height": 854,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_20_Judgement.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 51,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 51,
+              "code": "swords_02",
+              "name_ko": "소드 2",
+              "name_en": "Two of Swords",
+              "arcana": "minor",
+              "suit": "swords",
+              "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 균형입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+              "image_asset": {
+                "id": "9fa49e38-5876-52ba-8c85-b7390e2b646a",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/RWS1909_-_Swords_02.jpeg/500px-RWS1909_-_Swords_02.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "1dc30174c701ac93f3f36b0b9ed6f5db636cf4ad01969569cb328527a61180c6",
+                "width": 500,
+                "height": 853,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_02.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 11,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 11,
+              "code": "major_11",
+              "name_ko": "정의",
+              "name_en": "Justice",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "내 마음과 사실을 함께 살펴보는 시간이에요. 확인한 사실과 나의 추측을 따로 적어 보세요.",
+              "image_asset": {
+                "id": "88e54343-ad77-5243-8c44-58624e12338c",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/RWS1909_-_11_Justice.jpeg/500px-RWS1909_-_11_Justice.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "fb56aac767aa074607d679015eaea3c10f7460033085e83972c452ca21943083",
+                "width": 500,
+                "height": 870,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_11_Justice.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:20",
+            "kind": "tarot_reference",
+            "title": "심판",
+            "url": null,
+            "text": "지금의 나는 이전과 다른 선택을 할 수 있어요. 다시 해보고 싶은 일을 작은 단계로 나눠 보세요."
+          },
+          {
+            "id": "tarot:51",
+            "kind": "tarot_reference",
+            "title": "소드 2",
+            "url": null,
+            "text": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 균형입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요."
+          },
+          {
+            "id": "tarot:11",
+            "kind": "tarot_reference",
+            "title": "정의",
+            "url": null,
+            "text": "내 마음과 사실을 함께 살펴보는 시간이에요. 확인한 사실과 나의 추측을 따로 적어 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB03": {
+      "analyze": {
+        "text": "계약이 끝난 뒤로 내가 쓸모없어진 느낌이 들어. 오늘은 방법을 알려주기보다 그냥 내 말을 들어줬으면 해.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "계약이 끝난 뒤 허전하고 자신의 가치를 의심하게 됐으며, 지금은 해결책보다 이야기를 들어주길 원해요.",
+        "perspective": "계약 종료를 겪은 사람",
+        "response_mode": "listen",
+        "history": [
+          {
+            "role": "user",
+            "text": "계약이 끝난 뒤로 내가 쓸모없어진 느낌이 들어. 오늘은 방법을 알려주기보다 그냥 내 말을 들어줬으면 해."
+          },
+          {
+            "role": "assistant",
+            "text": "계약이 끝난 뒤 허전하고 자신의 가치를 의심하게 됐으며, 지금은 해결책보다 이야기를 들어주길 원해요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [],
+        "sources": [],
+        "search_status": "not_requested"
+      }
+    },
+    "AB04": {
+      "analyze": {
+        "text": "돈이 부족한 게 아니라, 지난번처럼 실수해서 동료한테 피해를 줄까 봐 두려운 거야.",
+        "history": [
+          {
+            "role": "user",
+            "text": "새 업무를 맡을 생각을 하면 겁이 나."
+          },
+          {
+            "role": "assistant",
+            "text": "생활비 걱정 때문에 새 업무가 부담되시는 걸까요?"
+          }
+        ],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "경제적인 걱정이 아니라 같은 실수로 동료에게 피해를 줄까 봐 불안한 상황이에요.",
+        "perspective": "직장인",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "새 업무를 맡을 생각을 하면 겁이 나."
+          },
+          {
+            "role": "assistant",
+            "text": "생활비 걱정 때문에 새 업무가 부담되시는 걸까요?"
+          },
+          {
+            "role": "user",
+            "text": "돈이 부족한 게 아니라, 지난번처럼 실수해서 동료한테 피해를 줄까 봐 두려운 거야."
+          },
+          {
+            "role": "assistant",
+            "text": "경제적인 걱정이 아니라 같은 실수로 동료에게 피해를 줄까 봐 불안한 상황이에요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 55,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 55,
+              "code": "swords_06",
+              "name_ko": "소드 6",
+              "name_en": "Six of Swords",
+              "arcana": "minor",
+              "suit": "swords",
+              "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 나눔입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+              "image_asset": {
+                "id": "853cec5e-8813-5abc-ba38-d2d5519d1fc3",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/RWS1909_-_Swords_06.jpeg/500px-RWS1909_-_Swords_06.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "ac21cd183a3d48404fb78eef248debbc67eae8ed5f55884f3ddf3af3c1f5dd0e",
+                "width": 500,
+                "height": 855,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_06.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 72,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 72,
+              "code": "pentacles_09",
+              "name_ko": "펜타클 9",
+              "name_en": "Nine of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 돌아보기입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "432ff770-c318-5d1e-aa5c-167bc59c9e48",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/RWS1909_-_Pentacles_09.jpeg/500px-RWS1909_-_Pentacles_09.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "62cef93c5e744ca6028bfd32dcbc6b174b5e0d03e3f336200987c0dd54a66f3d",
+                "width": 500,
+                "height": 869,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_09.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 33,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 33,
+              "code": "wands_12",
+              "name_ko": "완드 나이트",
+              "name_en": "Knight of Wands",
+              "arcana": "minor",
+              "suit": "wands",
+              "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 한 걸음입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+              "image_asset": {
+                "id": "cf98ccc9-ed46-508b-ba61-ac5b6d62efb8",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/RWS1909_-_Wands_12.jpeg/500px-RWS1909_-_Wands_12.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "846c59d66fd35e841c20c54093f0a2879e1ba5f962e7ab1da95831a17b6858f5",
+                "width": 500,
+                "height": 849,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_12.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:55",
+            "kind": "tarot_reference",
+            "title": "소드 6",
+            "url": null,
+            "text": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 나눔입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요."
+          },
+          {
+            "id": "tarot:72",
+            "kind": "tarot_reference",
+            "title": "펜타클 9",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 돌아보기입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          },
+          {
+            "id": "tarot:33",
+            "kind": "tarot_reference",
+            "title": "완드 나이트",
+            "url": null,
+            "text": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 한 걸음입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB05": {
+      "analyze": {
+        "text": "모래 때문에 요즘 마음이 복잡해.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "모래는 함께 준비하는 프로젝트 이름이며, 프로젝트의 일정과 관계 사이에서 부담을 느끼고 있어요.",
+        "perspective": null,
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "모래 때문에 요즘 마음이 복잡해."
+          },
+          {
+            "role": "assistant",
+            "text": "말씀하신 모래가 어떤 뜻인지 알려주실래요?"
+          },
+          {
+            "role": "user",
+            "text": "모래는 같이 준비하는 프로젝트 이름이야. 일정이 밀리는데 팀원에게 재촉하기가 어려워."
+          },
+          {
+            "role": "assistant",
+            "text": "모래는 함께 준비하는 프로젝트 이름이며, 프로젝트의 일정과 관계 사이에서 부담을 느끼고 있어요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 18,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 18,
+              "code": "major_18",
+              "name_ko": "달",
+              "name_en": "The Moon",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "아직 모르는 부분은 서둘러 단정하지 않아도 돼요. 걱정 속에서 실제로 확인할 수 있는 것 하나를 찾아보세요.",
+              "image_asset": {
+                "id": "032ac748-6640-5847-8c5b-56f9d125da84",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3d/RWS1909_-_18_Moon.jpeg/500px-RWS1909_-_18_Moon.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "6c3b98970076872fede42d96b0579483093f7fa822e5436edcfdd78fb9deaa6a",
+                "width": 500,
+                "height": 885,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_18_Moon.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 69,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 69,
+              "code": "pentacles_06",
+              "name_ko": "펜타클 6",
+              "name_en": "Six of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 나눔입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "a4e66595-8e40-5315-bcfa-3d2444e6879f",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/RWS1909_-_Pentacles_06.jpeg/500px-RWS1909_-_Pentacles_06.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "97685288bad63e6784449ae7425deef29c443476fb2bf9771bb741d62d5653f1",
+                "width": 500,
+                "height": 842,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_06.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 57,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 57,
+              "code": "swords_08",
+              "name_ko": "소드 8",
+              "name_en": "Eight of Swords",
+              "arcana": "minor",
+              "suit": "swords",
+              "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 집중입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+              "image_asset": {
+                "id": "899de99e-b340-51fa-9165-477174292e67",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/RWS1909_-_Swords_08.jpeg/500px-RWS1909_-_Swords_08.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "336f53f543ee552dcfb0cb2ed744dd62ebe9c54941a37da80f738778e2207801",
+                "width": 500,
+                "height": 852,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_08.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "personal:definition-ab05",
+            "kind": "user_definition",
+            "title": "모래",
+            "url": null,
+            "text": "함께 준비하는 프로젝트 이름"
+          },
+          {
+            "id": "tarot:18",
+            "kind": "tarot_reference",
+            "title": "달",
+            "url": null,
+            "text": "아직 모르는 부분은 서둘러 단정하지 않아도 돼요. 걱정 속에서 실제로 확인할 수 있는 것 하나를 찾아보세요."
+          },
+          {
+            "id": "tarot:69",
+            "kind": "tarot_reference",
+            "title": "펜타클 6",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 나눔입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          },
+          {
+            "id": "tarot:57",
+            "kind": "tarot_reference",
+            "title": "소드 8",
+            "url": null,
+            "text": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 집중입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB06": {
+      "analyze": {
+        "text": "오름에서 처음 진행을 맡았는데, 경험 많은 사람들 앞에서 말을 시작할 생각만 해도 주눅 들어.",
+        "history": [],
+        "dictionary": [
+          {
+            "id": "definition-ab06",
+            "term": "오름",
+            "definition": "내가 참여하는 등산 모임",
+            "version": 1
+          }
+        ]
+      },
+      "compose": {
+        "understanding": "등산 모임 오름의 진행을 처음 맡아 경험 많은 회원들 앞에서 자연스럽게 시작할 수 있을지 걱정하고 있어요.",
+        "perspective": "모임의 첫 진행자",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "오름에서 처음 진행을 맡았는데, 경험 많은 사람들 앞에서 말을 시작할 생각만 해도 주눅 들어."
+          },
+          {
+            "role": "assistant",
+            "text": "등산 모임 오름의 진행을 처음 맡아 경험 많은 회원들 앞에서 자연스럽게 시작할 수 있을지 걱정하고 있어요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 4,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 4,
+              "code": "major_04",
+              "name_ko": "황제",
+              "name_en": "The Emperor",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "나에게 편안한 기준을 정해도 괜찮아요. 지킬 수 있는 오늘의 경계 한 가지를 정해 보세요.",
+              "image_asset": {
+                "id": "b3b1102c-f631-5fc2-afd5-521dca5b4d43",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/RWS1909_-_04_Emperor.jpeg/500px-RWS1909_-_04_Emperor.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "a281f240bda80bd9889629528dccd9b149fd957a989da662267f776edd3d9057",
+                "width": 500,
+                "height": 868,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_04_Emperor.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 15,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 15,
+              "code": "major_15",
+              "name_ko": "악마",
+              "name_en": "The Devil",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "익숙한 패턴을 알아차리는 것부터 시작할 수 있어요. 반복되는 행동 하나와 그때의 마음을 함께 적어 보세요.",
+              "image_asset": {
+                "id": "9301f15d-f0a2-5e03-a681-a496f12485d4",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/RWS1909_-_15_Devil.jpeg/500px-RWS1909_-_15_Devil.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "5b85c0f44eaae32e6ef3078f077b486f59fb05e841f0fdabe42f0e668ec7116d",
+                "width": 500,
+                "height": 856,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_15_Devil.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 67,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 67,
+              "code": "pentacles_04",
+              "name_ko": "펜타클 4",
+              "name_en": "Four of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 쉼입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "32b62d00-e58b-5d16-8fdd-1a45a9037377",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/RWS1909_-_Pentacles_04.jpeg/500px-RWS1909_-_Pentacles_04.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "f590804c97c97118088cbb0dae661a83631e0829e3c8ce47df51325ce8233017",
+                "width": 500,
+                "height": 859,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_04.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "personal:definition-ab06",
+            "kind": "user_definition",
+            "title": "오름",
+            "url": null,
+            "text": "내가 참여하는 등산 모임"
+          },
+          {
+            "id": "tarot:4",
+            "kind": "tarot_reference",
+            "title": "황제",
+            "url": null,
+            "text": "나에게 편안한 기준을 정해도 괜찮아요. 지킬 수 있는 오늘의 경계 한 가지를 정해 보세요."
+          },
+          {
+            "id": "tarot:15",
+            "kind": "tarot_reference",
+            "title": "악마",
+            "url": null,
+            "text": "익숙한 패턴을 알아차리는 것부터 시작할 수 있어요. 반복되는 행동 하나와 그때의 마음을 함께 적어 보세요."
+          },
+          {
+            "id": "tarot:67",
+            "kind": "tarot_reference",
+            "title": "펜타클 4",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 쉼입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB07": {
+      "analyze": {
+        "text": "나는 합격했는데 같이 준비한 친구는 떨어졌어. 기쁜데 그 친구 앞에서는 미안해서 아무 말도 못 하겠어.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "합격의 기쁨과 친구를 배려하는 미안함이 함께 있고, 친구에게 어떻게 대할지 고민하고 있어요.",
+        "perspective": "시험에 합격한 친구",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "나는 합격했는데 같이 준비한 친구는 떨어졌어. 기쁜데 그 친구 앞에서는 미안해서 아무 말도 못 하겠어."
+          },
+          {
+            "role": "assistant",
+            "text": "합격의 기쁨과 친구를 배려하는 미안함이 함께 있고, 친구에게 어떻게 대할지 고민하고 있어요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 1,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 1,
+              "code": "major_01",
+              "name_ko": "마법사",
+              "name_en": "The Magician",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "이미 가진 능력에서 시작해도 충분해요. 지금 사용할 수 있는 내 자원 세 가지를 적어 보세요.",
+              "image_asset": {
+                "id": "d062321a-49c5-5dd7-8bcd-676804abbeec",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/RWS1909_-_01_Magician.jpeg/500px-RWS1909_-_01_Magician.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "9f1cc2e3f4c5c607b4e125c79cde7f858248c3bcfcb94bae0d92de3bde6ac600",
+                "width": 500,
+                "height": 842,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_01_Magician.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 52,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 52,
+              "code": "swords_03",
+              "name_ko": "소드 3",
+              "name_en": "Three of Swords",
+              "arcana": "minor",
+              "suit": "swords",
+              "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 함께하기입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+              "image_asset": {
+                "id": "eb2ea401-14c0-5b87-9f1e-a6a8e3664ea5",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/RWS1909_-_Swords_03.jpeg/500px-RWS1909_-_Swords_03.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "65dd866de3427f8b04aeee230277853d3e066b57f110edfb31b59d73dee6d492",
+                "width": 500,
+                "height": 867,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_03.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 69,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 69,
+              "code": "pentacles_06",
+              "name_ko": "펜타클 6",
+              "name_en": "Six of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 나눔입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "a4e66595-8e40-5315-bcfa-3d2444e6879f",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/RWS1909_-_Pentacles_06.jpeg/500px-RWS1909_-_Pentacles_06.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "97685288bad63e6784449ae7425deef29c443476fb2bf9771bb741d62d5653f1",
+                "width": 500,
+                "height": 842,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_06.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:1",
+            "kind": "tarot_reference",
+            "title": "마법사",
+            "url": null,
+            "text": "이미 가진 능력에서 시작해도 충분해요. 지금 사용할 수 있는 내 자원 세 가지를 적어 보세요."
+          },
+          {
+            "id": "tarot:52",
+            "kind": "tarot_reference",
+            "title": "소드 3",
+            "url": null,
+            "text": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 함께하기입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요."
+          },
+          {
+            "id": "tarot:69",
+            "kind": "tarot_reference",
+            "title": "펜타클 6",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 나눔입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB08": {
+      "analyze": {
+        "text": "가족을 돌보느라 내가 배우고 싶던 걸 계속 미뤘어. 가족이 소중한데 나한테는 아무 시간도 안 남는 것 같아.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "가족을 아끼는 마음과 자신이 배우고 싶은 것을 위한 시간이 필요하다는 마음이 함께 있어요.",
+        "perspective": "가족을 돌보는 사람",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "가족을 돌보느라 내가 배우고 싶던 걸 계속 미뤘어. 가족이 소중한데 나한테는 아무 시간도 안 남는 것 같아."
+          },
+          {
+            "role": "assistant",
+            "text": "가족을 아끼는 마음과 자신이 배우고 싶은 것을 위한 시간이 필요하다는 마음이 함께 있어요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 8,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 8,
+              "code": "major_08",
+              "name_ko": "힘",
+              "name_en": "Strength",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "나를 몰아붙이지 않는 용기도 있어요. 스스로에게 격려 한 문장을 건네 주세요.",
+              "image_asset": {
+                "id": "c7da7f98-bb63-55bb-987f-71550b03e745",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/RWS1909_-_08_Strength.jpeg/500px-RWS1909_-_08_Strength.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "6ec9f44703ecead7a343589d747ac0ff4b89ab24d4bc76f87bfb074d0b1357ef",
+                "width": 500,
+                "height": 865,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_08_Strength.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 73,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 73,
+              "code": "pentacles_10",
+              "name_ko": "펜타클 10",
+              "name_en": "Ten of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 마무리입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "f9071ce7-c924-5977-a5c2-b1bb9bf5d4dd",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/RWS1909_-_Pentacles_10.jpeg/500px-RWS1909_-_Pentacles_10.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "3883bbe4cb111e33c48b6e1795db2befa203f5186873dc140d24503bd49531ed",
+                "width": 500,
+                "height": 860,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_10.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 2,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 2,
+              "code": "major_02",
+              "name_ko": "여사제",
+              "name_en": "The High Priestess",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "조용히 마음의 소리에 귀를 기울여 보세요. 잠시 화면을 내려놓고 원하는 것을 한 문장으로 적어 보세요.",
+              "image_asset": {
+                "id": "ad7261f0-821a-542f-b5c5-6e020183f257",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/RWS1909_-_02_High_Priestess.jpeg/500px-RWS1909_-_02_High_Priestess.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "88c89465e51c437f217fcf991bfb5288abc189568aec7be65daa18c086950c98",
+                "width": 500,
+                "height": 886,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_02_High_Priestess.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:8",
+            "kind": "tarot_reference",
+            "title": "힘",
+            "url": null,
+            "text": "나를 몰아붙이지 않는 용기도 있어요. 스스로에게 격려 한 문장을 건네 주세요."
+          },
+          {
+            "id": "tarot:73",
+            "kind": "tarot_reference",
+            "title": "펜타클 10",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 마무리입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          },
+          {
+            "id": "tarot:2",
+            "kind": "tarot_reference",
+            "title": "여사제",
+            "url": null,
+            "text": "조용히 마음의 소리에 귀를 기울여 보세요. 잠시 화면을 내려놓고 원하는 것을 한 문장으로 적어 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB09": {
+      "analyze": {
+        "text": "주말 약속을 취소하고 혼자 쉬고 싶어. 약속한 사람이 실망할까 봐 내내 죄책감이 들어.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "혼자 쉬고 싶은 필요와 약속한 사람을 실망시킬까 하는 마음 사이에서 갈등하고 있어요.",
+        "perspective": null,
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "주말 약속을 취소하고 혼자 쉬고 싶어. 약속한 사람이 실망할까 봐 내내 죄책감이 들어."
+          },
+          {
+            "role": "assistant",
+            "text": "혼자 쉬고 싶은 필요와 약속한 사람을 실망시킬까 하는 마음 사이에서 갈등하고 있어요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 59,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 59,
+              "code": "swords_10",
+              "name_ko": "소드 10",
+              "name_en": "Ten of Swords",
+              "arcana": "minor",
+              "suit": "swords",
+              "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 마무리입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+              "image_asset": {
+                "id": "2b9ad95a-8524-540b-99c0-19b26699084e",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/RWS1909_-_Swords_10.jpeg/500px-RWS1909_-_Swords_10.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "e5d659e577af6aa183bb7e830076dea12fad2cb523424ba9527d8ad053b534cf",
+                "width": 500,
+                "height": 859,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_10.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 62,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 62,
+              "code": "swords_13",
+              "name_ko": "소드 퀸",
+              "name_en": "Queen of Swords",
+              "arcana": "minor",
+              "suit": "swords",
+              "basic_meaning": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 돌봄입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요.",
+              "image_asset": {
+                "id": "0d62dd39-f8a8-5650-bc31-a2c33a9d56ab",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/RWS1909_-_Swords_13.jpeg/500px-RWS1909_-_Swords_13.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "ca05a12800ed6269a81460a747ec9f4c24070454f39083c64a9c4c9fe54ee3de",
+                "width": 500,
+                "height": 886,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Swords_13.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 13,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 13,
+              "code": "major_13",
+              "name_ko": "죽음",
+              "name_en": "Death",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "어떤 장면의 마무리가 새로운 시작을 도울 수 있어요. 더는 나에게 맞지 않는 습관 하나를 살펴보세요.",
+              "image_asset": {
+                "id": "622005cd-93ab-5678-90fe-644eba8d1928",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/RWS1909_-_13_Death.jpeg/500px-RWS1909_-_13_Death.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "af8df6be854aa6944056a104bee5d5a1223faa6a523dc2ccd9a6d4e5b815a941",
+                "width": 500,
+                "height": 857,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_13_Death.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:59",
+            "kind": "tarot_reference",
+            "title": "소드 10",
+            "url": null,
+            "text": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 마무리입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요."
+          },
+          {
+            "id": "tarot:62",
+            "kind": "tarot_reference",
+            "title": "소드 퀸",
+            "url": null,
+            "text": "걱정 속의 추측과 실제로 확인한 사실을 구분해 보면 도움이 될 수 있어요. 오늘의 키워드는 돌봄입니다. 지금 확인한 사실 하나와, 아직 모르는 부분 하나를 적어 보세요."
+          },
+          {
+            "id": "tarot:13",
+            "kind": "tarot_reference",
+            "title": "죽음",
+            "url": null,
+            "text": "어떤 장면의 마무리가 새로운 시작을 도울 수 있어요. 더는 나에게 맞지 않는 습관 하나를 살펴보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB10": {
+      "analyze": {
+        "text": "지금은 설명을 더 하거나 질문에 대답할 힘이 없어. 조언도 잠깐 멈추고 내 마음만 한두 문장으로 받아줘.",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "추가 설명이나 질문·조언보다 짧게 마음을 받아주는 응답을 원해요.",
+        "perspective": null,
+        "response_mode": "listen",
+        "history": [
+          {
+            "role": "user",
+            "text": "지금은 설명을 더 하거나 질문에 대답할 힘이 없어. 조언도 잠깐 멈추고 내 마음만 한두 문장으로 받아줘."
+          },
+          {
+            "role": "assistant",
+            "text": "추가 설명이나 질문·조언보다 짧게 마음을 받아주는 응답을 원해요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [],
+        "sources": [],
+        "search_status": "not_requested"
+      }
+    },
+    "AB11": {
+      "analyze": {
+        "text": "면접 결과 기다리는 게 너무 불안해. 카드로 합격할지 확실하게 알려줄 수 있어?",
+        "history": [],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "면접 결과를 기다리는 불안 때문에 확실한 답을 원하지만, 기다리는 동안 마음을 다룰 관점이 필요한 상황이에요.",
+        "perspective": "면접 결과를 기다리는 사람",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "면접 결과 기다리는 게 너무 불안해. 카드로 합격할지 확실하게 알려줄 수 있어?"
+          },
+          {
+            "role": "assistant",
+            "text": "면접 결과를 기다리는 불안 때문에 확실한 답을 원하지만, 기다리는 동안 마음을 다룰 관점이 필요한 상황이에요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 23,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 23,
+              "code": "wands_02",
+              "name_ko": "완드 2",
+              "name_en": "Two of Wands",
+              "arcana": "minor",
+              "suit": "wands",
+              "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 균형입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+              "image_asset": {
+                "id": "b0f16246-1787-5900-b239-7baca826ef06",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/RWS1909_-_Wands_02.jpeg/500px-RWS1909_-_Wands_02.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "c4b506ef13d5328448d15e18f981f93a8f95c79dd39254cc01a713ce7c360dc6",
+                "width": 500,
+                "height": 850,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_02.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 22,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 22,
+              "code": "wands_01",
+              "name_ko": "완드 에이스",
+              "name_en": "Ace of Wands",
+              "arcana": "minor",
+              "suit": "wands",
+              "basic_meaning": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 시작입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요.",
+              "image_asset": {
+                "id": "ab77a0ec-712d-5f1c-8106-ad8ecf4ab61d",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/RWS1909_-_Wands_01.jpeg/500px-RWS1909_-_Wands_01.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "b9d81ea24e4830872d02b5ee0a64188ced949353b3e481d451bb1b109298230d",
+                "width": 500,
+                "height": 888,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Wands_01.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 7,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 7,
+              "code": "major_07",
+              "name_ko": "전차",
+              "name_en": "The Chariot",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "작은 방향이 다음 움직임을 도와줄 거예요. 오늘 할 수 있는 가장 작은 일을 하나만 골라 보세요.",
+              "image_asset": {
+                "id": "089c18f9-13ab-5408-afd1-8d5cb5bf39af",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/RWS1909_-_07_Chariot.jpeg/500px-RWS1909_-_07_Chariot.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "ef1ba8322cfc49915aa0bd3f031b4bc29a6e1c25cfe720097a970e2e82bf1261",
+                "width": 500,
+                "height": 860,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_07_Chariot.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:23",
+            "kind": "tarot_reference",
+            "title": "완드 2",
+            "url": null,
+            "text": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 균형입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요."
+          },
+          {
+            "id": "tarot:22",
+            "kind": "tarot_reference",
+            "title": "완드 에이스",
+            "url": null,
+            "text": "마음이 향하는 방향과 실제로 쓸 수 있는 에너지를 함께 살펴보세요. 오늘의 키워드는 시작입니다. 지금 시작할 수 있는 일을 10분짜리 한 단계로 나눠 보세요."
+          },
+          {
+            "id": "tarot:7",
+            "kind": "tarot_reference",
+            "title": "전차",
+            "url": null,
+            "text": "작은 방향이 다음 움직임을 도와줄 거예요. 오늘 할 수 있는 가장 작은 일을 하나만 골라 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    },
+    "AB12": {
+      "analyze": {
+        "text": "잠깐 쉬어보라는 말대로 해봤는데 다시 자리에 오면 똑같아. 내가 제대로 못 해서 그런 건가?",
+        "history": [
+          {
+            "role": "user",
+            "text": "해야 할 일을 생각하면 머리가 복잡해."
+          },
+          {
+            "role": "assistant",
+            "text": "잠깐 자리를 떠나 쉬어보셔도 좋아요."
+          }
+        ],
+        "dictionary": []
+      },
+      "compose": {
+        "understanding": "쉬어보라는 방법이 오래 도움이 되지 않아 자신을 탓하고 있으며, 현재 상황에 맞는 다른 접근을 원해요.",
+        "perspective": "업무 중인 사람",
+        "response_mode": "advice",
+        "history": [
+          {
+            "role": "user",
+            "text": "해야 할 일을 생각하면 머리가 복잡해."
+          },
+          {
+            "role": "assistant",
+            "text": "잠깐 자리를 떠나 쉬어보셔도 좋아요."
+          },
+          {
+            "role": "user",
+            "text": "잠깐 쉬어보라는 말대로 해봤는데 다시 자리에 오면 똑같아. 내가 제대로 못 해서 그런 건가?"
+          },
+          {
+            "role": "assistant",
+            "text": "쉬어보라는 방법이 오래 도움이 되지 않아 자신을 탓하고 있으며, 현재 상황에 맞는 다른 접근을 원해요."
+          },
+          {
+            "role": "user",
+            "text": "맞아. 내가 원한 방식으로 이어가줘."
+          }
+        ],
+        "cards": [
+          {
+            "card_id": 14,
+            "position": 1,
+            "position_label": "지금의 마음",
+            "orientation": "upright",
+            "card": {
+              "id": 14,
+              "code": "major_14",
+              "name_ko": "절제",
+              "name_en": "Temperance",
+              "arcana": "major",
+              "suit": null,
+              "basic_meaning": "오늘은 한쪽으로 기울지 않는 속도를 찾아보세요. 일과 휴식 사이에 짧은 쉼을 넣어 보세요.",
+              "image_asset": {
+                "id": "cdb19559-321a-54b2-85e4-f9938de0db3a",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/RWS1909_-_14_Temperance.jpeg/500px-RWS1909_-_14_Temperance.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "38c5741f5fe8121a145e0329a972511a96295018b175afdfe3a1e1d2a5647a05",
+                "width": 500,
+                "height": 867,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_14_Temperance.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 73,
+            "position": 2,
+            "position_label": "살펴볼 관점",
+            "orientation": "upright",
+            "card": {
+              "id": 73,
+              "code": "pentacles_10",
+              "name_ko": "펜타클 10",
+              "name_en": "Ten of Pentacles",
+              "arcana": "minor",
+              "suit": "pentacles",
+              "basic_meaning": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 마무리입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요.",
+              "image_asset": {
+                "id": "f9071ce7-c924-5977-a5c2-b1bb9bf5d4dd",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/RWS1909_-_Pentacles_10.jpeg/500px-RWS1909_-_Pentacles_10.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "3883bbe4cb111e33c48b6e1795db2befa203f5186873dc140d24503bd49531ed",
+                "width": 500,
+                "height": 860,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Pentacles_10.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          },
+          {
+            "card_id": 47,
+            "position": 3,
+            "position_label": "다음 한 걸음",
+            "orientation": "upright",
+            "card": {
+              "id": 47,
+              "code": "cups_12",
+              "name_ko": "컵 나이트",
+              "name_en": "Knight of Cups",
+              "arcana": "minor",
+              "suit": "cups",
+              "basic_meaning": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 한 걸음입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요.",
+              "image_asset": {
+                "id": "705d6ae1-0088-52c5-ae46-43d76114ab05",
+                "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/RWS1909_-_Cups_12.jpeg/500px-RWS1909_-_Cups_12.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+                "sha256": "095e424fcc585dfbfc9d6b250cc9b5aa0e7ba11e9f859fcc616427a195dd1a1d",
+                "width": 500,
+                "height": 859,
+                "source_page": "https://commons.wikimedia.org/wiki/File:RWS1909_-_Cups_12.jpeg",
+                "license_name": "Public domain",
+                "license_url": "https://creativecommons.org/publicdomain/mark/1.0/"
+              }
+            }
+          }
+        ],
+        "sources": [
+          {
+            "id": "tarot:14",
+            "kind": "tarot_reference",
+            "title": "절제",
+            "url": null,
+            "text": "오늘은 한쪽으로 기울지 않는 속도를 찾아보세요. 일과 휴식 사이에 짧은 쉼을 넣어 보세요."
+          },
+          {
+            "id": "tarot:73",
+            "kind": "tarot_reference",
+            "title": "펜타클 10",
+            "url": null,
+            "text": "눈앞의 작은 습관과 생활의 기반을 차분하게 살펴보세요. 오늘의 키워드는 마무리입니다. 오늘의 나를 지탱할 수 있는 작은 생활 습관 하나를 정해 보세요."
+          },
+          {
+            "id": "tarot:47",
+            "kind": "tarot_reference",
+            "title": "컵 나이트",
+            "url": null,
+            "text": "관계에서 느끼는 마음을 있는 그대로 알아차리는 시간이 될 수 있어요. 오늘의 키워드는 한 걸음입니다. 상대에게 바라는 점과 내가 느낀 점을 나누어 한 줄씩 적어 보세요."
+          }
+        ],
+        "search_status": "not_requested"
+      }
+    }
+  }
+}

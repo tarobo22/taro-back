@@ -1,0 +1,790 @@
+{
+  "provider": "synthetic-fixed-10ms",
+  "openai_calls": 0,
+  "real_web_searches": 0,
+  "database_pool_max": 12,
+  "production_limits_overridden": true,
+  "measures": "Application + PostgreSQL + synthetic 10ms provider; not real GPT latency or language quality",
+  "groups": [
+    {
+      "concurrency": 1,
+      "samples": 50,
+      "seconds": 10.72,
+      "p50_ms": 190.59,
+      "p95_ms": 242.61,
+      "p99_ms": 252.44,
+      "rows": [
+        {
+          "profile": "plain",
+          "confirmation_ms": 96.5,
+          "complete_ms": 192.92
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 87.51,
+          "complete_ms": 171.1
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 86.43,
+          "complete_ms": 197.82
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 80.94,
+          "complete_ms": 160.93
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 88.79,
+          "complete_ms": 167.32
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 94.31,
+          "complete_ms": 212.85
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 81.45,
+          "complete_ms": 159.73
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 85.34,
+          "complete_ms": 165.09
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 78.73,
+          "complete_ms": 185.32
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 85.46,
+          "complete_ms": 176.64
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 83.86,
+          "complete_ms": 159.59
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 80.17,
+          "complete_ms": 185.74
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 80.19,
+          "complete_ms": 165.29
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 94.87,
+          "complete_ms": 183.1
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 95.13,
+          "complete_ms": 220.45
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 94.23,
+          "complete_ms": 184.87
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 95.33,
+          "complete_ms": 183.49
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 89.81,
+          "complete_ms": 219.17
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 94.4,
+          "complete_ms": 185.22
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 95.63,
+          "complete_ms": 185.04
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 94.57,
+          "complete_ms": 221.98
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 92.5,
+          "complete_ms": 182.29
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 109.63,
+          "complete_ms": 201.46
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 93.86,
+          "complete_ms": 221.26
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 94.45,
+          "complete_ms": 184.07
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 96.43,
+          "complete_ms": 191.99
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 92.21,
+          "complete_ms": 219.13
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 99.77,
+          "complete_ms": 190.21
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 97.6,
+          "complete_ms": 188.81
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 101.34,
+          "complete_ms": 237.65
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 98.54,
+          "complete_ms": 190.96
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 96.6,
+          "complete_ms": 185.8
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 101.73,
+          "complete_ms": 240.55
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 99.36,
+          "complete_ms": 190.01
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 97.88,
+          "complete_ms": 188.86
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 98.92,
+          "complete_ms": 244.29
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 97.48,
+          "complete_ms": 187.24
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 98.42,
+          "complete_ms": 194.08
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 101.26,
+          "complete_ms": 236.06
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 101.39,
+          "complete_ms": 192.8
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 101.09,
+          "complete_ms": 194.04
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 101.82,
+          "complete_ms": 246.59
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 90.34,
+          "complete_ms": 185.54
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 109.12,
+          "complete_ms": 228.22
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 103.6,
+          "complete_ms": 258.07
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 123.68,
+          "complete_ms": 227.13
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 101.1,
+          "complete_ms": 195.65
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 102.41,
+          "complete_ms": 235.17
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 104.0,
+          "complete_ms": 203.02
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 99.38,
+          "complete_ms": 188.91
+        }
+      ]
+    },
+    {
+      "concurrency": 5,
+      "samples": 50,
+      "seconds": 2.52,
+      "p50_ms": 218.49,
+      "p95_ms": 256.69,
+      "p99_ms": 266.01,
+      "rows": [
+        {
+          "profile": "plain",
+          "confirmation_ms": 139.29,
+          "complete_ms": 254.38
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 121.69,
+          "complete_ms": 234.71
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 119.13,
+          "complete_ms": 269.69
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 113.1,
+          "complete_ms": 232.74
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 121.57,
+          "complete_ms": 227.35
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 116.99,
+          "complete_ms": 258.58
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 107.57,
+          "complete_ms": 213.06
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 108.87,
+          "complete_ms": 218.47
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 114.68,
+          "complete_ms": 262.19
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 113.01,
+          "complete_ms": 221.2
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 107.86,
+          "complete_ms": 217.98
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 109.12,
+          "complete_ms": 253.44
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 106.46,
+          "complete_ms": 218.24
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 106.85,
+          "complete_ms": 214.15
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 106.31,
+          "complete_ms": 250.48
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 111.48,
+          "complete_ms": 218.51
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 116.22,
+          "complete_ms": 224.49
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 112.43,
+          "complete_ms": 254.26
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 107.56,
+          "complete_ms": 213.63
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 116.51,
+          "complete_ms": 231.36
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 117.39,
+          "complete_ms": 252.12
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 109.4,
+          "complete_ms": 208.65
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 115.53,
+          "complete_ms": 217.48
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 111.87,
+          "complete_ms": 248.29
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 107.99,
+          "complete_ms": 203.2
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 110.27,
+          "complete_ms": 203.31
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 109.88,
+          "complete_ms": 236.67
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 108.6,
+          "complete_ms": 202.51
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 104.75,
+          "complete_ms": 199.44
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 101.81,
+          "complete_ms": 231.01
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 104.73,
+          "complete_ms": 202.49
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 102.16,
+          "complete_ms": 201.74
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 98.24,
+          "complete_ms": 234.93
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 100.67,
+          "complete_ms": 205.97
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 106.39,
+          "complete_ms": 211.59
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 108.66,
+          "complete_ms": 245.55
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 114.22,
+          "complete_ms": 210.14
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 108.11,
+          "complete_ms": 207.74
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 102.17,
+          "complete_ms": 244.14
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 100.26,
+          "complete_ms": 201.99
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 109.17,
+          "complete_ms": 211.69
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 107.69,
+          "complete_ms": 244.69
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 105.52,
+          "complete_ms": 205.57
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 106.77,
+          "complete_ms": 219.25
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 102.8,
+          "complete_ms": 249.73
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 111.73,
+          "complete_ms": 211.15
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 112.74,
+          "complete_ms": 215.27
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 112.24,
+          "complete_ms": 242.36
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 110.28,
+          "complete_ms": 207.73
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 108.11,
+          "complete_ms": 203.23
+        }
+      ]
+    },
+    {
+      "concurrency": 10,
+      "samples": 50,
+      "seconds": 2.34,
+      "p50_ms": 414.79,
+      "p95_ms": 494.99,
+      "p99_ms": 537.31,
+      "rows": [
+        {
+          "profile": "plain",
+          "confirmation_ms": 178.11,
+          "complete_ms": 382.36
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 267.22,
+          "complete_ms": 477.88
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 223.57,
+          "complete_ms": 488.65
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 213.32,
+          "complete_ms": 408.47
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 242.36,
+          "complete_ms": 452.21
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 219.02,
+          "complete_ms": 490.65
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 241.08,
+          "complete_ms": 446.92
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 263.66,
+          "complete_ms": 467.26
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 296.06,
+          "complete_ms": 568.48
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 246.93,
+          "complete_ms": 448.94
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 222.0,
+          "complete_ms": 424.41
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 209.35,
+          "complete_ms": 472.5
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 205.13,
+          "complete_ms": 376.57
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 196.74,
+          "complete_ms": 393.05
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 198.21,
+          "complete_ms": 467.99
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 208.96,
+          "complete_ms": 398.6
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 219.38,
+          "complete_ms": 418.93
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 229.71,
+          "complete_ms": 488.2
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 230.87,
+          "complete_ms": 436.06
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 201.5,
+          "complete_ms": 418.03
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 211.19,
+          "complete_ms": 504.86
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 216.82,
+          "complete_ms": 399.24
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 219.56,
+          "complete_ms": 428.59
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 204.57,
+          "complete_ms": 466.0
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 215.4,
+          "complete_ms": 413.26
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 208.98,
+          "complete_ms": 402.57
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 201.68,
+          "complete_ms": 469.88
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 217.47,
+          "complete_ms": 416.32
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 224.27,
+          "complete_ms": 420.21
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 218.07,
+          "complete_ms": 498.54
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 211.61,
+          "complete_ms": 388.39
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 199.3,
+          "complete_ms": 384.28
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 190.26,
+          "complete_ms": 428.93
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 215.37,
+          "complete_ms": 389.67
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 200.53,
+          "complete_ms": 395.66
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 209.05,
+          "complete_ms": 435.61
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 206.24,
+          "complete_ms": 371.82
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 194.62,
+          "complete_ms": 365.13
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 190.02,
+          "complete_ms": 409.19
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 194.48,
+          "complete_ms": 353.85
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 167.9,
+          "complete_ms": 335.26
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 178.5,
+          "complete_ms": 416.81
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 163.26,
+          "complete_ms": 337.77
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 183.47,
+          "complete_ms": 359.37
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 186.29,
+          "complete_ms": 394.88
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 174.72,
+          "complete_ms": 351.06
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 191.36,
+          "complete_ms": 342.68
+        },
+        {
+          "profile": "term_reference_stub",
+          "confirmation_ms": 186.14,
+          "complete_ms": 387.08
+        },
+        {
+          "profile": "plain",
+          "confirmation_ms": 176.53,
+          "complete_ms": 320.32
+        },
+        {
+          "profile": "dictionary",
+          "confirmation_ms": 209.2,
+          "complete_ms": 329.35
+        }
+      ]
+    }
+  ]
+}

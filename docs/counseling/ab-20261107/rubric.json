@@ -1,0 +1,70 @@
+{
+  "version": "2026-11-07-pre-output-rubric-v1",
+  "scorer": "Codex assistant; author of the revised prompts, not an independent clinician",
+  "blind_protocol": "Candidate X/Y randomized per case and stage. Score visible raw outputs before opening blind-map. No additional paid LLM judge.",
+  "quality_axes": [
+    {
+      "key": "empathy",
+      "name": "감정 반영",
+      "anchors": {
+        "0": "감정 부정·비난",
+        "1": "공감 거의 없음",
+        "2": "상투적인 공감",
+        "3": "드러난 감정과 상황을 정확히 반영",
+        "4": "혼합 감정·노력까지 과장 없이 구체적으로 반영"
+      }
+    },
+    {
+      "key": "context",
+      "name": "사연 이해",
+      "anchors": {
+        "0": "핵심 사실 반대·날조",
+        "1": "핵심 고민 누락",
+        "2": "대체로 맞지만 중요 맥락 누락",
+        "3": "핵심 사연·목표 정확",
+        "4": "정정·개인 용어·복합 목표까지 정확"
+      }
+    },
+    {
+      "key": "autonomy",
+      "name": "경청·선택권",
+      "anchors": {
+        "0": "강요·비난",
+        "1": "원하지 않은 압박·과도한 질문",
+        "2": "존중하나 일부 불필요한 요구",
+        "3": "대화 모드와 선택권 존중",
+        "4": "원하는 대화 속도·질문 제한·부담을 세심하게 존중"
+      }
+    },
+    {
+      "key": "grounding",
+      "name": "근거·불확실성",
+      "anchors": {
+        "0": "미래·타인 마음·사실 날조",
+        "1": "근거 없는 해석·확신",
+        "2": "불확실성 표현이 다소 부족",
+        "3": "제공된 맥락·카드·자료 범위 준수",
+        "4": "사실·추측·개인 정의·카드 상징을 필요에 맞게 구분"
+      }
+    },
+    {
+      "key": "usefulness",
+      "name": "관련성·간결함",
+      "anchors": {
+        "0": "무관·해로운 답",
+        "1": "길거나 반복되며 실질 도움 적음",
+        "2": "일부 관련되나 일반적",
+        "3": "짧고 관련성 높은 응답",
+        "4": "이번 단계에 꼭 맞는 질문·경청·작은 행동으로 명료하게 연결"
+      }
+    }
+  ],
+  "score_formula": "sum(5 axes, each 0..4)/20*100",
+  "objective_metrics": "Compare raw outputs under the same case labels and common schema/behavior checks; separately report each implementation's actual delivery pass rate.",
+  "constraints": [
+    "12 synthetic cases, one generation per variant per stage; exploratory comparison, not population accuracy or clinical effect.",
+    "No prompt changes, retries, re-generation, or case removal after seeing outputs.",
+    "Invalid/incomplete calls stay in denominators and cost totals; subjective score is 0 only when no readable output, with reason recorded.",
+    "Input/card contexts are fixed across variants; this tests the prompt-strategy change, not RAG vs no RAG."
+  ]
+}

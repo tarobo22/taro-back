@@ -1,0 +1,106 @@
+{
+  "files": [
+    {
+      "name": "blinded-review.json",
+      "bytes": 132945,
+      "sha256": "dc45cde5cdc047ad34e19563d6fbb08521c7e28d466770e963c29605fdcdca61",
+      "working_file_sha256": "e0fb9997931d0a5a19579308c152d398b8256331907f4fbe834b088086552c23"
+    },
+    {
+      "name": "calls.csv",
+      "bytes": 2942,
+      "sha256": "d782b9e58262158fec0b2aef59ecd339f62c1893bb4f43a046d4864788444407",
+      "working_file_sha256": "b09e6c82976cd7e618bd290dd0637e742010806745bdbfd8a7bc139a9b36dbec"
+    },
+    {
+      "name": "case-scores.csv",
+      "bytes": 258,
+      "sha256": "c01bf986fdd9b77efd307ca5e4ac9e53e8f66f7d02d7b7791114dd0d95df659e",
+      "working_file_sha256": "8134c0e3e345076a6ec219ca764a60905cf0482c105caa3242864e9c1c3d0d23"
+    },
+    {
+      "name": "comparison-example.png",
+      "bytes": 105657,
+      "sha256": "dd3f5c832d4aa576ecbc86eabd8e9a2ada861b2ee4008d8ce3ea67b2685d9b56",
+      "working_file_sha256": "dd3f5c832d4aa576ecbc86eabd8e9a2ada861b2ee4008d8ce3ea67b2685d9b56"
+    },
+    {
+      "name": "COMPARISON.html",
+      "bytes": 122320,
+      "sha256": "24671688d23c94d12f4b6402ac6b41744a5d69f74a844e52a47705e9684fc83b",
+      "working_file_sha256": "f89d3b55b58390ac9f5fd67a78ade911013ceada122d2bc3b0474a603f0b9df2"
+    },
+    {
+      "name": "inputs.json",
+      "bytes": 67184,
+      "sha256": "f5013972f77bed0257bf8d1ba4e0147641b6f7f98c007d03bdf0c74f08502953",
+      "working_file_sha256": "19f9de3ea2ab6ba31c0a46db32e5b0c54909ecef7b3aeee9a73b0964c2d8b70c"
+    },
+    {
+      "name": "manual-blind-scores.json",
+      "bytes": 15967,
+      "sha256": "85b5af1e4928de7ee4c610efb3659fee88c7e5aeb368c4bf2e51a73ef6b7cf98",
+      "working_file_sha256": "85b5af1e4928de7ee4c610efb3659fee88c7e5aeb368c4bf2e51a73ef6b7cf98"
+    },
+    {
+      "name": "metrics.json",
+      "bytes": 12339,
+      "sha256": "4ebc9ca9f932a47ee5c139e58312f511688467723a21eae2f425b836605690ce",
+      "working_file_sha256": "8bcfa67547d554c96ecf31f5ea083c75904c192a364555f0edd276e136a2769e"
+    },
+    {
+      "name": "plan.json",
+      "bytes": 846,
+      "sha256": "546581ee3784b89fbd75612d2ba150ee18d9e2f459ef898d7952083e0532d1c1",
+      "working_file_sha256": "015688da5493a6b726f5e82c6c9acae430dd8ad14b29d0a13e1aae6e1c7a5d31"
+    },
+    {
+      "name": "raw-results.json",
+      "bytes": 167031,
+      "sha256": "140171124aa1f1c6ad78cdec185e511ae1c392d6d50fc5ede0a05140338388b5",
+      "working_file_sha256": "bcee824feb784b1c6871aaf8097a2419c95d98ba8e2711da9096fd7e524f1c10"
+    },
+    {
+      "name": "README.md",
+      "bytes": 12374,
+      "sha256": "009b359dcdf633447e42b85be78c2715de622ef88edb7ad69b1f7c59fb7004f0",
+      "working_file_sha256": "f627c35a29fbe7171b3f5033ebf7b0755adb33bad86747f4389ad77f11a169ea"
+    },
+    {
+      "name": "report-ui-verification.json",
+      "bytes": 1060,
+      "sha256": "e3e8ac6e2c977cc37c9c19111aceb5bcfa857581a2bafa83fb85a5fc1ad0f558",
+      "working_file_sha256": "e3e8ac6e2c977cc37c9c19111aceb5bcfa857581a2bafa83fb85a5fc1ad0f558"
+    },
+    {
+      "name": "REPORT.pdf",
+      "bytes": 146497,
+      "sha256": "2fe91d0b5da0a3b99d320062afe27ce82f2fea27692220483f895e086aca10ff",
+      "working_file_sha256": "2fe91d0b5da0a3b99d320062afe27ce82f2fea27692220483f895e086aca10ff"
+    },
+    {
+      "name": "rubric.json",
+      "bytes": 2917,
+      "sha256": "993ca1c999144e7e31c1aedc1977e8ecf26fb8d973f198798500c424a6c961aa",
+      "working_file_sha256": "993ca1c999144e7e31c1aedc1977e8ecf26fb8d973f198798500c424a6c961aa"
+    },
+    {
+      "name": "unblinded-scores.json",
+      "bytes": 20061,
+      "sha256": "0c19bede6f5e07c333bbee16bed7404252ac7fa890f8fc672ec3ac2840037b41",
+      "working_file_sha256": "19b82551fa8802347331abcc5e37881e12967bbbbf59ed1e64ac070a13a47128"
+    }
+  ],
+  "real_inference_calls": 48,
+  "regenerated_model_responses": 0,
+  "secret_shaped_text_matches": 0,
+  "pdf_pages": 4,
+  "portfolio_pages": 13,
+  "test_files_changed_this_task": 0,
+  "evaluation_tools_commit": "d8b647044379211fd1a06a8a8f17cf03842ffbd7",
+  "evaluation_tools_ci": "https://github.com/tarobo22/taro-back/actions/runs/42277499753",
+  "evaluation_tools_ci_conclusion": "success",
+  "pdf_visual_review": "all 4 pages reviewed",
+  "html_visual_review": "desktop pair + mobile reflow and selector checks",
+  "hash_basis": "sha256 and bytes refer to committed Git blob bytes (LF); working-file hashes may differ due to Windows line endings."
+}

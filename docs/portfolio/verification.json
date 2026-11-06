@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-07",
+  "implementation_commit": "4e80d4bac5198eef2b309f75186283b988a9deee",
+  "prompt_version": "esc-strategy-20261107-v1",
+  "intentional_red": 9,
+  "local_targeted_passed": 28,
+  "remote_ci_passed": 588,
+  "remote_ci_url": "https://github.com/tarobo22/taro-back/actions/runs/42269331242",
+  "existing_tests_modified": 0,
+  "real_model_quality_evaluated": true,
+  "real_openai_calls_this_task": 48,
+  "weight_training_jobs": 0,
+  "load_tests_this_task": 0,
+  "server_available_at_check": false,
+  "pdf": {
+    "pages": 13,
+    "all_pages_rendered": true,
+    "sha256": "c3f9cb256135032b99bfeed8c7b51a114eab0ccf98523a46c2d7fd372b1b80ec",
+    "qr_targets": 5,
+    "clickable_links": 15
+  },
+  "existing_assets_changed_from_prior_submission": [],
+  "development_cases_are_not_blind_eval": true,
+  "modified_product_files": [
+    "api/adapters/counseling_openai.py",
+    "api/adapters/counseling_strategy.py"
+  ],
+  "new_test_files": [
+    "api/tests/unit/test_counseling_strategy.py"
+  ],
+  "scope": "ESConv-informed prompt strategy and portfolio documentation; no training or clinical efficacy claim",
+  "listening_contract_scope": "final compose response after existing user confirmation",
+  "real_model_evaluation_type": "Codex AI exploratory single-rater comparison",
+  "ab": {
+    "cases": 12,
+    "calls": 48,
+    "before_commit": "f93bb9e",
+    "after_commit": "4e80d4b",
+    "report": "../counseling/ab-20261107/README.md",
+    "total_estimated_usd": 0.0748929,
+    "quality_before": 74.375,
+    "quality_after": 78.958,
+    "independent_human_review": false,
+    "permanent_server_key_config_changed": false
+  }
+}

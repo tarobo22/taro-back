@@ -1,0 +1,59 @@
+{
+  "desktop_width": 1280,
+  "mobile_width": 375,
+  "checks": [
+    {
+      "id": "AB01",
+      "phase": "analyze",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB01",
+      "phase": "compose",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB07",
+      "phase": "analyze",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB07",
+      "phase": "compose",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB06",
+      "phase": "analyze",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB06",
+      "phase": "compose",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB10",
+      "phase": "analyze",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB10",
+      "phase": "compose",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB12",
+      "phase": "analyze",
+      "one_visible_pair": true
+    },
+    {
+      "id": "AB12",
+      "phase": "compose",
+      "one_visible_pair": true
+    }
+  ],
+  "mobile_no_horizontal_overflow": true,
+  "js_errors": [],
+  "actual_model_outputs": true
+}

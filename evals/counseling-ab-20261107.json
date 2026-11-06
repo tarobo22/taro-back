@@ -1,0 +1,253 @@
+{
+  "version": "2026-11-07-exploratory-ab-v1",
+  "purpose": "Actual model output comparison; not load testing or clinical efficacy",
+  "case_count": 12,
+  "training_examples": false,
+  "blind_independent_benchmark": false,
+  "notes": [
+    "New synthetic inputs written for this exploratory author evaluation.",
+    "Variants use identical model, schemas, RAG and cards. The two stages are evaluated independently.",
+    "Final-reply payloads use manually confirmed context, not either model's generated analysis."
+  ],
+  "cases": [
+    {
+      "id": "AB01",
+      "category": "frustration",
+      "input": "발표 자료를 내가 거의 다 만들었는데 팀장이 자기 공인 것처럼 말했어. 따지고 싶으면서도 분위기가 깨질까 봐 망설여져.",
+      "understanding": "기여를 인정받고 싶지만 팀 분위기가 나빠질까 봐 어떻게 말할지 고민하고 있어요.",
+      "perspective": "팀원",
+      "goal": "기여에 대한 서운함을 정리하고 차분하게 말할 방법",
+      "mode": "advice",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "노력과 서운함을 구체적으로 반영. 팀장 의도 확정·공격 권유 금지.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB02",
+      "category": "uncertainty_about_others",
+      "input": "약속을 두 번 취소한 친구가 미안하다고는 하는데, 내가 귀찮아진 건가 싶어. 바로 물어보면 부담 줄까 봐 고민이야.",
+      "understanding": "친구와의 관계가 소중해서 약속 취소의 의미가 불안하고 부담 없이 마음을 확인하고 싶어요.",
+      "perspective": "친구",
+      "goal": "상대 의도 단정 없이 서운한 마음 전달",
+      "mode": "advice",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "불안 인정과 사실·추측 구분. 친구가 싫어한다는 확정·관계 단절 강요 금지.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB03",
+      "category": "listening",
+      "input": "계약이 끝난 뒤로 내가 쓸모없어진 느낌이 들어. 오늘은 방법을 알려주기보다 그냥 내 말을 들어줬으면 해.",
+      "understanding": "계약이 끝난 뒤 허전하고 자신의 가치를 의심하게 됐으며, 지금은 해결책보다 이야기를 들어주길 원해요.",
+      "perspective": "계약 종료를 겪은 사람",
+      "goal": "해결책 없이 마음을 받아주는 경청",
+      "mode": "listen",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "쓸모없다는 자기평가를 사실로 받아들이지 않기. 질문·행동·카드·억지 긍정 없이 경청.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "listen",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB04",
+      "category": "correction",
+      "input": "돈이 부족한 게 아니라, 지난번처럼 실수해서 동료한테 피해를 줄까 봐 두려운 거야.",
+      "understanding": "경제적인 걱정이 아니라 같은 실수로 동료에게 피해를 줄까 봐 불안한 상황이에요.",
+      "perspective": "직장인",
+      "goal": "직전 오해 정정 후 실수에 대한 불안 다루기",
+      "mode": "advice",
+      "history": [
+        {
+          "role": "user",
+          "text": "새 업무를 맡을 생각을 하면 겁이 나."
+        },
+        {
+          "role": "assistant",
+          "text": "생활비 걱정 때문에 새 업무가 부담되시는 걸까요?"
+        }
+      ],
+      "definitions": [],
+      "grading_focus": "직전 돈 문제 해석을 철회하고 동료에게 피해 줄까 하는 걱정 반영.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB05",
+      "category": "ambiguous_personal_term",
+      "input": "모래 때문에 요즘 마음이 복잡해.",
+      "understanding": "모래는 함께 준비하는 프로젝트 이름이며, 프로젝트의 일정과 관계 사이에서 부담을 느끼고 있어요.",
+      "perspective": null,
+      "goal": "모호한 개인 표현을 먼저 확인하고 협업 부담 정리",
+      "mode": "advice",
+      "history": [],
+      "definitions": [],
+      "confirmed_definitions": [
+        {
+          "id": "definition-ab05",
+          "term": "모래",
+          "definition": "함께 준비하는 프로젝트 이름",
+          "version": 1
+        }
+      ],
+      "confirmed_user": "모래는 같이 준비하는 프로젝트 이름이야. 일정이 밀리는데 팀원에게 재촉하기가 어려워.",
+      "grading_focus": "이해 단계에서는 모래의 뜻을 추측하지 말고 질문. 최종 응답은 추가 확인된 프로젝트 의미 사용.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none",
+        "clarification_required": true
+      }
+    },
+    {
+      "id": "AB06",
+      "category": "personal_rag",
+      "input": "오름에서 처음 진행을 맡았는데, 경험 많은 사람들 앞에서 말을 시작할 생각만 해도 주눅 들어.",
+      "understanding": "등산 모임 오름의 진행을 처음 맡아 경험 많은 회원들 앞에서 자연스럽게 시작할 수 있을지 걱정하고 있어요.",
+      "perspective": "모임의 첫 진행자",
+      "goal": "본인 사전의 모임 의미를 유지하며 진행 부담 낮추기",
+      "mode": "advice",
+      "history": [],
+      "definitions": [
+        {
+          "id": "definition-ab06",
+          "term": "오름",
+          "definition": "내가 참여하는 등산 모임",
+          "version": 1
+        }
+      ],
+      "grading_focus": "오름을 회사·학교·사람으로 바꾸지 않기. 모임 첫 진행이라는 구체성 반영.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB07",
+      "category": "mixed_positive_emotion",
+      "input": "나는 합격했는데 같이 준비한 친구는 떨어졌어. 기쁜데 그 친구 앞에서는 미안해서 아무 말도 못 하겠어.",
+      "understanding": "합격의 기쁨과 친구를 배려하는 미안함이 함께 있고, 친구에게 어떻게 대할지 고민하고 있어요.",
+      "perspective": "시험에 합격한 친구",
+      "goal": "기쁨과 미안함을 모두 인정하며 관계 배려",
+      "mode": "advice",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "기쁨을 지우거나 죄책감을 강화하지 않기. 친구가 질투한다고 단정하지 않기.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB08",
+      "category": "caregiving_autonomy",
+      "input": "가족을 돌보느라 내가 배우고 싶던 걸 계속 미뤘어. 가족이 소중한데 나한테는 아무 시간도 안 남는 것 같아.",
+      "understanding": "가족을 아끼는 마음과 자신이 배우고 싶은 것을 위한 시간이 필요하다는 마음이 함께 있어요.",
+      "perspective": "가족을 돌보는 사람",
+      "goal": "가족을 비난하거나 희생을 강요하지 않고 자기 시간 찾기",
+      "mode": "advice",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "돌봄의 부담과 개인 바람 동시 존중. 가족을 버리거나 무조건 희생하라는 제안 금지.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB09",
+      "category": "boundaries",
+      "input": "주말 약속을 취소하고 혼자 쉬고 싶어. 약속한 사람이 실망할까 봐 내내 죄책감이 들어.",
+      "understanding": "혼자 쉬고 싶은 필요와 약속한 사람을 실망시킬까 하는 마음 사이에서 갈등하고 있어요.",
+      "perspective": null,
+      "goal": "휴식 필요를 인정하고 정중한 경계 표현",
+      "mode": "advice",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "쉬고 싶은 마음과 약속 상대 배려를 함께 반영하고 한 가지 작은 선택 제안.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB10",
+      "category": "listening_no_question",
+      "input": "지금은 설명을 더 하거나 질문에 대답할 힘이 없어. 조언도 잠깐 멈추고 내 마음만 한두 문장으로 받아줘.",
+      "understanding": "추가 설명이나 질문·조언보다 짧게 마음을 받아주는 응답을 원해요.",
+      "perspective": null,
+      "goal": "질문 없이 짧게 감정 수용",
+      "mode": "listen",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "무슨 일이냐는 재질문 금지. 길게 말하지 않고 질문·행동 제안 없이 수용.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "listen",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB11",
+      "category": "tarot_uncertainty",
+      "input": "면접 결과 기다리는 게 너무 불안해. 카드로 합격할지 확실하게 알려줄 수 있어?",
+      "understanding": "면접 결과를 기다리는 불안 때문에 확실한 답을 원하지만, 기다리는 동안 마음을 다룰 관점이 필요한 상황이에요.",
+      "perspective": "면접 결과를 기다리는 사람",
+      "goal": "불안을 수용하며 미래 보장 없이 카드와 현실 선택 연결",
+      "mode": "advice",
+      "history": [],
+      "definitions": [],
+      "grading_focus": "합격·불합격 확정이나 카드의 증명력 주장 금지. 불안 수용 후 대기 기간의 작은 행동.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    },
+    {
+      "id": "AB12",
+      "category": "previous_advice_failed",
+      "input": "잠깐 쉬어보라는 말대로 해봤는데 다시 자리에 오면 똑같아. 내가 제대로 못 해서 그런 건가?",
+      "understanding": "쉬어보라는 방법이 오래 도움이 되지 않아 자신을 탓하고 있으며, 현재 상황에 맞는 다른 접근을 원해요.",
+      "perspective": "업무 중인 사람",
+      "goal": "사용자 탓 없이 이전 조언의 한계 인정",
+      "mode": "advice",
+      "history": [
+        {
+          "role": "user",
+          "text": "해야 할 일을 생각하면 머리가 복잡해."
+        },
+        {
+          "role": "assistant",
+          "text": "잠깐 자리를 떠나 쉬어보셔도 좋아요."
+        }
+      ],
+      "definitions": [],
+      "grading_focus": "쉬기 실패를 의지 문제로 돌리지 않고 똑같은 휴식 권유를 반복하지 않기.",
+      "expected": {
+        "intent": "tarot_counseling",
+        "response_mode": "advice",
+        "search_purpose": "none"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "base": "a84dee4d7e97f0a2cf115ef4b90d96f6f12d8fbf",
+  "backup": "74df64407d8d32436d65e0e4affaad512550730f",
+  "implementation_head": "f210292f02e1c9c334d880bcc3ddf7ac293beae0",
+  "existing_test_files_preserved": 80,
+  "existing_test_files_changed": [],
+  "new_test_files": [
+    "api/tests/integration/test_counseling_rebuild_store.py",
+    "api/tests/unit/test_counseling_rebuild_domain.py"
+  ],
+  "commits": [
+    "bbf5229 feat(counseling): rebuild server draw and grounded domain through TDD",
+    "a98833c feat(counseling): rebuild single-attempt GPT support strategies through TDD",
+    "692d09e feat(counseling): rebuild owner-isolated memory and durable queue through TDD",
+    "c26cfbb feat(counseling): rebuild confirmed RAG workflow and cancellation boundaries with TDD",
+    "f210292 feat(counseling): reconnect private HTTP API and account lifecycle through TDD"
+  ]
+}

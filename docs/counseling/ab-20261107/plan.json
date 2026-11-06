@@ -1,0 +1,26 @@
+{
+  "model": "gpt-5-mini-2025-08-07",
+  "reasoning_effort": "low",
+  "baseline_commit": "f93bb9e",
+  "after_commit": "4e80d4b",
+  "module_sha256": {
+    "before": "da0ec1be3ac2ca6dc826eb8ab1e10738e14a1db8c4bc4fe1d3642dd17980f383",
+    "after": "5f07c2c2b8dfd0b0bdb6fef744038464590ecabf85555c81a9754eb5912012c4"
+  },
+  "cases": 12,
+  "max_inference_calls": 48,
+  "concurrency": 1,
+  "budget_usd": 1.0,
+  "prices_usd": {
+    "input_per_million": 0.25,
+    "cached_input_per_million": 0.025,
+    "output_per_million": 2.0
+  },
+  "price_source": "https://developers.openai.com/api/docs/models/gpt-5-mini",
+  "price_verified_on": "2026-11-07",
+  "web_search_calls": 0,
+  "stage_comparison": "independent stages with identical manually confirmed context",
+  "load_test": false,
+  "temperature": "omitted; model default",
+  "repetitions_per_stage": 1
+}

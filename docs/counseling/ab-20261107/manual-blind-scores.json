@@ -1,0 +1,637 @@
+{
+  "rubric": "rubric.json",
+  "axes": [
+    "empathy",
+    "context",
+    "autonomy",
+    "grounding",
+    "usefulness"
+  ],
+  "reviewed_before_unblinding": true,
+  "rows": [
+    {
+      "case_id": "AB01",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        2
+      ],
+      "reason": "기여와 분위기 걱정은 정확하다. 목표 확인 질문에 선택지가 길게 붙어 한 번에 답할 부담이 있다."
+    },
+    {
+      "case_id": "AB01",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        4,
+        4,
+        3
+      ],
+      "reason": "두 마음을 함께 요약하고 추가 질문을 붙이지 않아 간결하다. 공감 표현 자체는 다소 일반적이다."
+    },
+    {
+      "case_id": "AB01",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        2,
+        3,
+        2
+      ],
+      "reason": "기여를 사실 중심으로 알리는 방향은 맞지만 행동 두 개와 source:tarot 표기가 노출돼 복잡하다."
+    },
+    {
+      "case_id": "AB01",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "reason": "행동 하나로 좁혔고 사연 연결이 명확하다. 카드 설명이 반복되고 '짧히' 오타가 있다."
+    },
+    {
+      "case_id": "AB02",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "reason": "취소·사과라는 사실과 귀찮아졌을까 하는 추측, 부담을 줄까 하는 망설임을 정확히 정리한다."
+    },
+    {
+      "case_id": "AB02",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "서운함과 불안을 잘 반영한다. 조언 가능성이 있는 이야기에서 listen을 골라 원하는 도움의 방향은 추가 확인 여지가 있다."
+    },
+    {
+      "case_id": "AB02",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "reason": "불안을 수용하고 사실·추측을 구분한다. 사용자가 말하지 않은 관계 포기 가능성을 끌어와 일부 불필요한 프레임을 더한다."
+    },
+    {
+      "case_id": "AB02",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        3,
+        3,
+        2
+      ],
+      "reason": "사연은 유지하지만 사실 기록·질문·재조정 제안이 겹친다. '지난번 약속 괜찮았어?' 문장도 취소 상황에 덜 자연스럽다."
+    },
+    {
+      "case_id": "AB03",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        2,
+        4,
+        4,
+        4,
+        3
+      ],
+      "reason": "경청 의도는 정확하다. 공감이 '쓸모없어진 느낌'을 거의 그대로 되풀이해 다소 건조하다."
+    },
+    {
+      "case_id": "AB03",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        4,
+        4,
+        3
+      ],
+      "reason": "무겁고 힘든 감정을 받아주며 해결책보다 경청을 원한다는 점을 정확히 이해한다."
+    },
+    {
+      "case_id": "AB03",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        4,
+        3,
+        3
+      ],
+      "reason": "질문·행동 없이 선택권을 남기며 듣는다. 다소 상투적인 표현이고 급박한 위험이 제시되지 않았는데 support로 분류했다."
+    },
+    {
+      "case_id": "AB03",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        2,
+        4,
+        3
+      ],
+      "reason": "따뜻하고 짧지만 경청 요청 뒤에 다시 이야기 주제를 고르는 질문을 붙인다."
+    },
+    {
+      "case_id": "AB04",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "돈 문제가 아니라는 정정을 정확히 반영하고 지난 실수의 맥락을 조심스럽게 묻는다."
+    },
+    {
+      "case_id": "AB04",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "직전 생활비 해석을 철회하고 새 업무·동료 피해의 두려움을 정확히 요약한다."
+    },
+    {
+      "case_id": "AB04",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "reason": "불안을 반영하고 위험·대비책 공유라는 행동으로 좁혔다. 카드의 점검·작은 단계 설명은 다소 일반적이다."
+    },
+    {
+      "case_id": "AB04",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "reason": "세 가지 행동과 지시형 표현이 겹친다. 두려움이 업무를 막고 있다고 단정해 원래 말보다 강하게 해석한다."
+    },
+    {
+      "case_id": "AB05",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        2,
+        4,
+        3,
+        4,
+        2
+      ],
+      "reason": "모래를 추측하지 않고 확인하지만 실제 모래·별명·사물 등 긴 선택지가 질문을 복잡하게 만든다."
+    },
+    {
+      "case_id": "AB05",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        2,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "의미를 지어내지 않고 한 질문으로 확인한다. 공감은 짧지만 일반적인 되풀이 수준이다."
+    },
+    {
+      "case_id": "AB05",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        2,
+        3,
+        2
+      ],
+      "reason": "프로젝트·관계 갈등은 정확하나 세 행동과 3일 루틴까지 제안해 부담이 커진다."
+    },
+    {
+      "case_id": "AB05",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        2,
+        3,
+        3
+      ],
+      "reason": "모래 팀의 진행 상황 요청으로 구체화했다. 다만 오늘까지라는 기한·직접 명령, 짧히 오타는 개선 여지가 있다."
+    },
+    {
+      "case_id": "AB06",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        2,
+        4,
+        3,
+        2,
+        3
+      ],
+      "reason": "등산 모임 의미와 첫 진행을 정확히 사용했다. 사전의 문장을 현재 사용자가 명시한 정의 인용처럼 추출한 점은 부정확하다."
+    },
+    {
+      "case_id": "AB06",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "reason": "사전 의미는 맞지만 acknowledgement 안에 질문이 섞이고 요약이 메모체다. 사전 문장을 현재 발화의 정의 인용으로 잘못 추출한다."
+    },
+    {
+      "case_id": "AB06",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        2,
+        3,
+        2
+      ],
+      "reason": "안전·페이스·초보자 배려로 등산 맥락이 구체적이다. 세 행동·호흡·스트레칭까지 늘려 부담이 크다."
+    },
+    {
+      "case_id": "AB06",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "reason": "시작·마무리 멘트 준비로 행동을 좁혔다. 등산보다 일반 발표 상황에 가까운 설명과 추가 경계 과제가 남는다."
+    },
+    {
+      "case_id": "AB07",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        4,
+        3,
+        3,
+        4,
+        3
+      ],
+      "reason": "기쁨과 미안함을 모두 인정한다. 이미 파악된 갈등 뒤에 원하는 행동을 다시 요구하는 질문은 조금 부담스럽다."
+    },
+    {
+      "case_id": "AB07",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        3,
+        4,
+        4,
+        3
+      ],
+      "reason": "혼합 감정을 이해하고 짧게 정리한다. 소식을 전하고 싶다는 목표는 사용자가 직접 말한 범위를 조금 넘는다."
+    },
+    {
+      "case_id": "AB07",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        4,
+        3,
+        2,
+        2,
+        2
+      ],
+      "reason": "두 감정의 수용은 좋지만 합격에 미안하다고 사과하게 하는 문구가 죄책감을 강화할 수 있다. 공감능력·시간을 이미 가진 자원으로 단정한다."
+    },
+    {
+      "case_id": "AB07",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        0,
+        2,
+        1,
+        0
+      ],
+      "reason": "불합격한 친구에게 '정말 축하해'라고 하도록 제안해 합격·불합격 주체를 뒤집는다. 세 행동도 요구해 실제 대화에 쓰기 어렵다."
+    },
+    {
+      "case_id": "AB08",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        2,
+        4,
+        4,
+        4,
+        3
+      ],
+      "reason": "돌봄과 배우고 싶은 바람, 가족의 소중함을 함께 이해한다. 첫 공감은 사건 되풀이에 가깝다."
+    },
+    {
+      "case_id": "AB08",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "reason": "돌봄으로 답답한 마음은 반영하지만 가족이 소중하다는 양가적인 마음이 요약에서 약해진다."
+    },
+    {
+      "case_id": "AB08",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "reason": "가족과 자신의 바람을 잘 받아준다. 비울 수 있는 15분을 당연시하고 '변화가 옵니다'라고 결과를 장담하는 표현은 부적절하다."
+    },
+    {
+      "case_id": "AB08",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        4,
+        4,
+        2,
+        3,
+        2
+      ],
+      "reason": "두 마음을 존중한다. 시간이 없다는 사연에 매일 20분 확보와 오늘 당장 가능한지 묻는 방식은 부담스럽고 현실적 여건을 확인하지 않는다."
+    },
+    {
+      "case_id": "AB09",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        3,
+        3,
+        4,
+        4,
+        3
+      ],
+      "reason": "휴식과 죄책감은 정확하다. 결정을 못 내린다고 표현해 원래 말보다 조금 강하게 해석한다."
+    },
+    {
+      "case_id": "AB09",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "사연은 정확하고 짧다. 다만 listen 선택은 이 사람이 원하는 도움의 방향을 확정한 것으로 보기 어렵다."
+    },
+    {
+      "case_id": "AB09",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        3,
+        3,
+        2,
+        2
+      ],
+      "reason": "갈등을 수용하지만 주말을 오늘로 바꾸고, 쉬면 더 진정한 관계를 지킨다는 근거 없는 전망을 덧붙인다."
+    },
+    {
+      "case_id": "AB09",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        4,
+        3,
+        2,
+        2,
+        2
+      ],
+      "reason": "두 욕구를 따뜻하게 반영한다. 주말을 오늘로 바꾸고 늘 거절 못 했다는 과거 습관을 추정하며 즉시 행동을 묻는다."
+    },
+    {
+      "case_id": "AB10",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        4,
+        4,
+        3
+      ],
+      "reason": "경청·짧은 응답 요청은 정확하다. 사용자에게 보일 요약이 '원하심'이라는 메모체로 끝난다."
+    },
+    {
+      "case_id": "AB10",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "reason": "질문·조언 없이 한두 문장만 원한다는 의도를 간결하게 정리했다."
+    },
+    {
+      "case_id": "AB10",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        3,
+        4,
+        3,
+        3
+      ],
+      "reason": "원본 문장은 질문 없이 마음을 받아준다. 다만 advice가 공백뿐이어서 사용자에게 전달 가능한 완성된 응답 계약과는 다르다."
+    },
+    {
+      "case_id": "AB10",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        4,
+        3,
+        3
+      ],
+      "reason": "추가 설명을 요구하지 않고 함께 있겠다고 짧게 말한다. 요청한 한두 문장보다 전체 문장이 조금 길고 support 분류는 과하다."
+    },
+    {
+      "case_id": "AB11",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "불안을 반영하고 미래를 확정할 수 없음을 분명히 한 뒤 진행 여부를 묻는다. 확인 문장은 조금 길다."
+    },
+    {
+      "case_id": "AB11",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "reason": "확정할 수 없다고 하면서 예측형 리딩을 선택지로 다시 제시해 경계가 흐려진다. 질문과 설명도 길다."
+    },
+    {
+      "case_id": "AB11",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        2,
+        2,
+        2
+      ],
+      "reason": "불안은 수용하지만 루틴을 정하면 불안이 줄어든다고 단정하고 바로 행동을 고르게 한다. 산책·호흡·메일 확인은 일반적이다."
+    },
+    {
+      "case_id": "AB11",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "reason": "결과 예언 없이 작은 행동으로 연결한다. 면접 메모라는 한 가지 제안은 관련성이 있고 불확실성 표현도 비교적 부드럽다."
+    },
+    {
+      "case_id": "AB12",
+      "phase": "analyze",
+      "candidate": "X",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "자책과 이전 휴식 방법의 한계를 이해한다. 쉬는 동안 할 일이 떠나지 않았냐는 질문은 다소 유도적이다."
+    },
+    {
+      "case_id": "AB12",
+      "phase": "analyze",
+      "candidate": "Y",
+      "scores": [
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "reason": "쉬는 동안의 변화를 묻는 질문이 맥락에 맞고, 실패를 사용자 잘못으로 돌리지 않는다."
+    },
+    {
+      "case_id": "AB12",
+      "phase": "compose",
+      "candidate": "X",
+      "scores": [
+        2,
+        3,
+        2,
+        3,
+        2
+      ],
+      "reason": "다른 방식을 제안하지만 '쉬움 대신'이라는 부자연스러운 말과 여러 시간 관리 과제가 남는다. 원인이 확인되지 않았다."
+    },
+    {
+      "case_id": "AB12",
+      "phase": "compose",
+      "candidate": "Y",
+      "scores": [
+        3,
+        3,
+        1,
+        3,
+        1
+      ],
+      "reason": "사용자를 탓하지는 않는다. 그러나 25분·5분 3세트에 15분 정리까지 요구해 작은 행동이라 보기 어렵고 휴식 반복 실패의 원인도 확인하지 않았다."
+    }
+  ]
+}
