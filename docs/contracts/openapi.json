@@ -74,11 +74,21 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -93,22 +103,9 @@
         ],
         "summary": "Refresh",
         "operationId": "refresh_v2_sessions_refresh_post",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
+            "SessionBearer": []
           }
         ],
         "responses": {
@@ -123,11 +120,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -152,6 +169,16 @@
                 }
               }
             }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
           }
         }
       }
@@ -163,6 +190,11 @@
         ],
         "summary": "Start",
         "operationId": "startSocialLogin",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "provider",
@@ -175,22 +207,6 @@
               ],
               "type": "string",
               "title": "Provider"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -216,11 +232,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -251,20 +287,25 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+          "303": {
+            "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -293,20 +334,25 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+          "303": {
+            "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -321,33 +367,15 @@
         ],
         "summary": "Exchange",
         "operationId": "exchangeSocialTicket",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SocialExchange"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -361,16 +389,41 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/auth/account": {
@@ -380,24 +433,6 @@
         ],
         "summary": "Account",
         "operationId": "getSocialAccount",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -409,17 +444,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/auth/sessions": {
@@ -429,22 +479,9 @@
         ],
         "summary": "Sessions",
         "operationId": "listAccountSessions",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
+            "SessionBearer": []
           }
         ],
         "responses": {
@@ -459,11 +496,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -478,22 +535,9 @@
         ],
         "summary": "Logout",
         "operationId": "logoutAccountSession",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
+            "SessionBearer": []
           }
         ],
         "responses": {
@@ -501,11 +545,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -520,6 +584,11 @@
         ],
         "summary": "Revoke",
         "operationId": "revokeAccountSession",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "session_id",
@@ -530,22 +599,6 @@
               "format": "uuid",
               "title": "Session Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -553,11 +606,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -572,39 +645,36 @@
         ],
         "summary": "Logout All",
         "operationId": "logoutAllAccountSessions",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "204": {
             "description": "Successful Response"
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/admin/eligibility": {
@@ -614,24 +684,6 @@
         ],
         "summary": "Eligibility",
         "operationId": "getAdminEligibility",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -643,17 +695,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/admin/sessions": {
@@ -663,24 +730,6 @@
         ],
         "summary": "Issue",
         "operationId": "createAdminSession",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Successful Response",
@@ -692,17 +741,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/admin/me": {
@@ -712,24 +776,6 @@
         ],
         "summary": "Me",
         "operationId": "getAdminSession",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -741,17 +787,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ]
       }
     },
     "/v2/admin/sessions/current": {
@@ -761,39 +822,36 @@
         ],
         "summary": "Logout",
         "operationId": "deleteAdminSession",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "204": {
             "description": "Successful Response"
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ]
       }
     },
     "/v2/admin/catalog": {
@@ -803,24 +861,6 @@
         ],
         "summary": "Catalog",
         "operationId": "getAdminCatalog",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -832,17 +872,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ]
       }
     },
     "/v2/admin/catalog/{version_id}/review": {
@@ -852,6 +907,11 @@
         ],
         "summary": "Review",
         "operationId": "reviewAdminCatalog",
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "version_id",
@@ -861,22 +921,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Version Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -902,11 +946,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -921,6 +985,11 @@
         ],
         "summary": "Publish",
         "operationId": "publishAdminCatalog",
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "version_id",
@@ -930,22 +999,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Version Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -971,11 +1024,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -990,6 +1063,11 @@
         ],
         "summary": "Rollback",
         "operationId": "rollbackAdminCatalog",
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "version_id",
@@ -999,22 +1077,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Version Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -1040,11 +1102,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1059,6 +1141,11 @@
         ],
         "summary": "Feedback",
         "operationId": "listAdminFeedback",
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "cursor",
@@ -1115,22 +1202,6 @@
               ],
               "title": "Status"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -1145,11 +1216,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1164,6 +1255,11 @@
         ],
         "summary": "Triage",
         "operationId": "triageAdminFeedback",
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "feedback_id",
@@ -1173,22 +1269,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Feedback Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -1214,11 +1294,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1233,6 +1333,11 @@
         ],
         "summary": "Audit",
         "operationId": "listAdminAudit",
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "cursor",
@@ -1267,22 +1372,6 @@
               ],
               "title": "Limit"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -1297,11 +1386,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1316,24 +1425,6 @@
         ],
         "summary": "Get Ota",
         "operationId": "getAdminOtaPolicy",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1345,17 +1436,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -1363,33 +1469,15 @@
         ],
         "summary": "Set Ota",
         "operationId": "updateAdminOtaPolicy",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/OtaInput"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1403,16 +1491,41 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "AdminBearer": []
+          }
+        ]
       }
     },
     "/v2/story-episodes": {
@@ -1422,24 +1535,6 @@
         ],
         "summary": "Episodes",
         "operationId": "listStoryEpisodes",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1451,17 +1546,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/story-progress": {
@@ -1471,6 +1581,11 @@
         ],
         "summary": "Progress",
         "operationId": "getStoryProgress",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "episode_id",
@@ -1480,22 +1595,6 @@
               "type": "string",
               "pattern": "^[a-z][a-z0-9-]{0,47}$",
               "title": "Episode Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -1511,11 +1610,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1530,6 +1649,11 @@
         ],
         "summary": "Start",
         "operationId": "startStory",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "X-Idempotency-Key",
@@ -1539,22 +1663,6 @@
               "type": "string",
               "format": "uuid",
               "title": "X-Idempotency-Key"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -1580,11 +1688,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1599,6 +1727,11 @@
         ],
         "summary": "Get",
         "operationId": "getStoryRun",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "run_id",
@@ -1608,22 +1741,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Run Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -1639,11 +1756,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1658,6 +1795,11 @@
         ],
         "summary": "Choose",
         "operationId": "chooseStory",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "run_id",
@@ -1677,22 +1819,6 @@
               "type": "string",
               "format": "uuid",
               "title": "X-Idempotency-Key"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -1718,11 +1844,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1737,6 +1883,11 @@
         ],
         "summary": "Restart",
         "operationId": "restartStory",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "run_id",
@@ -1756,22 +1907,6 @@
               "type": "string",
               "format": "uuid",
               "title": "X-Idempotency-Key"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -1797,11 +1932,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -1826,6 +1981,16 @@
                 }
               }
             }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
           }
         }
       }
@@ -1837,24 +2002,6 @@
         ],
         "summary": "Bootstrap",
         "operationId": "bootstrap",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1866,17 +2013,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/me": {
@@ -1886,24 +2048,6 @@
         ],
         "summary": "Get Me",
         "operationId": "getMe",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1915,17 +2059,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/me/preferences": {
@@ -1935,33 +2094,15 @@
         ],
         "summary": "Update Preferences",
         "operationId": "updatePreferences",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/PreferencePatch"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1975,16 +2116,41 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/decks": {
@@ -1994,6 +2160,11 @@
         ],
         "summary": "List Decks",
         "operationId": "listDecks",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "cursor",
@@ -2023,22 +2194,6 @@
               "default": 20,
               "title": "Limit"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -2053,11 +2208,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2072,6 +2247,11 @@
         ],
         "summary": "Get Deck",
         "operationId": "getDeck",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "deck_id",
@@ -2081,22 +2261,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Deck Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -2112,11 +2276,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2131,6 +2315,11 @@
         ],
         "summary": "List Cards",
         "operationId": "listCards",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "deck_id",
@@ -2236,22 +2425,6 @@
               ],
               "title": "Suit"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -2266,11 +2439,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2285,6 +2478,11 @@
         ],
         "summary": "Get Card",
         "operationId": "getCard",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "card_id",
@@ -2311,22 +2509,6 @@
               ],
               "title": "Deck Version Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -2341,11 +2523,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2360,23 +2562,12 @@
         ],
         "summary": "Create Feedback",
         "operationId": "createFeedback",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -2432,11 +2623,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2451,23 +2662,12 @@
         ],
         "summary": "Create Data Request",
         "operationId": "createDataRequest",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -2523,11 +2723,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2542,6 +2762,14 @@
         ],
         "summary": "Get Data Request",
         "operationId": "getDataRequest",
+        "security": [
+          {
+            "SessionBearer": []
+          },
+          {
+            "DataReceipt": []
+          }
+        ],
         "parameters": [
           {
             "name": "request_id",
@@ -2551,38 +2779,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Request Id"
-            }
-          },
-          {
-            "name": "X-Data-Receipt",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "X-Data-Receipt"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -2598,11 +2794,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2617,6 +2833,11 @@
         ],
         "summary": "Download Export",
         "operationId": "downloadExport",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "request_id",
@@ -2626,22 +2847,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Request Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -2653,11 +2858,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2672,6 +2897,11 @@
         ],
         "summary": "Consents",
         "operationId": "consents_v2_me_consents_get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -2700,22 +2930,6 @@
               ],
               "title": "Cursor"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -2730,11 +2944,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2747,23 +2981,12 @@
         ],
         "summary": "Record",
         "operationId": "record_v2_me_consents_post",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -2821,11 +3044,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2840,23 +3083,12 @@
         ],
         "summary": "Create",
         "operationId": "create_v2_conversations_post",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -2914,11 +3146,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -2931,6 +3183,11 @@
         ],
         "summary": "Conversations",
         "operationId": "conversations_v2_conversations_get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -2959,22 +3216,6 @@
               ],
               "title": "Cursor"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -2989,11 +3230,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3008,6 +3269,11 @@
         ],
         "summary": "Conversation",
         "operationId": "conversation_v2_conversations__conversation_id__get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "conversation_id",
@@ -3017,22 +3283,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Conversation Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -3048,11 +3298,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3065,6 +3335,11 @@
         ],
         "summary": "Delete",
         "operationId": "delete_v2_conversations__conversation_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "conversation_id",
@@ -3075,22 +3350,6 @@
               "format": "uuid",
               "title": "Conversation Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -3098,11 +3357,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3117,6 +3396,11 @@
         ],
         "summary": "Close",
         "operationId": "close_v2_conversations__conversation_id__close_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "conversation_id",
@@ -3126,22 +3410,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Conversation Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           },
           {
@@ -3191,11 +3459,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3210,6 +3498,11 @@
         ],
         "summary": "Create Turn",
         "operationId": "create_turn_v2_conversations__conversation_id__turns_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "conversation_id",
@@ -3219,22 +3512,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Conversation Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           },
           {
@@ -3294,11 +3571,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3311,6 +3608,11 @@
         ],
         "summary": "Turns",
         "operationId": "turns_v2_conversations__conversation_id__turns_get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "conversation_id",
@@ -3349,22 +3651,6 @@
               ],
               "title": "Cursor"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -3379,11 +3665,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3398,6 +3704,11 @@
         ],
         "summary": "Turn",
         "operationId": "turn_v2_conversations__conversation_id__turns__turn_id__get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "conversation_id",
@@ -3418,22 +3729,6 @@
               "format": "uuid",
               "title": "Turn Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -3448,11 +3743,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3467,6 +3782,11 @@
         ],
         "summary": "Interpretation",
         "operationId": "interpretation_v2_readings__reading_id__interpretations_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -3476,22 +3796,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Reading Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           },
           {
@@ -3551,11 +3855,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3570,6 +3894,11 @@
         ],
         "summary": "Job",
         "operationId": "job_v2_ai_jobs__job_id__get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "job_id",
@@ -3579,22 +3908,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Job Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -3610,11 +3923,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3629,6 +3962,11 @@
         ],
         "summary": "Cancel",
         "operationId": "cancel_v2_ai_jobs__job_id__cancel_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "job_id",
@@ -3638,22 +3976,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Job Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           },
           {
@@ -3703,11 +4025,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3722,6 +4064,11 @@
         ],
         "summary": "Retry",
         "operationId": "retry_v2_ai_jobs__job_id__retry_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "job_id",
@@ -3731,22 +4078,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Job Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           },
           {
@@ -3796,11 +4127,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3815,6 +4166,11 @@
         ],
         "summary": "Events",
         "operationId": "events_v2_ai_jobs__job_id__events_get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "job_id",
@@ -3825,22 +4181,6 @@
               "format": "uuid",
               "title": "Job Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -3848,11 +4188,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3867,23 +4227,12 @@
         ],
         "summary": "Transcribe",
         "operationId": "transcribe_v2_transcriptions_post",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -3941,11 +4290,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -3960,6 +4329,11 @@
         ],
         "summary": "Transcription",
         "operationId": "transcription_v2_transcriptions__transcription_id__get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "transcription_id",
@@ -3969,22 +4343,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Transcription Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -4000,11 +4358,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4017,6 +4395,11 @@
         ],
         "summary": "Delete Transcription",
         "operationId": "delete_transcription_v2_transcriptions__transcription_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "transcription_id",
@@ -4027,22 +4410,6 @@
               "format": "uuid",
               "title": "Transcription Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -4050,11 +4417,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4069,23 +4456,12 @@
         ],
         "summary": "Create",
         "operationId": "create_v2_readings_post",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -4158,11 +4534,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4175,6 +4571,11 @@
         ],
         "summary": "Readings",
         "operationId": "readings_v2_readings_get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "limit",
@@ -4239,22 +4640,6 @@
               ],
               "title": "Topic"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -4269,11 +4654,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4288,6 +4693,11 @@
         ],
         "summary": "Reading",
         "operationId": "reading_v2_readings__reading_id__get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -4297,22 +4707,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Reading Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -4328,11 +4722,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4345,6 +4759,11 @@
         ],
         "summary": "Delete",
         "operationId": "delete_v2_readings__reading_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -4355,22 +4774,6 @@
               "format": "uuid",
               "title": "Reading Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -4378,11 +4781,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4397,6 +4820,11 @@
         ],
         "summary": "Shuffle",
         "operationId": "shuffle_v2_readings__reading_id__shuffle_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -4406,22 +4834,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Reading Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           },
           {
@@ -4481,11 +4893,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4500,6 +4932,11 @@
         ],
         "summary": "Select",
         "operationId": "select_v2_readings__reading_id__selection_post",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -4509,22 +4946,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Reading Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           },
           {
@@ -4584,11 +5005,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4603,6 +5044,11 @@
         ],
         "summary": "Basic",
         "operationId": "basic_v2_readings__reading_id__basic_get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -4612,22 +5058,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Reading Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -4643,11 +5073,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4662,23 +5112,12 @@
         ],
         "summary": "Create",
         "operationId": "createJournal",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -4734,11 +5173,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4751,6 +5210,11 @@
         ],
         "summary": "List Entries",
         "operationId": "listJournals",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "cursor",
@@ -4837,22 +5301,6 @@
               ],
               "title": "Mood"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -4867,11 +5315,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4886,6 +5354,11 @@
         ],
         "summary": "Get",
         "operationId": "getJournal",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -4895,22 +5368,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Entry Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -4926,11 +5383,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -4943,6 +5420,11 @@
         ],
         "summary": "Update",
         "operationId": "updateJournal",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -4952,22 +5434,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Entry Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -4993,11 +5459,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5010,6 +5496,11 @@
         ],
         "summary": "Delete",
         "operationId": "deleteJournal",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -5020,22 +5511,6 @@
               "format": "uuid",
               "title": "Entry Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -5043,11 +5518,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5062,6 +5557,11 @@
         ],
         "summary": "Source",
         "operationId": "getJournalSource",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -5071,22 +5571,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Entry Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -5125,11 +5609,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5144,6 +5648,11 @@
         ],
         "summary": "Summary",
         "operationId": "getJournalSummary",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "from",
@@ -5164,22 +5673,6 @@
               "format": "date",
               "title": "To"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -5194,11 +5687,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5213,6 +5726,11 @@
         ],
         "summary": "List Favorites",
         "operationId": "listFavorites",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "cursor",
@@ -5242,22 +5760,6 @@
               "default": 20,
               "title": "Limit"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -5272,11 +5774,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5289,6 +5811,11 @@
         ],
         "summary": "Add Favorite",
         "operationId": "addFavorite",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "X-Idempotency-Key",
@@ -5298,22 +5825,6 @@
               "type": "string",
               "format": "uuid",
               "title": "X-Idempotency-Key"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -5339,11 +5850,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5358,6 +5889,11 @@
         ],
         "summary": "Remove Favorite",
         "operationId": "removeFavorite",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -5368,22 +5904,6 @@
               "format": "uuid",
               "title": "Reading Id"
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
           }
         ],
         "responses": {
@@ -5391,11 +5911,31 @@
             "description": "Successful Response"
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5410,23 +5950,12 @@
         ],
         "summary": "Create",
         "operationId": "createInsight",
-        "parameters": [
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          },
+            "SessionBearer": []
+          }
+        ],
+        "parameters": [
           {
             "name": "X-Idempotency-Key",
             "in": "header",
@@ -5484,11 +6013,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5503,6 +6052,11 @@
         ],
         "summary": "Get",
         "operationId": "getInsight",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "insight_id",
@@ -5512,22 +6066,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Insight Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -5543,11 +6081,31 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
@@ -5583,50 +6141,27 @@
         ],
         "summary": "Entries",
         "operationId": "entries_v1_entries_get",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/EntryResponse"
                   },
+                  "type": "array",
                   "title": "Response Entries V1 Entries Get"
                 }
               }
             }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -5634,33 +6169,15 @@
         ],
         "summary": "Create",
         "operationId": "create_v1_entries_post",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateEntry"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -5683,7 +6200,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v1/entries/{entry_id}": {
@@ -5693,6 +6215,11 @@
         ],
         "summary": "Update",
         "operationId": "update_v1_entries__entry_id__put",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -5702,22 +6229,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Entry Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -5760,6 +6271,11 @@
         ],
         "summary": "Detail",
         "operationId": "detail_v1_entries__entry_id__get",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -5769,22 +6285,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Entry Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -5817,6 +6317,11 @@
         ],
         "summary": "Delete",
         "operationId": "delete_v1_entries__entry_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "entry_id",
@@ -5826,22 +6331,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Entry Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -5876,24 +6365,6 @@
         ],
         "summary": "Catalog",
         "operationId": "getBillingCatalog",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -5905,17 +6376,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/billing/entitlements": {
@@ -5925,24 +6411,6 @@
         ],
         "summary": "Entitlements",
         "operationId": "getBillingEntitlements",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -5954,17 +6422,32 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v2/billing/purchases/verify": {
@@ -5974,33 +6457,15 @@
         ],
         "summary": "Verify",
         "operationId": "verifyStorePurchase",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/VerifyPurchase"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6014,16 +6479,41 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Input validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Request rejected or service failure. Cache-Control: no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session or request receipt is invalid, expired or revoked.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/V2ErrorEnvelope"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v1/experience-config": {
@@ -6048,39 +6538,49 @@
       }
     },
     "/v1/readings": {
+      "get": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "List Readings",
+        "operationId": "list_readings_v1_readings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReadingResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Readings V1 Readings Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
+      },
       "post": {
         "tags": [
           "experience"
         ],
         "summary": "Create Reading",
         "operationId": "create_reading_v1_readings_post",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ReadingInput"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -6103,58 +6603,12 @@
               }
             }
           }
-        }
-      },
-      "get": {
-        "tags": [
-          "experience"
-        ],
-        "summary": "List Readings",
-        "operationId": "list_readings_v1_readings_get",
-        "parameters": [
+        },
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
+            "SessionBearer": []
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReadingResponse"
-                  },
-                  "title": "Response List Readings V1 Readings Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
+        ]
       }
     },
     "/v1/daily": {
@@ -6164,33 +6618,15 @@
         ],
         "summary": "Daily",
         "operationId": "daily_v1_daily_post",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/DailyInput"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6213,43 +6649,58 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
       }
     },
     "/v1/counsel": {
+      "get": {
+        "tags": [
+          "experience"
+        ],
+        "summary": "List Counsel",
+        "operationId": "list_counsel_v1_counsel_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CounselResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Counsel V1 Counsel Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ]
+      },
       "post": {
         "tags": [
           "experience"
         ],
         "summary": "Counsel",
         "operationId": "counsel_v1_counsel_post",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CounselInput"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -6281,58 +6732,12 @@
               }
             }
           }
-        }
-      },
-      "get": {
-        "tags": [
-          "experience"
-        ],
-        "summary": "List Counsel",
-        "operationId": "list_counsel_v1_counsel_get",
-        "parameters": [
+        },
+        "security": [
           {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
+            "SessionBearer": []
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CounselResponse"
-                  },
-                  "title": "Response List Counsel V1 Counsel Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
+        ]
       }
     },
     "/v1/readings/{reading_id}": {
@@ -6342,6 +6747,11 @@
         ],
         "summary": "Delete Reading",
         "operationId": "delete_reading_v1_readings__reading_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "reading_id",
@@ -6351,22 +6761,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Reading Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -6394,6 +6788,11 @@
         ],
         "summary": "Delete Counsel",
         "operationId": "delete_counsel_v1_counsel__counsel_id__delete",
+        "security": [
+          {
+            "SessionBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "counsel_id",
@@ -6403,22 +6802,6 @@
               "type": "string",
               "format": "uuid",
               "title": "Counsel Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
             }
           }
         ],
@@ -11076,6 +11459,69 @@
           "token"
         ],
         "title": "SessionResponse"
+      },
+      "V2Error": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "retryable": {
+            "title": "Retryable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "retryable"
+        ],
+        "title": "V2Error",
+        "type": "object"
+      },
+      "V2ErrorEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/V2Error"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error",
+          "request_id"
+        ],
+        "title": "V2ErrorEnvelope",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "SessionBearer": {
+        "type": "http",
+        "description": "Guest or linked-account session. Not an admin session.",
+        "scheme": "bearer",
+        "bearerFormat": "opaque"
+      },
+      "AdminBearer": {
+        "type": "http",
+        "description": "Short-lived administrator session issued to an explicitly assigned role.",
+        "scheme": "bearer",
+        "bearerFormat": "opaque"
+      },
+      "DataReceipt": {
+        "type": "apiKey",
+        "description": "A single data-request receipt; alternative to a session only for that request status.",
+        "in": "header",
+        "name": "X-Data-Receipt"
       }
     }
   }

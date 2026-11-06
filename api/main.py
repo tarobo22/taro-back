@@ -8,7 +8,7 @@ import os
 from typing import Annotated
 from uuid import uuid4
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Security
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -50,6 +50,8 @@ from api.adapters.story_catalog import load_story_catalog
 from api.adapters.http.story import story_router
 from api.adapters.admin_postgres import PostgresAdminUnitOfWork
 from api.adapters.http.admin import admin_router
+from api.adapters.http.authentication import session_authorization, data_receipt, has_session_token_shape
+from api.adapters.http.errors import install_v2_error_contract
 from api.adapters.local_guidance import LocalGuidance
 from api.adapters.openai_guidance import OpenAIGuidance
 from api.adapters.owned_references import PostgresOwnedReferences
@@ -251,16 +253,18 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         logger.error('Request failed: %s', type(exc).__name__)
         return error_response(request, 500, '연결이 잠시 원활하지 않아요. 입력한 내용은 그대로 두고 다시 시도해 주세요.')
 
-    def current_session(authorization: Annotated[str | None, Header()] = None):
+    def current_session(authorization: Annotated[str | None, Security(session_authorization)] = None):
         try:
+            if not has_session_token_shape(authorization):
+                raise SessionRejected('SESSION_INVALID')
             owner = auth.authenticate(authorization)
             return identity.authenticate(authorization) if owner is None else owner
         except SessionRejected as error:
             raise HTTPException(401, {'code': str(error), 'message': '기록 연결을 확인해 주세요. 새 연결로 자동 교체하지 않아요.',
                                       'retryable': False}) from None
 
-    def status_session(authorization: Annotated[str | None, Header()] = None,
-                       receipt: Annotated[str | None, Header(alias='X-Data-Receipt')] = None):
+    def status_session(authorization: Annotated[str | None, Security(session_authorization)] = None,
+                       receipt: Annotated[str | None, Security(data_receipt)] = None):
         return None if receipt is not None else current_session(authorization)
 
     def check_database():
@@ -296,6 +300,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
     app.include_router(journal_router(journals, policy, current_session, mood_codes=journal_v2_policy.mood_labels))
     app.include_router(billing_router(billing, current_session))
     app.include_router(experience_router(experiences, configuration, current_session))
+    install_v2_error_contract(app)
     return app
 
 

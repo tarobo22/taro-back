@@ -2,12 +2,13 @@ from datetime import datetime
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Header, HTTPException, Query, Response
+from fastapi import APIRouter, HTTPException, Query, Response, Security
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
 from api.adapters.http.data_privacy import Asset
 from api.domain.admin import AdminError
 from api.domain.data_privacy import DataNotFound, OwnerDeleting
+from api.adapters.http.authentication import admin_authorization, session_authorization
 
 
 class AdminModel(BaseModel):
@@ -146,16 +147,17 @@ def admin_call(operation):
 
 def admin_router(service):
     router = APIRouter(prefix='/v2/admin',tags=['admin'])
-    Authorization = Annotated[str | None,Header()]
+    Authorization = Annotated[str | None,Security(admin_authorization)]
+    SessionAuthorization = Annotated[str | None,Security(session_authorization)]
     Limit = Annotated[int | None,Query(ge=1,le=50)]
 
     @router.get('/eligibility',response_model=Eligibility,operation_id='getAdminEligibility')
-    def eligibility(response:Response,authorization:Authorization=None):
+    def eligibility(response:Response,authorization:SessionAuthorization=None):
         response.headers['Cache-Control']='no-store'
         return admin_call(lambda:service.eligibility(authorization))
 
     @router.post('/sessions',status_code=201,response_model=AdminGrant,operation_id='createAdminSession')
-    def issue(response:Response,authorization:Authorization=None):
+    def issue(response:Response,authorization:SessionAuthorization=None):
         response.headers['Cache-Control']='no-store'
         return admin_call(lambda:service.issue(authorization))
 

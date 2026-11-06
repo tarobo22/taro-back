@@ -111,7 +111,7 @@ def social_auth_router(service, owner_dependency):
         target = await run_in_threadpool(lambda: social_call(lambda: service.callback(provider, state, code=code, error=error)))
         return RedirectResponse(target, status_code=303, headers={'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer'})
 
-    @router.get('/social/{provider}/callback', operation_id='completeSocialLoginQuery')
+    @router.get('/social/{provider}/callback', status_code=303, response_class=RedirectResponse, operation_id='completeSocialLoginQuery')
     async def callback_get(provider: Literal['google', 'apple'], request: Request):
         raw = request.scope.get('query_string', b'')
         request.scope['query_string'] = b''  # Prevent authorization codes/states in ASGI access logs.
@@ -123,7 +123,7 @@ def social_auth_router(service, owner_dependency):
             raise HTTPException(400, '로그인 응답을 확인해 주세요.') from None
         return await callback_response(provider, request, values)
 
-    @router.post('/social/{provider}/callback', operation_id='completeSocialLoginForm')
+    @router.post('/social/{provider}/callback', status_code=303, response_class=RedirectResponse, operation_id='completeSocialLoginForm')
     async def callback_post(provider: Literal['google', 'apple'], request: Request):
         if request.headers.get('content-type', '').split(';')[0] != 'application/x-www-form-urlencoded':
             raise HTTPException(415, '로그인 응답 형식을 확인해 주세요.')
