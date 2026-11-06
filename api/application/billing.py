@@ -51,12 +51,13 @@ class BillingService:
             raise BillingInvalid('invalid_receipt')
         if not self.available():raise BillingUnavailable('store_not_configured')
         token_hash = self.digest(token)
-        with self.uow_factory() as uow:
-            uow.receipts.lock(owner, token_hash);uow.receipts.active(owner)
-            if self.owner_kind(uow.connection, owner) != 'member':raise BillingRejected('account_required')
-            previous = uow.receipts.get(token_hash)
-            if previous and previous['owner_id'] != owner:raise BillingRejected('receipt_owner_mismatch')
-            if previous is None and uow.receipts.count(owner) >= self.max_receipts:raise BillingRejected('receipt_limit')
+        # Never retain a database connection/owner lock across external store I/O.
+        # Re-check all admission rules under lock before the durable grant. A receipt
+        # version detects a concurrent refund/restore, even with identical clocks.
+        for attempt in range(3):
+            with self.uow_factory() as uow:
+                previous = self._admit_receipt(uow, owner, token_hash, product)
+                version = self._receipt_version(previous)
             try:
                 purchase = self.verifier.verify(product, token)
             except BillingRejected as error:
@@ -68,18 +69,26 @@ class BillingService:
             if product.kind == 'subs' and purchase.state == 'purchased' and purchase.expires_at is None:
                 raise BillingRejected('subscription_expiry_missing')
             state = entitlement_state(purchase, self.clock())
-            if purchase.linked_token:
-                linked_hash = self.digest(purchase.linked_token)
-                linked = uow.receipts.get(linked_hash)
-                if linked and linked['owner_id'] != owner:raise BillingRejected('linked_receipt_owner_mismatch')
-                if state == 'active':uow.receipts.revoke_linked(owner, linked_hash)
-            values = {'token_hash': token_hash, 'owner_id': owner, 'product_id': product.product_id,
-                      'product_kind': product.kind, 'entitlement_key': product.entitlement_key,
-                      'token_ciphertext': self.cipher.seal(token), 'state': state,
-                      'expires_at': purchase.expires_at, 'acknowledged': purchase.acknowledged,
-                      'verified_at': self.clock()}
-            uow.receipts.save(values);uow.commit()
-        acknowledged = purchase.acknowledged
+            sealed = self.cipher.seal(token)
+            with self.uow_factory() as uow:
+                current = self._admit_receipt(uow, owner, token_hash, product)
+                if self._receipt_version(current) != version:
+                    continue  # Fetch fresh store state instead of committing an older response.
+                if purchase.linked_token:
+                    linked_hash = self.digest(purchase.linked_token)
+                    linked = uow.receipts.get(linked_hash)
+                    if linked and linked['owner_id'] != owner:raise BillingRejected('linked_receipt_owner_mismatch')
+                    if state == 'active':uow.receipts.revoke_linked(owner, linked_hash)
+                acknowledged = purchase.acknowledged or bool(current and current['acknowledged'])
+                values = {'token_hash': token_hash, 'owner_id': owner, 'product_id': product.product_id,
+                          'product_kind': product.kind, 'entitlement_key': product.entitlement_key,
+                          'token_ciphertext': sealed, 'state': state,
+                          'expires_at': purchase.expires_at, 'acknowledged': acknowledged,
+                          'verified_at': self.clock()}
+                uow.receipts.save(values);uow.commit()
+            break
+        else:
+            raise BillingUnavailable('receipt_changed_during_verification')
         if state == 'active' and not acknowledged:
             try:
                 self.verifier.acknowledge(product, token)
@@ -94,6 +103,24 @@ class BillingService:
             uow.receipts.lock(owner);uow.receipts.active(owner)
             entitlements = self._snapshot(uow.receipts, owner)
         return {'state': state, 'acknowledged': acknowledged, 'entitlements': entitlements}
+
+    def _admit_receipt(self, uow, owner, token_hash, product):
+        uow.receipts.lock(owner, token_hash)
+        uow.receipts.active(owner)
+        if self.owner_kind(uow.connection, owner) != 'member':
+            raise BillingRejected('account_required')
+        previous = uow.receipts.get(token_hash)
+        if previous and previous['owner_id'] != owner:
+            raise BillingRejected('receipt_owner_mismatch')
+        if previous and previous['product_id'] != product.product_id:
+            raise BillingRejected('receipt_product_mismatch')
+        if previous is None and uow.receipts.count(owner) >= self.max_receipts:
+            raise BillingRejected('receipt_limit')
+        return previous
+
+    @staticmethod
+    def _receipt_version(row):
+        return None if row is None else row.get('verification_version', 1)
 
     def entitlements(self, owner):
         with self.uow_factory() as uow:

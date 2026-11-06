@@ -16,11 +16,12 @@ class PostgresBillingRepository:
             token_ciphertext,state,expires_at,acknowledged,verified_at) VALUES(%(token_hash)s,%(owner_id)s,%(product_id)s,
             %(product_kind)s,%(entitlement_key)s,%(token_ciphertext)s,%(state)s,%(expires_at)s,%(acknowledged)s,%(verified_at)s)
             ON CONFLICT(token_hash) DO UPDATE SET token_ciphertext=EXCLUDED.token_ciphertext,state=EXCLUDED.state,
-            expires_at=EXCLUDED.expires_at,acknowledged=EXCLUDED.acknowledged,verified_at=EXCLUDED.verified_at''', values)
+            expires_at=EXCLUDED.expires_at,acknowledged=EXCLUDED.acknowledged,verified_at=EXCLUDED.verified_at,
+            verification_version=billing_receipts.verification_version+1''', values)
     def acknowledge(self, owner, token_hash):
         self.connection.execute('UPDATE billing_receipts SET acknowledged=true WHERE owner_id=%s AND token_hash=%s', (owner, token_hash))
     def revoke_linked(self, owner, token_hash):
-        self.connection.execute("UPDATE billing_receipts SET state='revoked' WHERE owner_id=%s AND token_hash=%s", (owner, token_hash))
+        self.connection.execute("UPDATE billing_receipts SET state='revoked',verification_version=verification_version+1 WHERE owner_id=%s AND token_hash=%s", (owner, token_hash))
     def due(self, before, limit):
         return self.connection.execute('''SELECT r.* FROM billing_receipts r JOIN data_privacy_profiles p ON p.owner_id=r.owner_id
             WHERE p.state='active' AND (r.verified_at<=%s OR (r.state='active' AND NOT r.acknowledged))
