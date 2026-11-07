@@ -6,7 +6,7 @@
 
 브라우저 → Caddy HTTPS → React 정적 파일 / `/api/*` → FastAPI → PostgreSQL 및 OpenAI.
 
-- 정적 파일은 개발 PC에서 빌드해 서버로 전송한다. 서버에서 Node 빌드는 하지 않는다.
+- 정적 파일·API 이미지는 GitHub Actions에서 빌드한다. 서버에서 Node·Python 의존성 빌드는 하지 않는다.
 - 외부 공개 포트는 80·443, SSH 22는 관리 PC의 `/32` 주소만 허용한다. DB와 API는 Docker 내부 네트워크에서만 접근한다.
 - DB·음성 임시 저장소·HTTPS 인증서는 별도 Docker 볼륨으로 보존한다.
 - 서버 재부팅 시 Docker와 서비스가 자동 시작된다. 마이그레이션은 배포 때 한 번 명시적으로 실행한다.
@@ -38,4 +38,6 @@ sudo docker compose -f deploy/lightsail/compose.yaml --project-directory . up -d
 
 5. HTTPS·게스트·실제 GPT 답변·카드·기록 저장을 외부 브라우저에서 확인하고 공개 주소를 QR로 만든다.
 
-업데이트는 같은 경로에 새 코드와 웹 빌드를 전송하고 위 순서를 반복한다. `down -v`는 데이터 삭제 명령이므로 사용하지 않는다. CloudFormation 삭제만으로 서버·고정 IP가 제거되지 않도록 Retain을 설정했다. 서비스 종료 시 별도 확인 후 해당 여운 자원만 정리해야 요금이 멈춘다.
+운영 업데이트는 [GitHub CI/CD](../../docs/deployment/ci-cd.md)를 따른다. 초기 설치 시 `www/releases/bootstrap`에 웹 파일을 두고 `www/current`를 연결해야 한다. 기존 수동 배포에서 전환할 때는 `install-ci.sh`가 처리한다. CI 설치 후 수동 Compose 명령에도 `--env-file /etc/yeoun/runtime.env`를 지정해야 배포된 이미지가 유지된다.
+
+`down -v`는 데이터 삭제 명령이므로 사용하지 않는다. CloudFormation 삭제만으로 서버·고정 IP가 제거되지 않도록 Retain을 설정했다. 서비스 종료 시 별도 확인 후 해당 여운 자원만 정리해야 요금이 멈춘다.

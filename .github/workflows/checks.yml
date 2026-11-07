@@ -1,4 +1,4 @@
-name: FastAPI checks
+name: FastAPI CI and demo deployment
 on:
   push:
     paths-ignore: ['docs/**', '**/*.md']
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 permissions:
   contents: read
 jobs:
@@ -40,3 +40,44 @@ jobs:
       - run: python -m pytest -q
       - run: python -m api.export_openapi
       - run: git diff --exit-code -- docs/contracts/openapi.json
+      - name: Check release archive safety
+        run: python deploy/lightsail/test_pull_release.py
+      - name: Build deployable API image
+        run: docker build -f deploy/lightsail/Dockerfile -t "yeoun-api:$GITHUB_SHA" .
+      - name: Export tested image
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          mkdir -p .local/release
+          docker save "yeoun-api:$GITHUB_SHA" | gzip -1 > .local/release/api-image.tar.gz
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          name: api-image
+          path: .local/release/api-image.tar.gz
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 7
+  deploy:
+    needs: journal
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: api-image
+          path: .local/release
+      - name: Publish checked image
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python deploy/lightsail/publish_release.py api .local/release/api-image.tar.gz
+      - name: Confirm public deployment
+        env:
+          RELEASE_TAG: ${{ steps.publish.outputs.tag }}
+        run: python deploy/lightsail/wait_deployed.py api "$RELEASE_TAG"
+      - name: Deployment summary
+        run: echo 'Deployed and verified at https://yeoun-43-201-209-249.sslip.io/' >> "$GITHUB_STEP_SUMMARY"

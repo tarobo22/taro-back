@@ -8,13 +8,18 @@
   handle_path /api/* {
     reverse_proxy api:8000
   }
+  handle /deployment-status.json {
+    root * /srv
+    header Cache-Control no-store
+    file_server
+  }
   handle /assets/* {
     root * /srv
     header Cache-Control "public, max-age=31536000, immutable"
     file_server
   }
   handle {
-    root * /srv
+    root * /srv/current
     try_files {path} /index.html
     header Cache-Control no-cache
     file_server
