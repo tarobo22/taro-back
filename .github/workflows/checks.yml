@@ -41,7 +41,7 @@ jobs:
       - run: python -m api.export_openapi
       - run: git diff --exit-code -- docs/contracts/openapi.json
       - name: Check release archive safety
-        run: python deploy/lightsail/test_pull_release.py
+        run: python -m unittest discover -s deploy/lightsail -p 'test_*.py'
       - name: Build deployable API image
         run: docker build -f deploy/lightsail/Dockerfile -t "yeoun-api:$GITHUB_SHA" .
       - name: Export tested image

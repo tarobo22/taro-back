@@ -26,7 +26,7 @@ with archive.open('rb') as stream:
 tag = f'{component}-{sha}-{run_id}-{attempt}'
 manifest = archive.parent / 'deploy-manifest.json'
 manifest.write_text(json.dumps(dict(schema=1, component=component, repository=repo,
-    sha=sha, tag=tag, asset=archive.name, sha256=digest.hexdigest(), size=archive.stat().st_size()), indent=2) + '\n')
+    sha=sha, tag=tag, asset=archive.name, sha256=digest.hexdigest(), size=archive.stat().st_size), indent=2) + '\n')
 notes = archive.parent / 'release-notes.md'
 notes.write_text(f'Validated {component} release.\n\nSource: {sha}\n\n'
                  'Deployment is complete only when the workflow public health/status check passes.\n')
