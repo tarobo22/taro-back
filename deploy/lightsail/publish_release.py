@@ -31,8 +31,15 @@ notes = archive.parent / 'release-notes.md'
 notes.write_text(f'Validated {component} release.\n\nSource: {sha}\n\n'
                  'Deployment is complete only when the workflow public health/status check passes.\n')
 
-def current_main():
-    return subprocess.check_output(['gh', 'api', f'repos/{repo}/git/ref/heads/main', '--jq', '.object.sha'], text=True).strip()
+def source_is_current():
+    # Documentation-only pushes do not start another build. They must not strand a valid release.
+    comparison = json.loads(subprocess.check_output(
+        ['gh', 'api', f'repos/{repo}/compare/{sha}...main'], text=True))
+    if comparison['status'] == 'identical':
+        return True
+    files = comparison.get('files', [])
+    return (comparison['status'] == 'ahead' and 0 < len(files) < 300
+            and all(item['filename'].startswith('docs/') or item['filename'].endswith('.md') for item in files))
 
 def superseded():
     print('A newer main commit exists; this build is retained as an artifact, not deployed.')
@@ -40,16 +47,16 @@ def superseded():
         summary.write('Newer main revision detected. This superseded build was not published.\n')
     raise SystemExit(0)
 
-if current_main() != sha:
+if not source_is_current():
     superseded()
 try:
     subprocess.run(['gh', 'release', 'create', tag, str(archive), str(manifest), '--repo', repo,
         '--target', sha, '--title', f'Yeoun {component} {sha[:7]}', '--notes-file', str(notes), '--draft'], check=True)
 except subprocess.CalledProcessError:
-    if current_main() != sha:
+    if not source_is_current():
         superseded()
     raise
-if current_main() != sha:
+if not source_is_current():
     superseded()
 subprocess.run(['gh', 'release', 'edit', tag, '--repo', repo, '--draft=false', '--latest'], check=True)
 with open(os.environ['GITHUB_OUTPUT'], 'a') as output:

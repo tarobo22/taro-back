@@ -25,7 +25,7 @@ class PublishContractTests(unittest.TestCase):
                 error = subprocess.CalledProcessError(1, 'gh release create') if create_error else None
                 with patch.dict(os.environ, env), patch('sys.argv', ['publish_release.py', 'web', str(archive)]), \
                         patch('subprocess.run', side_effect=error) as command, \
-                        patch('subprocess.check_output', side_effect=revisions), self.assertRaises(SystemExit) as stopped:
+                        patch('subprocess.check_output', side_effect=[json.dumps({'status': 'identical'} if rev == 'a' * 40 else {'status': 'ahead', 'files': [{'filename': 'src/app.ts'}]}) for rev in revisions]), self.assertRaises(SystemExit) as stopped:
                     runpy.run_path(str(Path(__file__).with_name('publish_release.py')), run_name='__main__')
                 self.assertEqual(stopped.exception.code, 0)
                 self.assertFalse(output.exists())
@@ -40,7 +40,7 @@ class PublishContractTests(unittest.TestCase):
                        GITHUB_RUN_ID='123', GITHUB_RUN_ATTEMPT='1', GITHUB_REF='refs/heads/main')
             with patch.dict(os.environ, env), patch('sys.argv', ['publish_release.py', 'web', str(archive)]), \
                     patch('subprocess.run', side_effect=subprocess.CalledProcessError(1, 'gh')) as command, \
-                    patch('subprocess.check_output', return_value='a' * 40), self.assertRaises(subprocess.CalledProcessError):
+                    patch('subprocess.check_output', return_value=json.dumps({'status': 'identical'})), self.assertRaises(subprocess.CalledProcessError):
                 runpy.run_path(str(Path(__file__).with_name('publish_release.py')), run_name='__main__')
             self.assertEqual(command.call_count, 1)
 
@@ -53,12 +53,27 @@ class PublishContractTests(unittest.TestCase):
                        GITHUB_RUN_ID='123', GITHUB_RUN_ATTEMPT='1',
                        GITHUB_REF='refs/heads/main', GITHUB_OUTPUT=str(output))
             with patch.dict(os.environ, env), patch('sys.argv', ['publish_release.py', 'web', str(archive)]), \
-                    patch('subprocess.run'), patch('subprocess.check_output', return_value='a' * 40):
+                    patch('subprocess.run'), patch('subprocess.check_output', return_value=json.dumps({'status': 'identical'})):
                 runpy.run_path(str(Path(__file__).with_name('publish_release.py')), run_name='__main__')
             item = json.loads((Path(tmp) / 'deploy-manifest.json').read_text())
             self.assertEqual(item['size'], archive.stat().st_size)
             self.assertEqual(item['sha256'], hashlib.sha256(archive.read_bytes()).hexdigest())
             self.assertEqual(output.read_text().strip(), 'tag=' + item['tag'])
+
+    def test_documentation_only_head_does_not_strand_the_validated_release(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            archive = Path(tmp) / 'web.tar.gz'
+            archive.write_bytes(b'a verified build')
+            output = Path(tmp) / 'outputs'
+            env = dict(GITHUB_REPOSITORY='tarobo22/taro-raect', GITHUB_SHA='a' * 40,
+                       GITHUB_RUN_ID='123', GITHUB_RUN_ATTEMPT='1', GITHUB_REF='refs/heads/main',
+                       GITHUB_OUTPUT=str(output))
+            comparison = {'status': 'ahead', 'files': [{'filename': 'docs/result.md'}, {'filename': 'README.md'}]}
+            with patch.dict(os.environ, env), patch('sys.argv', ['publish_release.py', 'web', str(archive)]), \
+                    patch('subprocess.run') as command, patch('subprocess.check_output', return_value=json.dumps(comparison)):
+                runpy.run_path(str(Path(__file__).with_name('publish_release.py')), run_name='__main__')
+            self.assertEqual(command.call_args_list[-1].args[0][1:3], ['release', 'edit'])
+            self.assertTrue(output.read_text().startswith('tag=web-' + 'a' * 40))
 
 
 if __name__ == '__main__':

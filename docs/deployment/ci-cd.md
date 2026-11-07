@@ -13,6 +13,8 @@
 
 릴리스 직전에 현재 `main`과 빌드 커밋을 비교한다. 오래된 빌드는 artifact로만 남기고 배포하지 않는다. 업로드 중 `main`이 바뀌면 draft를 공개하지 않는다. 최신 커밋의 실제 업로드 오류는 실패로 처리한다.
 
+문서 전용 커밋은 빌드를 생략한다. 빌드 도중 문서만 추가됐다면 원래 검증한 코드의 배포를 계속한다. 코드가 변경되거나 GitHub 비교 결과가 불완전하면 게시하지 않는다.
+
 ## 서버 배포
 
 GitHub가 이미지를 빌드하므로 1 GB 서버에서 컴파일하지 않는다. 서버의 `yeoun-deploy.timer`가 1분 간격으로 지정된 두 공개 저장소의 최신 릴리스 manifest를 조회한다. GitHub runner에 SSH·AWS 키를 주거나 서버 SSH를 추가 공개하지 않는다. manifest와 아카이브는 draft 릴리스에 먼저 올린 뒤 함께 공개한다.
@@ -30,6 +32,8 @@ GPT·DB 키는 기존 서버의 root 전용 환경파일에만 둔다. Android �
 
 이미 배포된 여운 서버에 `deploy/lightsail/`의 CI 설치 파일을 별도 staging 폴더로 전송한 뒤 `sudo sh <staging>/install-ci.sh`를 한 번 실행한다. 이 스크립트는 최초 웹을 보존하고 Caddy 설정과 배포 타이머만 설치한다. 최초 인프라 배포는 `README.md`를 따른다.
 
+자동 배포 대상은 웹 산출물과 API 이미지다. 배포 에이전트·Compose·Caddy 설정을 변경할 때는 해당 파일을 검토해 서버에 다시 설치해야 한다. AWS 인프라 생성·변경을 자동 실행하는 파이프라인은 아니다.
+
 ```sh
 sudo systemctl status yeoun-deploy.timer
 sudo journalctl -u yeoun-deploy.service --since '30 minutes ago'
@@ -40,7 +44,7 @@ sudo systemctl start yeoun-deploy.service
 
 ## 검증 범위
 
-새 배포 검사 8개는 구현 전 실패를 확인한 후 통과시켰다: 다른 저장소·다른 커밋·손상 파일·경로 이탈·심볼릭 링크·진입 파일 누락 거절, 정상 manifest·정적 파일 수용. 릴리스 파일 크기·해시, 오래된 빌드 게시 방지, 최신 빌드의 실제 오류 전파 검사를 추가해 현재 배포 검사는 11개다. 기존 제품 테스트는 유지했다. 배포 확인은 공개 URL과 DB health 기준이며, 매 배포마다 유료 GPT를 호출하거나 부하 테스트를 수행하지 않는다.
+새 배포 검사 8개는 구현 전 실패를 확인한 후 통과시켰다: 다른 저장소·다른 커밋·손상 파일·경로 이탈·심볼릭 링크·진입 파일 누락 거절, 정상 manifest·정적 파일 수용. 릴리스 파일 크기·해시, 오래된 코드 게시 방지, 문서 변경 시 정상 게시, 최신 빌드의 실제 오류 전파 검사를 추가해 현재 배포 검사는 12개다. 기존 제품 테스트는 유지했다. 배포 확인은 공개 URL과 DB health 기준이며, 매 배포마다 유료 GPT를 호출하거나 부하 테스트를 수행하지 않는다.
 
 - [공개 앱](https://yeoun-43-201-209-249.sslip.io/)
 - [배포된 커밋](https://yeoun-43-201-209-249.sslip.io/deployment-status.json)
