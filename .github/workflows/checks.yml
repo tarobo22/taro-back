@@ -79,8 +79,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: python deploy/lightsail/publish_release.py api .local/release/api-image.tar.gz
       - name: Confirm public deployment
+        if: steps.publish.outputs.tag != ''
         env:
           RELEASE_TAG: ${{ steps.publish.outputs.tag }}
         run: python deploy/lightsail/wait_deployed.py api "$RELEASE_TAG"
       - name: Deployment summary
+        if: steps.publish.outputs.tag != ''
         run: echo 'Deployed and verified at https://yeoun-43-201-209-249.sslip.io/' >> "$GITHUB_STEP_SUMMARY"

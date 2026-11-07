@@ -30,8 +30,27 @@ manifest.write_text(json.dumps(dict(schema=1, component=component, repository=re
 notes = archive.parent / 'release-notes.md'
 notes.write_text(f'Validated {component} release.\n\nSource: {sha}\n\n'
                  'Deployment is complete only when the workflow public health/status check passes.\n')
-subprocess.run(['gh', 'release', 'create', tag, str(archive), str(manifest), '--repo', repo,
-    '--target', sha, '--title', f'Yeoun {component} {sha[:7]}', '--notes-file', str(notes), '--draft'], check=True)
+
+def current_main():
+    return subprocess.check_output(['gh', 'api', f'repos/{repo}/git/ref/heads/main', '--jq', '.object.sha'], text=True).strip()
+
+def superseded():
+    print('A newer main commit exists; this build is retained as an artifact, not deployed.')
+    with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+        summary.write('Newer main revision detected. This superseded build was not published.\n')
+    raise SystemExit(0)
+
+if current_main() != sha:
+    superseded()
+try:
+    subprocess.run(['gh', 'release', 'create', tag, str(archive), str(manifest), '--repo', repo,
+        '--target', sha, '--title', f'Yeoun {component} {sha[:7]}', '--notes-file', str(notes), '--draft'], check=True)
+except subprocess.CalledProcessError:
+    if current_main() != sha:
+        superseded()
+    raise
+if current_main() != sha:
+    superseded()
 subprocess.run(['gh', 'release', 'edit', tag, '--repo', repo, '--draft=false', '--latest'], check=True)
 with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
     output.write(f'tag={tag}\n')
