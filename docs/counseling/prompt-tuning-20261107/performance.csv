@@ -1,0 +1,11 @@
+metric,unit,previous_baseline,previous_tuned,v2_current_holdout,v3_holdout,target,scope
+analysis_mean,points,82.083,83.333,,,,historical GPT exploratory 12 cases per arm
+final_mean,points,66.667,74.583,,,90,historical GPT exploratory 12 cases per arm; current holdout 50
+final_at_least_90,cases,0/12,0/12,,,45/50,current target requires at least 90 percent
+overall_output_contract,calls,23/24,24/24,,,,historical output format and behavior
+final_mean_latency,seconds,7.14531,8.29021,,,,historical measured call latency
+final_p95_latency,seconds,9.84215,11.89719,,,,historical measured call latency
+estimated_cost_cached,USD,0.0377581,0.0371348,,,,historical cost per 24 calls
+critical_errors,cases,,,,,0,release quality gate
+existing_counseling_unit,tests,,,,39/39,,offline regression validation
+paid_model_calls,requests,24,24,0,0,,current holdout has no real calls

@@ -1,0 +1,33 @@
+{
+  "candidate_commit": "e44479c21e77299e0b94e3a91443d83f579a33c8",
+  "baseline_commit": "8fdb78e8305db57c726a6f81ae80d819803627f0",
+  "prompt_version": "esc-strategy-20261107-v3",
+  "existing_unit_tests": {
+    "failed": 0,
+    "passed": 39
+  },
+  "mock_transport": {
+    "responses": 7,
+    "scenarios": 3,
+    "status": "passed"
+  },
+  "paired_scoring_fixture": "passed",
+  "holdout_cases": 50,
+  "holdout_sha256": "658c3a5309fc3e83158b06a741bdd306e0e316e57861496816a283516f27aad7",
+  "actual_paid_requests": 0,
+  "live_quality_status": "awaiting_configured_isolated_provider_and_review",
+  "candidate_quality": null,
+  "candidate_passed_target": null,
+  "portfolio": {
+    "qr_codes_verified": 5,
+    "clickable_paper_and_doc_links": 7,
+    "chapters": [
+      1,
+      6,
+      11,
+      15
+    ],
+    "sha256": "338d69e9ffce3c39377db7f642f0bf07f4d3070fabc80b2e7e23403bafa561dc",
+    "pages": 17
+  }
+}
