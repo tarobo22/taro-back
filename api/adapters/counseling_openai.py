@@ -6,7 +6,10 @@ import time
 import httpx
 
 from api.domain.counseling import Analysis, CounselResult, CounselingError, safe_public_url, strict_schema
+from api.domain.counseling_context import StoryAnalysis
 from api.adapters.counseling_strategy import exploration_prompt, reply_strategy, validate_reply_strategy
+
+CONTEXT_PROMPT_VERSION = 'confirmed-story-20261107-v4'
 
 COMMON = '''여운은 타로로 마음과 고민을 함께 살펴보는 서비스입니다.
 상냥하고 쉬운 한국어 존댓말을 사용합니다. 전문 상담가나 의사 또는 실제 사람이라고 자칭하지 않습니다.
@@ -47,6 +50,23 @@ facts는 기본 빈 배열입니다. 꼭 필요한 공개 용어의 설명은 �
 타인의 속마음, 미래, 결과 보장은 카드에서 추론하지 않습니다.
 일상적인 슬픔·분노·피로에는 safety_mode=standard를 사용합니다. 실제 즉각적인 위험 신호는 지원이 필요합니다.'''
 
+STORY_ANALYSIS = ANALYZE + '''
+user_turns는 사용자가 직접 말한 문장만 모은 목록입니다. 0이 가장 최근입니다.
+story_anchors에는 이번 고민에 필요한 행위자, 시점, 사건, 감정, 제약, 해본 방법, 원하는 응답만 넣습니다.
+각 quote는 해당 turn의 실제 부분 문자열입니다. 사전, 다른 사람, 이전 어시스턴트의 말을 인용하지 않습니다.
+같은 항목을 정정했으면 새 인용을 쓰고, 함께 알아야 할 여러 행위자는 관계가 보이는 한 구절로 담습니다.
+해결책 없이 들어달라면 listen을 고르고 추가 설명을 요구하지 않습니다.
+질문이 필요하면 이번에 이해를 가로막는 한 가지를 묻고, 사용자가 이미 알려준 내용을 다시 묻지 않습니다.
+understanding은 말하듯 짧게 확인합니다. 걱정이나 감정을 추측해 사실처럼 붙이지 않습니다.'''
+
+STORY_REPLY = '''
+confirmed_story의 최신 발화와 인용이 사연의 근거입니다. 정정된 행위자나 날짜를 이전 이야기로 되돌리지 않습니다.
+개인사전은 말뜻을 해석할 때만 참고합니다. 사용자 발화의 인용으로 바꾸지 않습니다.
+경청에서는 해결 과제를 주지 않고 구체적인 상황과 사용자의 감정을 짧게 받아줍니다.
+조언에서는 실패한 방법을 다시 제안하지 않고, 이미 말한 제약 안에서 한 가지 선택을 남깁니다.
+카드 해석은 상징과 고민을 잇는 관점만, advice는 제안의 이유만 씁니다. 행동은 actions에만 한 개입니다.
+모든 모드에서 follow_up_question=null입니다.'''
+
 
 class OpenAICounselingModel:
     def __init__(self, client, model, key_provider, deadline=60, policy=None, reasoning_effort=None):
@@ -59,12 +79,18 @@ class OpenAICounselingModel:
         return bool(self.model and self.key_provider())
 
     def analyze(self, payload):
+        if 'user_turns' in payload:
+            return self._structured(STORY_ANALYSIS, payload, StoryAnalysis)
         return self._structured(ANALYZE, payload, Analysis)
 
     def compose(self, payload):
         mode = payload.get('response_mode', 'advice')
         policy = reply_strategy(mode)
-        result = self._structured(policy.render(COMPOSE), payload, CounselResult)
+        contextual = 'confirmed_story' in payload
+        result = self._structured(policy.render(COMPOSE + STORY_REPLY if contextual else COMPOSE),
+                                  payload, CounselResult)
+        if contextual:
+            result['follow_up_question'] = None
         return validate_reply_strategy(result, mode)
 
     def search(self, query):
@@ -86,7 +112,7 @@ class OpenAICounselingModel:
         return list(references.values())[:6]
 
     def _structured(self, instructions, payload, schema):
-        limit = ('analysis_max_output_tokens', 2000) if schema is Analysis else ('reply_max_output_tokens', 2500)
+        limit = ('analysis_max_output_tokens', 2000) if issubclass(schema, Analysis) else ('reply_max_output_tokens', 2500)
         _, parts = self._request(dict(instructions=instructions,
             max_output_tokens=self.policy.get(*limit),
             input=[{'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],

@@ -5,8 +5,9 @@ from uuid import uuid4
 
 from api.application.counseling_ports import CounselingModel, CounselingStore
 from api.domain.ai_jobs import fingerprint, load_policy, safety_result
-from api.domain.counseling import (Analysis, CounselingError, draw_cards, grounded_result,
+from api.domain.counseling import (CounselingError, draw_cards, grounded_result,
     personal_definitions, retrieve_definitions, search_queries, urgent_risk)
+from api.domain.counseling_context import StoryAnalysis, confirm_story, user_turns, verified_anchors
 
 
 def public_definition(row):
@@ -108,7 +109,9 @@ class CounselingService:
                 state = row['state']
                 used = any(item['term'] == term for item in state.get('glossary_used', []))
                 mentioned = any(term in item['text'] for item in state.get('history', []))
-                if used or mentioned:
+                story = state.get('confirmed_story', {})
+                quoted = any(term in anchor['quote'] for anchor in story.get('anchors', []))
+                if used or mentioned or quoted or term in story.get('understanding', ''):
                     repo.update_session(owner, row['id'], dict(phase='listening',
                         history=[item for item in state.get('history', []) if term not in item['text']]))
 
@@ -177,24 +180,29 @@ class CounselingService:
         known = definitions + conversation_definitions(state)
         retrieved = retrieve_definitions(text, known)
         self._guard(command, revision)
-        analysis = Analysis.model_validate(self.model.analyze(dict(text=text, history=history,
-            dictionary=[public_definition(entry) for entry in retrieved])))
+        turns = [text, *user_turns(history)]
+        analysis = StoryAnalysis.model_validate(self.model.analyze(dict(text=text, history=history,
+            user_turns=turns, dictionary=[public_definition(entry) for entry in retrieved])))
         if analysis.needs_immediate_support:
             return self._support(history, text), []
+        analysis.story_anchors = verified_anchors(analysis.story_anchors, turns)
         if analysis.intent == 'general_information':
             analysis.explicit_definitions, analysis.unknown_terms = [], []
             analysis.search_purpose = 'none'
             analysis.clarification_question = analysis.clarification_question or '그 일과 관련해서 어떤 마음이나 고민이 있으셨는지 조금 들려주실래요?'
+        elif analysis.response_mode == 'listen':
+            analysis.clarification_question = None
         proposals = personal_definitions(analysis, text)
         missing = [item for item in analysis.unknown_terms
                    if item.kind != 'public' and not retrieve_definitions(item.term, known + proposals)]
-        if missing and not analysis.clarification_question:
+        if missing and analysis.response_mode != 'listen' and not analysis.clarification_question:
             analysis.clarification_question = f'괜찮으시면, 말씀하신 “{missing[0].term}”가 어떤 뜻인지 알려주실래요?'
         temporary = analysis.memory_scope == 'conversation' or not command['payload'].get('remember_definitions', True)
         queries = search_queries(analysis, known + proposals)[:1] if (
-            analysis.intent == 'tarot_counseling' and analysis.search_purpose == 'clarify_counseling_term') else []
+            analysis.intent == 'tarot_counseling' and analysis.response_mode == 'advice'
+            and analysis.search_purpose == 'clarify_counseling_term') else []
         question = analysis.clarification_question
-        if not question:
+        if not question and analysis.response_mode == 'advice':
             question = '' if analysis.understanding.rstrip().endswith(('?', '？')) else '제가 이해한 내용이 맞을까요?'
         following = dict(phase='clarifying' if analysis.clarification_question else 'confirmation',
             analysis=analysis.model_dump(), search_queries=queries,
@@ -203,6 +211,8 @@ class CounselingService:
             evidence_cache=state.get('evidence_cache', []),
             history=bounded_history(history + [dict(role='user', text=text), dict(role='assistant',
                 text=' '.join(filter(None, (analysis.acknowledgement, analysis.understanding, question))))]))
+        if 'confirmed_story' in state:
+            following['confirmed_story'] = state['confirmed_story']
         return following, [] if temporary else proposals
 
     def _save_cache(self, command, state, revision):
@@ -213,9 +223,11 @@ class CounselingService:
             repo.update_session(command['owner_id'], command['session_id'], state)
 
     def _reply(self, command, state, definitions, revision):
-        mode = state['analysis'].get('response_mode', 'advice')
+        story = state['confirmed_story']
+        mode = story['mode']
+        history = [item for item in bounded_history(state.get('history', [])) if item['role'] == 'user']
         known = definitions + conversation_definitions(state)
-        relevant = retrieve_definitions(' '.join(item['text'] for item in state.get('history', [])), known)
+        relevant = retrieve_definitions(' '.join(user_turns(history)), known)
         sources = [dict(id='personal:' + str(entry['id']), kind='user_definition',
             title=entry['term'] + ' · 말씀해주신 의미', text=entry['definition'], url=None) for entry in relevant]
         cache, status, changed = list(state.get('evidence_cache', [])), 'not_requested', False
@@ -250,10 +262,11 @@ class CounselingService:
         if changed:
             self._save_cache(command, state, revision)
         self._guard(command, revision)
-        result = grounded_result(self.model.compose(dict(
-            understanding=state['analysis']['understanding'], perspective=state['analysis'].get('perspective'),
-            response_mode=mode, history=bounded_history(state.get('history', [])),
-            cards=cards, sources=sources, search_status=status)), cards, sources, mode)
+        draft = self.model.compose(dict(
+            understanding=story['understanding'], perspective=story['perspective'],
+            response_mode=mode, history=history, confirmed_story=story,
+            cards=cards, sources=sources, search_status=status))
+        result = grounded_result(dict(draft, follow_up_question=None), cards, sources, mode)
         return dict(state, phase='advice', sources=sources, result=result, search_status=status,
             history=bounded_history(state.get('history', []) + [dict(role='assistant',
                 text=' '.join((result['empathy'], result['advice'], *result['actions'])))]))
@@ -275,10 +288,15 @@ class CounselingService:
                 if command['kind'] == 'confirm':
                     if state.get('memory_revision') != revision:
                         raise CounselingError('GLOSSARY_CHANGED', 409)
-                    if state['analysis'].get('response_mode') != 'listen' and not state.get('cards'):
+                    story = confirm_story(state['analysis'], state.get('history', []))
+                    changed = state.get('confirmed_story') != story
+                    state['confirmed_story'] = story
+                    if story['mode'] == 'advice' and not state.get('cards'):
                         state['cards'] = draw_cards(self.cards, command['payload'].get('card_count', 3), self.sample)
                         state['draw'] = dict(id=str(uuid4()), method='python.SystemRandom.sample',
                             at=datetime.now(timezone.utc).isoformat(), without_replacement=True)
+                        changed = True
+                    if changed:
                         repo.update_session(owner, session_id, state)
             if command['kind'] == 'message':
                 state, proposals = self._analyze(command, state, definitions, revision)
