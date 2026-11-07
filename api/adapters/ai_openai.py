@@ -16,6 +16,19 @@ warm은 다정한 존댓말, giga는 간결하고 단호하게 응원하는 반�
 심각한 위험에는 해석을 강행하지 말고 차분한 지지와 가까운 사람 및 지역 긴급 도움 안내를 제공한다.
 구체적이고 선택 가능한 작은 행동 1..3개를 제안한다. 지정한 JSON 스키마로만 응답한다.'''
 
+TAROT_INSTRUCTIONS = '''타로 해설은 휴대폰에서 쉽게 읽을 수 있는 짧은 한국어로 쓴다.
+입력한 질문, 확인된 사연, 전달된 카드 설명만 근거로 삼는다. 없는 상황이나 감정을 만들어 확정하지 않는다.
+질문이 없으면 특정 사연을 가정하지 말고 스스로 돌아볼 수 있는 말로 쓴다.
+empathy: 사용자가 말한 고민을 짧게 받아 주는 한 문장. 감정 정보가 없으면 억지로 추측하지 않는다.
+summary: 전체 흐름의 핵심만 한 문장, 70자 이내. 카드별 설명을 이어 붙이지 않는다.
+card_insights.meaning: 해당 카드의 의미를 쉬운 말로 1~2문장, 100자 이내로 쓴다.
+card_insights.reflection: 해당 카드와 사용자의 질문을 연결하는 한 문장, 70자 이내로 쓴다. meaning을 되풀이하지 않는다.
+advice: 질문에 맞는 선택 가능한 조언을 1~2문장, 140자 이내로 쓴다. 카드 해설을 다시 요약하지 않는다.
+actions: 부담 없이 시도할 작은 행동 하나만 담는다. 60자 이내의 구체적인 문장으로 쓰고 명령하거나 강요하지 않는다.
+요약, 카드 설명, 조언, 행동에 같은 문장이나 똑같은 실천 과제를 반복하지 않는다.
+한 문장은 짧게 끝낸다. 여러 뜻을 접속사로 길게 잇지 않는다. 제목, 번호, 굵게 표시, 마크다운은 넣지 않는다. 화면에서 구분해 보여준다.
+카드의 개수, card_id, position은 입력 그대로 보존한다. 위의 안전 원칙과 JSON 스키마를 그대로 지킨다.'''
+
 
 class _OpenAIBoundary:
     def __init__(self, client, model, key_provider, deadline_seconds=60):
@@ -59,10 +72,13 @@ class OpenAIResultProvider(_OpenAIBoundary):
     def generate(self, payload):
         key = self._key()
         self._diagnostics.set({})
+        instructions = INSTRUCTIONS
+        if payload.get('kind') == 'tarot':
+            instructions += '\n\n' + TAROT_INSTRUCTIONS
         try:
             response = self.client.post('https://api.openai.com/v1/responses',
                 headers={'Authorization': 'Bearer ' + key}, timeout=self.deadline_seconds,
-                json={'model': self.model, 'store': False, 'instructions': INSTRUCTIONS,
+                json={'model': self.model, 'store': False, 'instructions': instructions,
                       'max_output_tokens': self.max_output_tokens,
                       'input': [{'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
                       'text': {'format': {'type': 'json_schema', 'name': 'yeoun_ai_result',

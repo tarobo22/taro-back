@@ -1,6 +1,6 @@
 {
   "policy_version": "2026-11-05",
-  "prompt_version": "yeoun-p0-1",
+  "prompt_version": "yeoun-p0-2-readability",
   "schema_version": "ai-result-1",
   "owner_daily_limit": 20,
   "global_daily_limit": 200,
