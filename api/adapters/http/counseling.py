@@ -27,6 +27,9 @@ class MessageInput(Input):
     expected_version:StrictInt=Field(ge=1)
     consent_event_id:UUID
     remember_definitions:StrictBool=True
+    auto_read:StrictBool=False
+    card_count:Literal[1,3,5]=3
+    web_search:StrictBool=False
 
 
 class ConfirmationInput(Input):

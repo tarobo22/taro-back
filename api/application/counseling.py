@@ -136,6 +136,10 @@ class CounselingService:
             text = payload.get('text')
             if not isinstance(text, str) or not 1 <= len(text.strip()) <= 2000:
                 raise CounselingError('INVALID_MESSAGE', 422, '하고 싶은 이야기를 적어주세요.')
+            if type(payload.get('auto_read', False)) is not bool:
+                raise CounselingError('INVALID_COMMAND')
+            if type(payload.get('card_count', 3)) is not int or payload.get('card_count', 3) not in (1, 3, 5):
+                raise CounselingError('INVALID_CARD_COUNT')
         elif payload.get('confirmed') is not True:
             raise CounselingError('CONFIRMATION_REQUIRED', 422, '이해한 내용이 맞는지 먼저 확인해 주세요.')
         elif type(payload.get('card_count', 3)) is not int or payload.get('card_count', 3) not in (1, 3, 5):
@@ -212,8 +216,10 @@ class CounselingService:
         queries = search_queries(analysis, known + proposals)[:1] if (
             analysis.intent == 'tarot_counseling' and analysis.search_purpose == 'clarify_counseling_term') else []
         question = analysis.clarification_question
-        if not question:
+        if not question and not command['payload'].get('auto_read'):
             question = '' if analysis.understanding.rstrip().endswith(('?', '？')) else '제가 이해한 내용이 맞을까요?'
+        assistant_history = [] if command['payload'].get('auto_read') and not analysis.clarification_question else [dict(role='assistant',
+            text=' '.join(filter(None, (analysis.acknowledgement, analysis.understanding, question))))]
         following = dict(phase='clarifying' if analysis.clarification_question else 'confirmation',
             source_reading_id=state.get('source_reading_id'), has_prior_advice=state.get('has_prior_advice', False),
             cards=[] if analysis.response_mode == 'listen' else state.get('cards') or state.get('retained_cards', []),
@@ -222,8 +228,7 @@ class CounselingService:
             session_definitions=(state.get('session_definitions', []) + (proposals if temporary else []))[-20:],
             glossary_used=[public_definition(entry) for entry in retrieved],
             evidence_cache=state.get('evidence_cache', []),
-            history=history + [dict(role='user', text=text), dict(role='assistant',
-                text=' '.join(filter(None, (analysis.acknowledgement, analysis.understanding, question))))])
+            history=history + [dict(role='user', text=text)] + assistant_history)
         return following, [] if temporary else proposals
 
     def _save_cache(self, command, state, revision):
@@ -279,6 +284,14 @@ class CounselingService:
             history=state.get('history', []) + [dict(role='assistant',
                 text=' '.join(filter(None, (result['empathy'], result['advice'], *result['actions'], result['follow_up_question']))))])
 
+    def _draw_if_needed(self, state, payload):
+        if state['analysis'].get('response_mode') != 'listen' and not state.get('cards'):
+            state['cards'] = draw_cards(self.cards, payload.get('card_count', 3), self.sample)
+            state['draw'] = dict(id=str(uuid4()), method='python.SystemRandom.sample',
+                at=datetime.now(timezone.utc).isoformat(), without_replacement=True)
+            return True
+        return False
+
     def run_next(self):
         meta = self.store.claim()
         if not meta:
@@ -296,13 +309,24 @@ class CounselingService:
                 if command['kind'] == 'confirm':
                     if state.get('memory_revision') != revision:
                         raise CounselingError('GLOSSARY_CHANGED', 409)
-                    if state['analysis'].get('response_mode') != 'listen' and not state.get('cards'):
-                        state['cards'] = draw_cards(self.cards, command['payload'].get('card_count', 3), self.sample)
-                        state['draw'] = dict(id=str(uuid4()), method='python.SystemRandom.sample',
-                            at=datetime.now(timezone.utc).isoformat(), without_replacement=True)
+                    if self._draw_if_needed(state, command['payload']):
                         repo.update_session(owner, session_id, state)
             if command['kind'] == 'message':
                 state, proposals = self._analyze(command, state, definitions, revision)
+                if command['payload'].get('auto_read') and state['phase'] == 'confirmation':
+                    with self.store.transaction(owner) as repo:
+                        self._check(repo, command)
+                        if revision != memory_revision(repo.definitions(owner)):
+                            raise CounselingError('GLOSSARY_CHANGED', 409)
+                        for proposal in proposals:
+                            repo.save_definition(owner, proposal, command['id'])
+                        definitions = repo.definitions(owner)
+                        revision = memory_revision(definitions)
+                        state['memory_revision'] = revision
+                        self._draw_if_needed(state, command['payload'])
+                        repo.update_session(owner, session_id, state)
+                    proposals = []
+                    state = self._reply(command, state, definitions, revision)
             else:
                 state, proposals = self._reply(command, state, definitions, revision), []
             with self.store.transaction(owner) as repo:

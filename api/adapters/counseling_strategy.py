@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from api.domain.counseling import CounselingError
 
-PROMPT_VERSION = 'esc-strategy-tdd-20261107-v2'
+PROMPT_VERSION = 'tarot-topic-readiness-20261108-v3'
 
 
 @dataclass(frozen=True)
@@ -25,8 +25,11 @@ class SupportPromptStrategy:
 EXPLORATION = SupportPromptStrategy('exploration',
     'reflection_of_feelings, restatement_or_paraphrasing, question',
     '사용자의 감정을 짧게 받아주고 이해한 상황을 쉽게 정리합니다. 원인과 상대의 의도를 추측하지 않습니다.\n'
-    '뜻이 모호한 부분만 질문 하나로 확인합니다. 사용자의 정정은 이전 해석보다 우선합니다.\n'
-    '이미 알려준 내용을 다시 묻지 않고, 조언·카드 해석은 확인 이후로 미룹니다.')
+    '타로 상담자가 아는 보통의 운세 주제는 짧게 말해도 이해합니다. 취업·취업운·연애운·재회운·금전운은 그 주제만으로 충분합니다.\n'
+    '시험 때문에 힘들다는 말은 원인이 시험으로 분명하므로 바로 진행합니다. 직종·시험 종류·날짜·배경은 필수 정보가 아닙니다.\n'
+    '질문은 주제나 대상이 없어 해석 방향을 정할 수 없거나, 서로 충돌하는 정보가 있을 때만 하나 합니다.\n'
+    '학교가 힘들다는 말만 있으면 공부·시험·친구 관계 중 무엇인지 묻습니다. 고양이를 키우는데 애견용품이라고 하면 고양이와 개 중 어느 쪽인지 확인합니다.\n'
+    '이미 나온 대화와 사용자 정정을 먼저 참고합니다. 충분하면 clarification_question=null이며, 카드 여부나 이해가 맞는지 다시 묻지 않습니다.')
 COMFORTING = SupportPromptStrategy('comforting',
     'reflection_of_feelings, restatement_or_paraphrasing, affirmation',
     '지금은 경청을 선택한 단계입니다. 구체적인 부담과 노력을 인정하며 따뜻하게 듣습니다.\n'
