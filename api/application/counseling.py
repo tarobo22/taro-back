@@ -7,7 +7,8 @@ from api.application.counseling_ports import CounselingModel, CounselingStore
 from api.domain.ai_jobs import fingerprint, load_policy, safety_result
 from api.domain.counseling import (CounselingError, draw_cards, grounded_result,
     personal_definitions, retrieve_definitions, search_queries, urgent_risk)
-from api.domain.counseling_context import StoryAnalysis, confirm_story, user_turns, verified_anchors
+from api.domain.counseling_context import (StoryAnalysis, confirm_story, reply_violations,
+    review_reasons, user_turns, verified_anchors)
 
 
 def public_definition(row):
@@ -262,11 +263,19 @@ class CounselingService:
         if changed:
             self._save_cache(command, state, revision)
         self._guard(command, revision)
-        draft = self.model.compose(dict(
+        payload = dict(
             understanding=story['understanding'], perspective=story['perspective'],
             response_mode=mode, history=history, confirmed_story=story,
-            cards=cards, sources=sources, search_status=status))
+            cards=cards, sources=sources, search_status=status)
+        draft = self.model.compose(payload)
         result = grounded_result(dict(draft, follow_up_question=None), cards, sources, mode)
+        reasons = review_reasons(story, result, history)
+        if reasons:
+            self._guard(command, revision)
+            reviewed = self.model.review_reply(payload, result, reasons)
+            result = grounded_result(dict(reviewed, follow_up_question=None), cards, sources, mode)
+            if reply_violations(story, result):
+                raise CounselingError('OUTPUT_INVALID', 502, '사연에 맞는 답변을 다시 확인해 주세요.')
         return dict(state, phase='advice', sources=sources, result=result, search_status=status,
             history=bounded_history(state.get('history', []) + [dict(role='assistant',
                 text=' '.join((result['empathy'], result['advice'], *result['actions'])))]))

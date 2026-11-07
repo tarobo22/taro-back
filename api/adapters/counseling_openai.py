@@ -1,4 +1,4 @@
-"""Single-attempt structured Responses adapter, rebuilt through contract tests."""
+"""Structured Responses adapter with a separate, bounded review operation."""
 import hashlib
 import json
 import time
@@ -6,7 +6,7 @@ import time
 import httpx
 
 from api.domain.counseling import Analysis, CounselResult, CounselingError, safe_public_url, strict_schema
-from api.domain.counseling_context import StoryAnalysis
+from api.domain.counseling_context import ReviewedReply, StoryAnalysis
 from api.adapters.counseling_strategy import exploration_prompt, reply_strategy, validate_reply_strategy
 
 CONTEXT_PROMPT_VERSION = 'confirmed-story-20261107-v4'
@@ -67,6 +67,14 @@ confirmed_story의 최신 발화와 인용이 사연의 근거입니다. 정정�
 카드 해석은 상징과 고민을 잇는 관점만, advice는 제안의 이유만 씁니다. 행동은 actions에만 한 개입니다.
 모든 모드에서 follow_up_question=null입니다.'''
 
+REVIEW = COMMON + STORY_REPLY + '''
+검토할 것은 draft_reply입니다. review_reasons는 다시 살펴볼 항목입니다.
+최신 발화와 인용에 비춰 틀린 사람·시점, 추가 과제, 실패한 조언의 반복, 죄책감을 키우는 표현만 고칩니다.
+시점 표현이 필요하면 사용자가 말한 표현을 그대로 사용합니다. 필요 없는 날짜나 시간 조건은 덧붙이지 않습니다.
+제안에는 한 가지 행동만 남기고, 제안 이유와 카드 해석에서 다른 행동을 지웁니다.
+출력의 카드 ID와 순서, 확인된 사용자의 요청 모드는 유지합니다. 긴급 위험 신호를 놓치지 않습니다.
+검토가 끝났으면 reply에 검증된 전체 답변을 넣습니다. 안전하게 검증할 수 없으면 reply=null입니다.'''
+
 
 class OpenAICounselingModel:
     def __init__(self, client, model, key_provider, deadline=60, policy=None, reasoning_effort=None):
@@ -92,6 +100,14 @@ class OpenAICounselingModel:
         if contextual:
             result['follow_up_question'] = None
         return validate_reply_strategy(result, mode)
+
+    def review_reply(self, payload, reply, reasons):
+        mode = payload['response_mode']
+        reviewed = self._structured(reply_strategy(mode).render(REVIEW),
+                                    dict(payload, draft_reply=reply, review_reasons=reasons), ReviewedReply)
+        if reviewed['reply'] is None:
+            raise CounselingError('OUTPUT_INVALID', 502, '사연에 맞는 답변을 다시 확인해 주세요.')
+        return validate_reply_strategy(dict(reviewed['reply'], follow_up_question=None), mode)
 
     def search(self, query):
         _, parts = self._request({
