@@ -1,13 +1,13 @@
-"""Server-owned support strategies inspired by ESConv, ACL 2021.
+"""Server-owned support strategies inspired by ESConv and strategy planning.
 
-This is prompt/context engineering, not model training.
 https://aclanthology.org/2021.acl-long.269/
+https://aclanthology.org/2024.acl-long.813/
 """
 from dataclasses import dataclass
 
 from api.domain.counseling import CounselingError
 
-PROMPT_VERSION = 'esc-strategy-tdd-20261107-v2'
+PROMPT_VERSION = 'esc-strategy-20261107-v3'
 
 
 @dataclass(frozen=True)
@@ -24,19 +24,19 @@ class SupportPromptStrategy:
 
 EXPLORATION = SupportPromptStrategy('exploration',
     'reflection_of_feelings, restatement_or_paraphrasing, question',
-    '사용자의 감정을 짧게 받아주고 이해한 상황을 쉽게 정리합니다. 원인과 상대의 의도를 추측하지 않습니다.\n'
-    '뜻이 모호한 부분만 질문 하나로 확인합니다. 사용자의 정정은 이전 해석보다 우선합니다.\n'
-    '이미 알려준 내용을 다시 묻지 않고, 조언·카드 해석은 확인 이후로 미룹니다.')
+    'acknowledgement는 사용자가 표현한 감정이나 부담을 짚는 한 문장입니다. 질문을 섞지 않습니다.\n'
+    'understanding은 확인할 상황을 한 문장으로 말합니다. 행위자와 시점은 사용자의 최신 정정을 따릅니다.\n'
+    '이해에 꼭 필요한 빈칸만 clarification_question 하나로 확인합니다. 조언과 카드는 확인 뒤에 다룹니다.')
 COMFORTING = SupportPromptStrategy('comforting',
     'reflection_of_feelings, restatement_or_paraphrasing, affirmation',
-    '지금은 경청을 선택한 단계입니다. 구체적인 부담과 노력을 인정하며 따뜻하게 듣습니다.\n'
-    'empathy와 advice에 질문이나 행동 지시를 넣지 않습니다. 억지 긍정과 타인 비난에 동조하지 않습니다.\n'
+    '경청에서는 empathy에 확인된 상황과 감정을 한 문장으로 반영하고 advice에는 부담을 덜어주는 한 문장을 씁니다.\n'
+    '두 문장의 역할을 나눕니다. empathy와 advice 모두 질문, 숙제, 당위, 억지 칭찬을 넣지 않습니다.\n'
     'actions=[], tarot=[], facts=[], follow_up_question=null입니다.')
 ACTION = SupportPromptStrategy('action', 'reflection_of_feelings, providing_suggestions',
-    '확인한 고민에 연결하여 선택할 수 있는 작은 행동 하나만 제안합니다. actions는 정확히 한 항목입니다.\n'
-    '사용자가 할 수 있다고 말한 범위 안에서 제안하며, 이미 힘들다고 한 과제를 다시 권하지 않습니다.\n'
-    '카드는 주어진 상징을 살펴보는 관점입니다. 타인의 속마음·미래·성공을 증명하지 않습니다.\n'
-    '조언을 여러 문단과 카드 설명에 나눠 반복하지 않습니다. 후속 질문은 하나 또는 null입니다.')
+    '행동 문장은 actions에 정확히 하나만 씁니다. 한 항목 안에 순서가 있는 여러 행동도 넣지 않습니다.\n'
+    '사용자가 이미 시도한 방법과 어렵다고 밝힌 조건을 반영합니다. 여유 시간, 돈, 상대의 반응을 가정하지 않습니다.\n'
+    'advice는 그 한 가지 제안이 고민에 맞는 이유를 설명합니다. empathy, advice, 카드 reflection에 행동을 더 쓰지 않습니다.\n'
+    'follow_up_question은 기본 null입니다. 새 정보 없이는 도움을 줄 수 없고 사용자가 질문을 열어둔 경우만 한 문장으로 묻습니다.')
 
 
 def exploration_prompt(base):
