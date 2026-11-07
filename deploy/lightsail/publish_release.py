@@ -54,4 +54,3 @@ if current_main() != sha:
 subprocess.run(['gh', 'release', 'edit', tag, '--repo', repo, '--draft=false', '--latest'], check=True)
 with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
     output.write(f'tag={tag}\n')
-
