@@ -1,0 +1,49 @@
+name: yeoun-demo
+services:
+  db:
+    image: postgres:17-bookworm
+    restart: unless-stopped
+    env_file: /etc/yeoun/db.env
+    command: [postgres, -c, shared_buffers=64MB, -c, max_connections=30, -c, work_mem=2MB]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    mem_limit: 256m
+    logging: {driver: json-file, options: {max-size: 5m, max-file: '2'}}
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U yeoun -d yeoun']
+      interval: 5s
+      retries: 12
+  api:
+    build:
+      context: .
+      dockerfile: deploy/lightsail/Dockerfile
+    restart: unless-stopped
+    env_file: /etc/yeoun/api.env
+    depends_on:
+      db: {condition: service_healthy}
+    volumes:
+      - private_audio:/app/.local/private-audio
+    mem_limit: 448m
+    logging: {driver: json-file, options: {max-size: 5m, max-file: '2'}}
+    healthcheck:
+      test: [CMD, python, -c, 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/health", timeout=4)']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    env_file: /etc/yeoun/site.env
+    ports: ['80:80', '443:443']
+    volumes:
+      - ./deploy/lightsail/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./web-dist:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    mem_limit: 96m
+    logging: {driver: json-file, options: {max-size: 5m, max-file: '2'}}
+volumes:
+  postgres_data:
+  private_audio:
+  caddy_data:
+  caddy_config:

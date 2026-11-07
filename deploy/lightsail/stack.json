@@ -1,0 +1,119 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Yeoun portfolio demo on a dedicated USD 7 Lightsail instance. No Dealerhub resources or dependencies.",
+  "Metadata": {
+    "AWSToolsMetrics": {
+      "AWSAgentToolkit": "aws-cloudformation@3"
+    }
+  },
+  "Parameters": {
+    "AdminCidr": {
+      "Type": "String",
+      "AllowedPattern": "^[0-9.]+/32$",
+      "Description": "Operator public IPv4 only; SSH is not public."
+    },
+    "AdminPublicKey": {
+      "Type": "String",
+      "AllowedPattern": "^ssh-rsa [A-Za-z0-9+/=]+( .*)?$",
+      "Description": "Dedicated Yeoun public SSH key. This is not a private key."
+    }
+  },
+  "Resources": {
+    "DemoServer": {
+      "Type": "AWS::Lightsail::Instance",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Keep the web, API and PostgreSQL demo within the approved USD 7 instance bundle.",
+          "must": "Dedicated Yeoun host only. Preserve disk on stack deletion. No existing service, DB, domain, VPC peering or IAM resource is changed."
+        }
+      },
+      "Properties": {
+        "InstanceName": {
+          "Fn::Sub": "${AWS::StackName}-server"
+        },
+        "AvailabilityZone": "ap-northeast-2a",
+        "BlueprintId": "ubuntu_24_04",
+        "BundleId": "micro_3_0",
+        "Networking": {
+          "Ports": [
+            {
+              "FromPort": 22,
+              "ToPort": 22,
+              "Protocol": "tcp",
+              "Cidrs": [
+                {
+                  "Ref": "AdminCidr"
+                }
+              ]
+            },
+            {
+              "FromPort": 80,
+              "ToPort": 80,
+              "Protocol": "tcp",
+              "Cidrs": [
+                "0.0.0.0/0"
+              ]
+            },
+            {
+              "FromPort": 443,
+              "ToPort": 443,
+              "Protocol": "tcp",
+              "Cidrs": [
+                "0.0.0.0/0"
+              ]
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "yeoun"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "portfolio-demo"
+          }
+        ],
+        "UserData": {
+          "Fn::Sub": "#!/bin/bash\nset -eu\ninstall -d -m 700 -o ubuntu -g ubuntu /home/ubuntu/.ssh\nprintf '%s\\n' '${AdminPublicKey}' >> /home/ubuntu/.ssh/authorized_keys\nchown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys\nchmod 600 /home/ubuntu/.ssh/authorized_keys\nexport DEBIAN_FRONTEND=noninteractive\napt-get update\napt-get install -y docker.io docker-compose-v2\nsystemctl enable --now docker\nif ! swapon --show | grep -q /swapfile; then\n  fallocate -l 2G /swapfile\n  chmod 600 /swapfile\n  mkswap /swapfile\n  swapon /swapfile\n  echo '/swapfile none swap sw 0 0' >> /etc/fstab\nfi\ninstall -d -m 700 /etc/yeoun\ninstall -d -m 755 /opt/yeoun\ntouch /opt/yeoun/bootstrap-ready\n"
+        }
+      }
+    },
+    "DemoIp": {
+      "Type": "AWS::Lightsail::StaticIp",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Keep the resume QR URL stable across server restarts.",
+          "must": "Attach only to the dedicated Yeoun server. Retained unattached IPs must be reviewed for charges."
+        }
+      },
+      "Properties": {
+        "StaticIpName": {
+          "Fn::Sub": "${AWS::StackName}-ip"
+        },
+        "AttachedTo": {
+          "Ref": "DemoServer"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "PublicIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "DemoIp",
+          "IpAddress"
+        ]
+      }
+    },
+    "InstanceName": {
+      "Value": {
+        "Ref": "DemoServer"
+      }
+    }
+  }
+}
