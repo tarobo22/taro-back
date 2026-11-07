@@ -2,6 +2,8 @@
 
 여운의 마음 대화에서 이해 확인 뒤 답변이 사연과 상담 모드를 지키도록 프롬프트를 조정했다. 이전 실제 GPT 평가와 이번 후보의 검증 상태를 따로 기록한다.
 
+이번 챕터에 [v4 구현과 50건 평가 상태](#v4--확인된-사연과-답변-검증)를 추가했다. 아래 첫 표는 앞선 v3 작업의 기록이다.
+
 | 지표 | 이전 실측 전 | 이전 실측 후 | 새 v3 후보 | 합격선 |
 |---|---:|---:|---|---:|
 | 이해 확인 평균 | 82.08점 | 83.33점 | 실측 대기 | 참고 지표 |
@@ -79,3 +81,53 @@ python tools/evaluate_counseling_prompt_v3.py score --review .local/review.json 
 ~~~
 
 채점 CSV 열은 `case_id,candidate,reviewer,empathy,context,autonomy,grounding,usefulness,critical_error`다. `candidate`에는 X 또는 Y를, `critical_error`에는 0 또는 1을 기록한다.
+
+## v4 · 확인된 사연과 답변 검증
+
+직전 v3의 전략 프롬프트에 사용자가 확인한 사연을 저장하는 단계와 조건부 답변 검토를 더했다. 상담 세션 안에 사용자가 직접 말한 인용, 가장 최근 발화, 확인한 요약과 응답 모드를 저장한다. 같은 항목의 이전 발화와 최신 정정이 모두 있으면 최신 인용을 우선한다. 개인사전은 별도 출처로 전달한다.
+
+| 사용자가 원하는 것 | 서버에서 처리하는 방식 |
+|---|---|
+| 경청 | 선택한 경청을 우선한다. 확인 뒤에는 감정을 받아주는 짧은 답을 전달한다. |
+| 질문 | 의미나 사연을 이해하는 데 필요한 내용이 빠졌다면 먼저 질문한다. 답이 오기 전에는 확인과 카드 뽑기를 진행하지 않는다. |
+| 조언 | 확인 후 Python에서 뽑은 카드에 관점을 연결한다. 행동은 하나만 제안한다. |
+| 답변 검증 | 카드 순서·출처·행동 개수를 검사한다. 시점 충돌, 질문·과제 혼입, 이전 시도나 제약 등 검토 신호가 있으면 확인한 사연을 기준으로 한 번 재검토한다. |
+
+재검토 전에 동의와 사전 버전을 다시 확인한다. 검토 후에도 검사할 수 있는 오류가 남으면 답변을 게시하지 않고, 사용자가 다시 요청할 때 확인한 사연과 카드가 이어진다. 문장 검사 규칙으로 모든 문맥 오류를 식별할 수 있는 범위에는 한계가 있어, 사연 이해와 공감은 별도 채점으로 확인한다. [EVA 연구](https://aclanthology.org/2026.findings-acl.1/) · [SSAG 연구](https://arxiv.org/html/2411.06723v2#S5.SS1)
+
+| TDD 단계 | 구현 전 | 구현 후 |
+|---|---|---|
+| 확인된 사연 저장과 분기 | 원문 인용 전달, 경청 우선, 재시도 시 사연 저장 3건 RED | 상담 관련 66건 통과 · [구현 커밋](https://github.com/tarobo22/taro-back/commit/041852a00fee44b6601aeed3f5ff9dd3fb7e8f87) |
+| 조건부 재검토 | 의심 답변 검토·게시 차단 2건 RED | 전체 610건 통과 · OpenAPI 일치 · [구현 커밋](https://github.com/tarobo22/taro-back/commit/9d6d484980bc94e6429e10f799345098ed1b7e8c) · [FastAPI CI](https://github.com/tarobo22/taro-back/actions/runs/42357111624) |
+
+검토 조건이 정상적인 선택 제안까지 막은 기존 회귀 실패 4건은 제품 코드에서 해결했다. 기존 테스트 파일은 수정하지 않았다. 새 통합 테스트는 격리 PostgreSQL과 모의 Responses 응답으로 동작을 확인했다.
+
+별도 모의 실행에서 경청·질문·조언 3건을 v3와 v4에 각각 입력했다. v3는 5개, v4는 검토 1개를 포함해 6개의 모의 응답을 처리했다. 카드 일치, p95 계산, 토큰 비용 계산과 익명 채점 파일 생성을 확인했다.
+
+### 실제 GPT 품질·시간·비용 비교
+
+| 지표 | 이전 탐색 평가 · 별도 12건 | 직전 v3 · 50건 | v4 · 동일 50건 |
+|---|---:|---:|---:|
+| 최종 답변 평균 | 74.58 / 100 | 미측정 | 미측정 |
+| 최종 답변 90점 이상 | 0 / 12 | 미측정 | 미측정 |
+| 최종 단계 평균 / p95 | 8.29초 / 11.90초 | 미측정 | 미측정 |
+| 전체 토큰 비용 추정 | US$0.03713 · 변경 후 24호출 | 미측정 | 미측정 |
+| 실제 GPT 요청 | 24회 · 변경 후 | 0회 | 0회 |
+
+50건 실측은 현재 격리 GPT 평가 경로 연결을 확인하지 못해 대기 중이다. 이전 12건 수치는 다른 리비전과 사례의 기록이다. **v4의 90점 달성 여부는 미판정**이다.
+
+고정 한국어 합성 50건을 같은 GPT 스냅샷(`gpt-5-mini-2025-08-07`), 같은 카드 카탈로그와 추첨 결과로 비교한다. 두 버전에서 실제 서비스의 접수·워커·확정 경로를 사용한다. 사용자 입력 대기 시간은 제외하고, 호출과 전체 처리의 평균·p95를 기록한다. 토큰 단가와 캐시 사용량으로 비용을 산출하며 캐시 미반영 금액도 제공한다. [OpenAI 표준 토큰 단가](https://developers.openai.com/api/docs/pricing#text-tokens)
+
+한 번에 한 요청씩 실행하며 기존 110회, 후보 160회가 상한이다. 합격 기준은 사람 두 명의 블라인드 채점에서 평균 90점 이상, 90점 이상 응답 45/50건 이상, 중대 오류 0건이다. 답변 생성 실패는 50건 분모에 남긴다. [OpenAI 평가 가이드](https://developers.openai.com/api/docs/guides/evaluation-best-practices)
+
+### v3 대비 v4 재현 명령
+
+`$baselineSource`는 `4b25b4ddd44aae31d9aba9e74293d4ef01247df1`의 체크아웃이다. `$candidateSource`는 위 v4 구현 커밋 또는 그 후속 문서 커밋이다. 평가용으로 마이그레이션을 마친 빈 로컬 `_test` PostgreSQL DB를 `YEOUN_TEST_DATABASE_URL`에 지정한다. `$evalRelay`에는 실제 GPT에 연결된 격리 로컬 `/v1/responses` 주소를 사용한다.
+
+~~~powershell
+python tools/evaluate_counseling_story.py plan
+python tools/evaluate_counseling_story.py capture --arm baseline --source $baselineSource --relay $evalRelay --allow-paid --out .local/story-v3.json
+python tools/evaluate_counseling_story.py capture --arm candidate --source $candidateSource --relay $evalRelay --allow-paid --out .local/story-v4.json
+python tools/evaluate_counseling_story.py compare --baseline .local/story-v3.json --candidate .local/story-v4.json --review .local/story-review.json --mapping .local/story-mapping.json --out .local/story-performance.json
+python tools/evaluate_counseling_story.py score --review .local/story-review.json --mapping .local/story-mapping.json --ratings .local/story-ratings.csv --out .local/story-quality.json
+~~~
