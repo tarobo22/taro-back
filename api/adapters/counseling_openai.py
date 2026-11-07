@@ -5,7 +5,7 @@ import time
 
 import httpx
 
-from api.domain.counseling import Analysis, CounselResult, CounselingError, safe_public_url, strict_schema
+from api.domain.counseling import Analysis, CounselResult, FollowUpCounselResult, CounselingError, safe_public_url, strict_schema
 from api.adapters.counseling_strategy import exploration_prompt, reply_strategy, validate_reply_strategy
 
 COMMON = '''여운은 타로로 마음과 고민을 함께 살펴보는 서비스입니다.
@@ -43,6 +43,13 @@ facts는 기본 빈 배열이며 필요한 공개 상담 표현을 설명할 때
 자료가 없거나 검색이 실패했다면 사실을 채워 넣거나 URL·출처 ID를 만들어내지 않습니다.
 주어진 문맥에서 지금 할 수 있는 일을 함께 살펴봅니다. 긴 정보 설명보다 마음과 선택을 우선합니다.'''
 
+FOLLOW_UP = '''지금은 이미 뽑은 카드로 이어가는 고민 상담입니다. 최신 발화와 앞선 사연에 답하는 것이 중심입니다.
+카드 reflection은 각 60자 이내 한 문장으로만 씁니다. 상세 해설은 사용자가 카드를 눌렀을 때 볼 참고 내용입니다.
+empathy와 advice에는 카드 이름이나 뜻을 나열하지 않습니다. 카드의 일반론을 반복하지 말고 사용자가 방금 말한 어려움을 구체적으로 받아줍니다.
+advice는 쉬운 말로 2~3개의 짧은 문장, 180자 이내입니다. 지난번 조언을 해봤다면 어떤 점이 어려웠는지 고려합니다.
+새로 필요한 정보가 있을 때만 follow_up_question에 부담 없는 질문 하나를 씁니다. 이미 답한 질문을 반복하지 않습니다.
+카드 수가 5장이어도 본문을 늘리지 않습니다. 위의 경청/조언 단계 계약은 그대로 지킵니다.'''
+
 
 class OpenAICounselingModel:
     def __init__(self, client, model, key_provider, deadline=60, policy=None, reasoning_effort=None):
@@ -60,7 +67,9 @@ class OpenAICounselingModel:
     def compose(self, payload):
         mode = payload.get('response_mode', 'advice')
         policy = reply_strategy(mode)
-        result = self._structured(policy.render(COMPOSE), payload, CounselResult)
+        instructions = COMPOSE + ('\n' + FOLLOW_UP if payload.get('follow_up') else '')
+        schema = FollowUpCounselResult if payload.get('follow_up') else CounselResult
+        result = self._structured(policy.render(instructions), payload, schema)
         return validate_reply_strategy(result, mode)
 
     def search(self, query):

@@ -161,6 +161,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         package_name=store_rules['package_name'])
     readings = ReadingV2Service(lambda: PostgresReadingV2UnitOfWork(pool), data,
         owner_guard=owner_guard, allow_candidate=settings.allow_candidate_decks, deck_access=billing.deck_access)
+    counseling.reading_source = readings.get
     ai_jobs = AIJobsService(lambda: PostgresAIJobsUnitOfWork(pool), provider=result_provider,
         transcription_provider=transcription_provider, reading_source=readings, owner_guard=owner_guard,
         audio_store=audio_store or PrivateAudioStore(settings.private_audio_dir), policy=ai_policy)

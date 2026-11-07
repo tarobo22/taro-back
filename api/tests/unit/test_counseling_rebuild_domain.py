@@ -23,7 +23,7 @@ def test_model_cannot_store_a_definition_quoted_only_from_retrieved_context():
     assert personal_definitions(value, '반짝 때문에 속상해요') == []
 
 
-@pytest.mark.parametrize('count', [True, 0, 2, 5])
+@pytest.mark.parametrize('count', [True, 0, 2, 4, 6])
 def test_server_draw_rejects_unsupported_counts_before_calling_random_source(count):
     calls = []
     with pytest.raises(CounselingError, match='DECK_INVALID'):

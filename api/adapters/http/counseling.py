@@ -6,7 +6,7 @@ from fastapi.routing import APIRoute
 from pydantic import BaseModel,ConfigDict,Field,StrictBool,StrictInt
 
 from api.adapters.http.ai_jobs import idempotency_key
-from api.adapters.http.reading_v2 import SelectedCard
+from api.adapters.http.reading_v2 import SelectedCard as ReadingSelectedCard
 from api.domain.counseling import CounselingError,CounselResult
 
 
@@ -15,6 +15,11 @@ class Input(BaseModel):model_config=ConfigDict(extra='forbid')
 
 class SessionInput(Input):
     topic:Literal['relationship','work','self','daily','care','start']='care'
+    source_reading_id:UUID|None=None
+
+
+class SelectedCard(ReadingSelectedCard):
+    position:int=Field(ge=1,le=5)
 
 
 class MessageInput(Input):
@@ -29,7 +34,7 @@ class ConfirmationInput(Input):
     expected_version:StrictInt=Field(ge=1)
     consent_event_id:UUID
     web_search:StrictBool=False
-    card_count:Literal[1,3]=3
+    card_count:Literal[1,3,5]=3
 
 
 class DefinitionInput(Input):
@@ -117,12 +122,12 @@ def create_counseling_router(service,owner_dependency):
     @router.get('/capabilities')
     def capabilities():
         return dict(available=bool(service.model and service.model.available()),
-            policy_version=service.policy['policy_version'], card_counts=[1, 3],
+            policy_version=service.policy['policy_version'], card_counts=[1, 3, 5],
             glossary_limit=200, max_message_chars=2000)
 
     @router.post('/sessions', status_code=201, response_model=SessionView)
     def create(body:SessionInput, owner:Owner, key:Key):
-        return call(lambda: service.create(owner, key, body.topic))
+        return call(lambda: service.create(owner, key, body.topic, body.source_reading_id))
 
     @router.get('/sessions')
     def sessions(owner:Owner):

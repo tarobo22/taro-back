@@ -125,9 +125,9 @@ def validate_context_entry_versions(ids, versions):
         raise AIError('INVALID_CONTEXT_VERSIONS') from None
 
 
-def validate_result(value, kind, cards):
+def validate_result(value, kind, cards, result_model=AIResult):
     try:
-        result = AIResult.model_validate(value).model_dump()
+        result = result_model.model_validate(value).model_dump()
         if result['kind'] != kind:
             raise ValueError()
         if any(not action.strip() or len(action) > 300 for action in result['actions']):

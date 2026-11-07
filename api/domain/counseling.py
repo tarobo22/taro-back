@@ -8,7 +8,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from api.domain.ai_jobs import AIError, validate_result
+from api.domain.ai_jobs import AIError, AIResult, CardInsight, validate_result
 
 
 class CounselingError(ValueError):
@@ -60,12 +60,28 @@ class Reflection(StrictModel):
 class CounselResult(StrictModel):
     empathy:str=Field(min_length=1,max_length=160)
     facts:list[GroundedClaim]=Field(max_length=1)
-    tarot:list[Reflection]=Field(max_length=3)
+    tarot:list[Reflection]=Field(max_length=5)
     advice:str=Field(min_length=1,max_length=300)
     actions:list[str]=Field(max_length=3)
     follow_up_question:str|None=Field(max_length=200)
     safety_mode:Literal['standard','support']
 
+
+class ShortReflection(Reflection):
+    reflection:str=Field(min_length=1,max_length=60)
+
+
+class FollowUpCounselResult(CounselResult):
+    tarot:list[ShortReflection]=Field(max_length=5)
+    advice:str=Field(min_length=1,max_length=180)
+
+
+class CounselingCardInsight(CardInsight):
+    position:int=Field(strict=True,ge=1,le=5)
+
+
+class CounselingResultCheck(AIResult):
+    card_insights:list[CounselingCardInsight]=Field(max_length=5)
 
 
 def normalized(text):
@@ -73,7 +89,7 @@ def normalized(text):
 
 def draw_cards(cards,count=3,sample=None):
     catalog = {card['id']: card for card in cards}
-    if (type(count) is not int or count not in (1, 3) or len(cards) != 78
+    if (type(count) is not int or count not in (1, 3, 5) or len(cards) != 78
             or set(catalog) != set(range(78))
             or any(type(card['id']) is not int for card in cards)):
         raise CounselingError('DECK_INVALID', 503)
@@ -81,7 +97,8 @@ def draw_cards(cards,count=3,sample=None):
     if (len(selected) != count or len(set(selected)) != count
             or any(type(item) is not int or item not in catalog for item in selected)):
         raise CounselingError('DRAW_INVALID', 503)
-    labels = ('지금의 마음', '살펴볼 관점', '다음 한 걸음')
+    labels = (('지금의 마음', '마음에 걸리는 것', '도움이 되는 것', '살펴볼 관점', '다음 한 걸음')
+              if count == 5 else ('지금의 마음', '살펴볼 관점', '다음 한 걸음'))
     return [dict(card_id=card_id, position=index + 1, position_label=labels[index],
                  orientation='upright', card=catalog[card_id])
             for index, card_id in enumerate(selected)]
@@ -179,7 +196,7 @@ def grounded_result(value,cards,sources,mode='advice'):
             card_insights=insights, advice=result['advice'],
             actions=result['actions'] or ['편하게 이야기를 이어가세요.'], expression='listen',
             follow_up_questions=[result['follow_up_question']] if result['follow_up_question'] else [],
-            safety_mode=result['safety_mode']), 'tarot', cards)
+            safety_mode=result['safety_mode']), 'tarot', cards, result_model=CounselingResultCheck)
         return result
     except (ValueError, TypeError, KeyError, AIError):
         raise CounselingError('OUTPUT_INVALID', 502,

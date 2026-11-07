@@ -4,7 +4,7 @@ import time
 from uuid import uuid4
 
 from api.application.counseling_ports import CounselingModel, CounselingStore
-from api.domain.ai_jobs import fingerprint, load_policy, safety_result
+from api.domain.ai_jobs import AIError, fingerprint, load_policy, safety_result
 from api.domain.counseling import (Analysis, CounselingError, draw_cards, grounded_result,
     personal_definitions, retrieve_definitions, search_queries, urgent_risk)
 
@@ -33,9 +33,10 @@ def conversation_definitions(state):
 
 
 class CounselingService:
-    def __init__(self, store: CounselingStore, model: CounselingModel, cards, policy=None, sample=None):
+    def __init__(self, store: CounselingStore, model: CounselingModel, cards, policy=None, sample=None, reading_source=None):
         self.store, self.model, self.cards = store, model, cards
         self.policy, self.sample = {**load_policy(), **(policy or {})}, sample
+        self.reading_source = reading_source
 
     def _session(self, repo, owner, session_id):
         row = repo.session(owner, session_id)
@@ -60,15 +61,31 @@ class CounselingService:
                  for key in ('id', 'state', 'error_code')} if job else None)
         return view
 
-    def create(self, owner, key, topic='care'):
+    def create(self, owner, key, topic='care', source_reading_id=None):
         if topic not in ('relationship', 'work', 'self', 'daily', 'care', 'start'):
             raise CounselingError('INVALID_TOPIC')
+        initial = {'phase': 'listening', 'history': []}
+        if source_reading_id is not None:
+            if self.reading_source is None:
+                raise CounselingError('READING_UNAVAILABLE', 503)
+            try:
+                source = self.reading_source(owner, source_reading_id)
+            except AIError as error:
+                raise CounselingError(error.code, error.status, error.message) from None
+            if not source or not source['selected_cards']:
+                raise CounselingError('READING_NOT_READY', 409, '먼저 카드를 골라 주세요.')
+            previous = (source.get('result') or {}).get('advice')
+            initial.update(source_reading_id=str(source_reading_id), cards=source['selected_cards'],
+                draw=dict(id=str(source_reading_id), method='saved_reading', at=source['created_at'], without_replacement=True),
+                has_prior_advice=True,
+                history=([dict(role='user', text=source['question'])] if source.get('question') else []) +
+                        ([dict(role='assistant', text=previous)] if previous else []))
         with self.store.transaction(owner) as repo:
             row = repo.session_for_key(owner, key)
-            if row and row['topic'] != topic:
+            if row and (row['topic'] != topic or row['state'].get('source_reading_id') != initial.get('source_reading_id')):
                 raise CounselingError('IDEMPOTENCY_CONFLICT', 409)
             if not row:
-                row = repo.create_session(owner, uuid4(), topic, {'phase': 'listening', 'history': []}, key)
+                row = repo.create_session(owner, uuid4(), topic, initial, key)
             return self._view(repo, row)
 
     def get(self, owner, session_id):
@@ -121,7 +138,7 @@ class CounselingService:
                 raise CounselingError('INVALID_MESSAGE', 422, '하고 싶은 이야기를 적어주세요.')
         elif payload.get('confirmed') is not True:
             raise CounselingError('CONFIRMATION_REQUIRED', 422, '이해한 내용이 맞는지 먼저 확인해 주세요.')
-        elif type(payload.get('card_count', 3)) is not int or payload.get('card_count', 3) not in (1, 3):
+        elif type(payload.get('card_count', 3)) is not int or payload.get('card_count', 3) not in (1, 3, 5):
             raise CounselingError('INVALID_CARD_COUNT')
         identity = fingerprint([str(session_id), kind, payload])
         with self.store.transaction(owner) as repo:
@@ -197,6 +214,9 @@ class CounselingService:
         if not question:
             question = '' if analysis.understanding.rstrip().endswith(('?', '？')) else '제가 이해한 내용이 맞을까요?'
         following = dict(phase='clarifying' if analysis.clarification_question else 'confirmation',
+            source_reading_id=state.get('source_reading_id'), has_prior_advice=state.get('has_prior_advice', False),
+            cards=[] if analysis.response_mode == 'listen' else state.get('cards') or state.get('retained_cards', []),
+            retained_cards=state.get('cards') or state.get('retained_cards', []), draw=state.get('draw'),
             analysis=analysis.model_dump(), search_queries=queries,
             session_definitions=(state.get('session_definitions', []) + (proposals if temporary else []))[-20:],
             glossary_used=[public_definition(entry) for entry in retrieved],
@@ -252,9 +272,9 @@ class CounselingService:
         self._guard(command, revision)
         result = grounded_result(self.model.compose(dict(
             understanding=state['analysis']['understanding'], perspective=state['analysis'].get('perspective'),
-            response_mode=mode, history=bounded_history(state.get('history', [])),
+            response_mode=mode, follow_up=bool(state.get('has_prior_advice')), history=bounded_history(state.get('history', [])),
             cards=cards, sources=sources, search_status=status)), cards, sources, mode)
-        return dict(state, phase='advice', sources=sources, result=result, search_status=status,
+        return dict(state, phase='advice', sources=sources, result=result, search_status=status, has_prior_advice=True,
             history=bounded_history(state.get('history', []) + [dict(role='assistant',
                 text=' '.join((result['empathy'], result['advice'], *result['actions'])))]))
 
