@@ -182,19 +182,20 @@ class CounselingService:
     @staticmethod
     def _support(history, text):
         result = safety_result('chat', [])
-        return dict(phase='support', history=history + [dict(role='user', text=text)], result=dict(
+        reply = ' '.join(filter(None, (result['empathy'], result['advice'], *result['actions'], *result['follow_up_questions'])))
+        return dict(phase='support', history=history + [dict(role='user', text=text), dict(role='assistant', text=reply)], result=dict(
             empathy=result['empathy'], facts=[], tarot=[], advice=result['advice'], actions=result['actions'],
             follow_up_question=result['follow_up_questions'][0], safety_mode='support'))
 
     def _analyze(self, command, state, definitions, revision):
         text = command['payload']['text'].strip()
-        history = bounded_history(state.get('history', []))
+        history = state.get('history', [])
         if urgent_risk(text):
             return self._support(history, text), []
         known = definitions + conversation_definitions(state)
         retrieved = retrieve_definitions(text, known)
         self._guard(command, revision)
-        analysis = Analysis.model_validate(self.model.analyze(dict(text=text, history=history,
+        analysis = Analysis.model_validate(self.model.analyze(dict(text=text, history=bounded_history(history),
             dictionary=[public_definition(entry) for entry in retrieved])))
         if analysis.needs_immediate_support:
             return self._support(history, text), []
@@ -221,8 +222,8 @@ class CounselingService:
             session_definitions=(state.get('session_definitions', []) + (proposals if temporary else []))[-20:],
             glossary_used=[public_definition(entry) for entry in retrieved],
             evidence_cache=state.get('evidence_cache', []),
-            history=bounded_history(history + [dict(role='user', text=text), dict(role='assistant',
-                text=' '.join(filter(None, (analysis.acknowledgement, analysis.understanding, question))))]))
+            history=history + [dict(role='user', text=text), dict(role='assistant',
+                text=' '.join(filter(None, (analysis.acknowledgement, analysis.understanding, question))))])
         return following, [] if temporary else proposals
 
     def _save_cache(self, command, state, revision):
@@ -275,8 +276,8 @@ class CounselingService:
             response_mode=mode, follow_up=bool(state.get('has_prior_advice')), history=bounded_history(state.get('history', [])),
             cards=cards, sources=sources, search_status=status)), cards, sources, mode)
         return dict(state, phase='advice', sources=sources, result=result, search_status=status, has_prior_advice=True,
-            history=bounded_history(state.get('history', []) + [dict(role='assistant',
-                text=' '.join((result['empathy'], result['advice'], *result['actions'])))]))
+            history=state.get('history', []) + [dict(role='assistant',
+                text=' '.join(filter(None, (result['empathy'], result['advice'], *result['actions'], result['follow_up_question']))))])
 
     def run_next(self):
         meta = self.store.claim()
