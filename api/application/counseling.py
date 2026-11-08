@@ -277,6 +277,8 @@ class CounselingService:
             self._save_cache(command, state, revision)
         self._guard(command, revision)
         result = grounded_result(self.model.compose(dict(
+            latest_user_text=next((item['text'] for item in reversed(state.get('history', []))
+                                   if item['role'] == 'user'), ''),
             understanding=state['analysis']['understanding'], perspective=state['analysis'].get('perspective'),
             response_mode=mode, follow_up=bool(state.get('has_prior_advice')), history=bounded_history(state.get('history', [])),
             cards=cards, sources=sources, search_status=status)), cards, sources, mode)
