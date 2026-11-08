@@ -282,6 +282,10 @@ class CounselingService:
             understanding=state['analysis']['understanding'], perspective=state['analysis'].get('perspective'),
             response_mode=mode, follow_up=bool(state.get('has_prior_advice')), history=bounded_history(state.get('history', [])),
             cards=cards, sources=sources, search_status=status)), cards, sources, mode)
+        # The user already saw this acknowledgement while cards were prepared.
+        # Do not let a second generation rewrite its subject or event status.
+        if acknowledgement := state['analysis'].get('acknowledgement'):
+            result['empathy'] = acknowledgement
         return dict(state, phase='advice', sources=sources, result=result, search_status=status, has_prior_advice=True,
             history=state.get('history', []) + [dict(role='assistant',
                 text=' '.join(filter(None, (result['empathy'], result['advice'], *result['actions'], result['follow_up_question']))))])

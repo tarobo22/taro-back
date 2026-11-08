@@ -8,7 +8,7 @@ import json
 
 from api.application.counseling import CounselingService, memory_revision
 from api.adapters.counseling_openai import OpenAICounselingModel
-from api.domain.counseling import Analysis
+from api.domain.counseling import Analysis, draw_cards
 
 
 @pytest.mark.parametrize('text', [
@@ -88,3 +88,27 @@ def test_listening_needs_an_actual_user_request_not_an_inferred_emotion(text, qu
     assert result['response_mode'] == expected
     assert 'listening_request_quote' not in result
     assert len(requests) == 1
+
+
+def test_composition_cannot_rewrite_the_initial_acknowledgement_as_an_existing_event():
+    selected = draw_cards([dict(id=i, name_ko=str(i), basic_meaning='생활의 균형') for i in range(78)], 1,
+                          sample=lambda items, count: items[:count])
+    acknowledgement = '동생이 쓰리잡을 해야 한다니 걱정되시겠어요.'
+
+    class Model:
+        def compose(self, payload):
+            return dict(empathy='동생이 쓰리잡을 하고 있다니 걱정되시겠어요.', facts=[],
+                        tarot=[dict(card_id=selected[0]['card_id'], reflection='감당할 수 있는 범위를 살펴봐요.')],
+                        advice='동생에게 어떤 도움이 필요한지 물어봐도 좋아요.',
+                        actions=['동생에게 안부 문자 보내기'], follow_up_question=None, safety_mode='standard')
+
+    service = CounselingService(None, Model(), [])
+    service._guard = lambda *args: None
+    state = dict(analysis=dict(acknowledgement=acknowledgement, understanding='동생이 쓰리잡을 해야 한다.',
+                               response_mode='advice'), cards=selected,
+                 history=[dict(role='user', text='동생이 쓰리잡을 뛰어야 한대. 걱정돼')])
+    result = service._reply({'payload': {}}, state, [], memory_revision([]))
+    assert result['result']['empathy'] == acknowledgement
+    assert result['result']['tarot'][0]['card_id'] == selected[0]['card_id']
+    assert acknowledgement in result['history'][-1]['text']
+    assert '하고 있다니' not in result['history'][-1]['text']
