@@ -6,6 +6,7 @@ Requires=docker.service
 
 [Service]
 Type=oneshot
+EnvironmentFile=/etc/yeoun/site.env
 ExecStart=/usr/bin/python3 /usr/local/lib/yeoun-deploy/pull_release.py
 TimeoutStartSec=15min
 User=root

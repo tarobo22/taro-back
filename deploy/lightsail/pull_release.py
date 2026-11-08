@@ -14,7 +14,6 @@ import urllib.request
 
 ROOT = Path('/opt/yeoun')
 STATE = Path('/var/lib/yeoun-deploy')
-PUBLIC = 'https://yeoun-43-201-209-249.sslip.io'
 REPOS = {'api': 'tarobo22/taro-back', 'web': 'tarobo22/taro-raect'}
 ASSETS = {'api': 'api-image.tar.gz', 'web': 'web.tar.gz'}
 COMPOSE = ['docker', 'compose', '--env-file', '/etc/yeoun/runtime.env',
@@ -120,7 +119,7 @@ def write_json(path, data, mode=0o644):
     temporary.replace(path)
 
 
-def deploy_web(item, archive):
+def deploy_web(item, archive, public_base):
     www = ROOT / 'www'
     target = www / 'releases' / item['tag']
     extract_web_archive(archive, target)
@@ -131,10 +130,10 @@ def deploy_web(item, archive):
     next_link.unlink(missing_ok=True)
     next_link.symlink_to(Path('releases') / item['tag'])
     next_link.replace(www / 'current')
-    wait_url(PUBLIC + '/')
+    wait_url(public_base + '/')
 
 
-def deploy_api(item, archive):
+def deploy_api(item, archive, public_base):
     image = 'yeoun-api:' + item['sha']
     run(['docker', 'load', '-i', str(archive)], timeout=300)
     run(['docker', 'image', 'inspect', image, '--format', '{{.Id}}'])
@@ -166,7 +165,7 @@ def deploy_api(item, archive):
     next_runtime.chmod(0o600)
     next_runtime.replace(runtime)
     run(COMPOSE + ['up', '-d', '--no-deps', '--no-build', 'api'])
-    wait_url(PUBLIC + '/api/health', timeout=90)
+    wait_url(public_base + '/api/health', timeout=90)
     active_image = run(['docker', 'inspect', 'yeoun-demo-api-1', '--format', '{{.Config.Image}}'])
     if active_image != image:
         raise RuntimeError('Running API does not match the released image')
@@ -174,6 +173,10 @@ def deploy_api(item, archive):
 
 def main():
     import fcntl  # Linux service only; pure archive validation is portable.
+    host = os.environ.get('YEOUN_HOST', '').strip()
+    if not re.fullmatch(r'[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+', host):
+        raise SystemExit('Set YEOUN_HOST to the public hostname in /etc/yeoun/site.env.')
+    public_base = 'https://' + host
     STATE.mkdir(mode=0o700, parents=True, exist_ok=True)
     with (STATE / 'lock').open('w') as lock:
         try:
@@ -198,7 +201,7 @@ def main():
                 staging = STATE / item['tag']
                 staging.mkdir(exist_ok=True)
                 archive = download(item, staging)
-                (deploy_api if component == 'api' else deploy_web)(item, archive)
+                (deploy_api if component == 'api' else deploy_web)(item, archive, public_base)
                 status[component] = {'sha': item['sha'], 'tag': item['tag'], 'status': 'deployed',
                                      'deployed_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}
                 status.pop(component + '_error', None)

@@ -1,12 +1,20 @@
 """Make GitHub Actions fail unless the public server has activated this release."""
 import json
+import os
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
+base = os.environ.get('YEOUN_PUBLIC_URL', '').strip().rstrip('/')
+origin = urllib.parse.urlsplit(base)
+if (origin.scheme != 'https' or not origin.hostname or origin.username is not None
+        or origin.path or origin.query or origin.fragment):
+    raise SystemExit('Set YEOUN_PUBLIC_URL to the public HTTPS origin.')
+if sys.argv[1:] == ['--check-config']:
+    raise SystemExit(0)
 component, tag = sys.argv[1:]
-base = 'https://yeoun-43-201-209-249.sslip.io'
 for attempt in range(60):
     try:
         req = urllib.request.Request(base + '/deployment-status.json', headers={'Cache-Control': 'no-cache'})

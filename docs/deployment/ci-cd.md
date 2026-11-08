@@ -30,6 +30,8 @@ GPT·DB 키는 기존 서버의 root 전용 환경파일에만 둔다. Android �
 
 ## 설치·운영
 
+세 저장소의 GitHub Actions 변수 `YEOUN_PUBLIC_URL`에 같은 공개 HTTPS 주소를 설정합니다. 주소에는 `/api` 경로를 붙이지 않습니다. 웹과 API의 릴리스 확인, Android와 iOS의 번들·검증이 이 값에서 주소를 가져옵니다. 서버에서는 기존 `/etc/yeoun/site.env`의 `YEOUN_HOST`에 같은 호스트명을 두고 Caddy와 배포 서비스가 함께 읽습니다.
+
 이미 배포된 여운 서버에 `deploy/lightsail/`의 CI 설치 파일을 별도 staging 폴더로 전송한 뒤 `sudo sh <staging>/install-ci.sh`를 한 번 실행한다. 이 스크립트는 최초 웹을 보존하고 Caddy 설정과 배포 타이머만 설치한다. 최초 인프라 배포는 `README.md`를 따른다.
 
 자동 배포 대상은 웹 산출물과 API 이미지다. 배포 에이전트·Compose·Caddy 설정을 변경할 때는 해당 파일을 검토해 서버에 다시 설치해야 한다. AWS 인프라 생성·변경을 자동 실행하는 파이프라인은 아니다.

@@ -67,8 +67,12 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
+    env:
+      YEOUN_PUBLIC_URL: ${{ vars.YEOUN_PUBLIC_URL }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Validate public deployment address
+        run: python deploy/lightsail/wait_deployed.py --check-config
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           name: api-image
@@ -85,4 +89,4 @@ jobs:
         run: python deploy/lightsail/wait_deployed.py api "$RELEASE_TAG"
       - name: Deployment summary
         if: steps.publish.outputs.tag != ''
-        run: echo 'Deployed and verified at https://yeoun-43-201-209-249.sslip.io/' >> "$GITHUB_STEP_SUMMARY"
+        run: printf 'Deployed and verified at %s\n' "$YEOUN_PUBLIC_URL" >> "$GITHUB_STEP_SUMMARY"
