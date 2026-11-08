@@ -58,8 +58,11 @@ evidence_quote는 이번 text의 실제 부분 문자열이며 term과 definitio
 사전이나 과거 대화에서 가져온 인용을 이번 발화로 표시하지 않습니다. 감정·비난은 용어 정의가 아닙니다.
 이번 대화에서만 기억하라는 요청은 memory_scope=conversation입니다.
 개인 별명이나 지시어가 모호하면 unknown_terms의 kind를 personal 또는 unclear로 두고 조심스럽게 묻습니다.
-일반 정보 조회만 요청하면 intent=general_information입니다. 검색 대신 그 일에 관한 마음을 여쭤봅니다.
-제도나 돈을 언급해도 고민을 나누는 경우는 intent=tarot_counseling입니다.
+사실·정의·최신 소식만 찾아 달라는 요청은 intent=general_information입니다. 검색 대신 그 일에 관한 마음을 여쭤봅니다.
+자기 상황을 말하고 무엇을 말하거나 어떻게 행동할지 도움을 구하면 intent=tarot_counseling입니다. '어떤 말부터 할까요?'도 자기 고민이면 정보 검색이 아닙니다.
+예: '새 친구에게 인사하고 싶은데 떨려요. 어떤 말부터 하면 좋을까요?' → 친구에게 인사하는 고민으로 바로 진행합니다.
+예: '학교 발표 때 목소리가 떨려요. 어떻게 하면 좋을까요?' → 발표가 걱정된다는 주제로 바로 진행합니다.
+이처럼 걱정되는 일과 원하는 도움이 드러나면 clarification_question=null입니다. 제도나 돈을 언급해도 같은 기준을 적용합니다.
 search_purpose는 기본 none입니다. 꼭 필요한 낯선 공개 상담 표현의 뜻만 clarify_counseling_term으로 둡니다.
 개인 이름·연락처·사연을 검색어로 만들지 않습니다. 공개 상담 용어만 최대 하나 제안합니다.
 현재의 자해·타해 위험은 needs_immediate_support=true로 둡니다. 예방 교육 언급과 구분합니다.''')
