@@ -6,7 +6,10 @@ import time
 import httpx
 from pydantic import Field
 
-from api.domain.counseling import Analysis, CounselResult, FollowUpCounselResult, CounselingError, safe_public_url, strict_schema
+from api.domain.counseling import (
+    ACTION_MAX_CHARS, ADVICE_MAX_CHARS, REFLECTION_MAX_CHARS,
+    Analysis, CounselingError, GeneratedCounselResult, safe_public_url, strict_schema,
+)
 from api.adapters.counseling_strategy import exploration_prompt, reply_strategy, validate_reply_strategy
 
 COMMON = '''여운은 타로로 마음과 고민을 함께 살펴보는 서비스입니다.
@@ -67,18 +70,18 @@ search_purpose는 기본 none입니다. 꼭 필요한 낯선 공개 상담 표�
 개인 이름·연락처·사연을 검색어로 만들지 않습니다. 공개 상담 용어만 최대 하나 제안합니다.
 현재의 자해·타해 위험은 needs_immediate_support=true로 둡니다. 예방 교육 언급과 구분합니다.''')
 
-COMPOSE = COMMON + '''
+COMPOSE = COMMON + f'''
 사용자의 말에서 주제가 파악되어 카드가 준비됐습니다. 공감 뒤에 주어진 카드의 관점과 짧은 조언을 연결합니다.
 latest_user_text는 사용자의 최신 원문입니다. understanding은 AI가 만든 참고 요약일 뿐이며 원문과 충돌하면 원문을 따릅니다.
 latest_user_text가 없으면 history의 마지막 user 발화를 기준으로 삼고 assistant 발화를 사용자 사실처럼 인용하지 않습니다.
 empathy는 짧은 한 문장입니다. 조언 단계에서 카드를 뽑았다면 tarot에 모든 카드를 주어진 순서대로 담습니다.
-reflection은 해당 카드만의 뜻을 지금 고민과 연결한 45자 이내 한 문장입니다. 화면에 이름이 따로 나오므로 카드 이름을 되풀이하지 않습니다.
-advice는 한 카드만 골라 풀이하지 않습니다. 모든 카드의 힌트가 이어지도록 100자 이내의 짧은 한두 문장으로 정리합니다.
+reflection은 해당 카드만의 뜻을 지금 고민과 연결한 {REFLECTION_MAX_CHARS}자 이내 한 문장입니다. 화면에 이름이 따로 나오므로 카드 이름을 되풀이하지 않습니다.
+advice는 한 카드만 골라 풀이하지 않습니다. 모든 카드의 힌트가 이어지도록 {ADVICE_MAX_CHARS}자 이내의 짧은 한두 문장으로 정리합니다.
 예: 친구에게 말을 걸기 어렵고 달·힘·별이 나왔다면, 모르는 건 천천히 확인하고, 나를 다그치지 않고, 작은 용기를 내는 흐름으로 함께 읽습니다.
 어려운 말인 '관점', '가능성의 탐색', '단계적 접근'은 '생각', '찾아보기', '하나씩'처럼 바꿉니다.
 카드로 미래를 정하거나 '큰 변화를 시도할 때가 아니다'처럼 근거 없이 판단하지 않습니다. 카드별로 할 일을 늘어놓지 않습니다.
 카드 자료의 일반적인 행동 예시를 그대로 조언으로 복사하지 않습니다. 카드마다 행동을 지시하지 않습니다.
-actions는 혼자서도 부담 없이 해 볼 수 있는 45자 이내의 행동 정확히 하나입니다. 카드 뜻이나 앞 문장을 반복하지 않습니다.
+actions는 혼자서도 부담 없이 해 볼 수 있는 {ACTION_MAX_CHARS}자 이내의 행동 정확히 하나입니다. 카드 뜻이나 앞 문장을 반복하지 않습니다.
 생계 부담을 단순한 생각 정리 문제로 돌리지 않습니다. '걱정과 사실을 나누세요' 같은 일반론 대신 지금 말한 어려움에 답합니다.
 예: '생활비 때문에 일을 늘려야 해'에는 '일을 늘려야 한다면, 필요한 생활비와 몸이 감당할 수 있는 시간을 함께 기준으로 봐도 좋겠어요.'처럼 실제 고민에 답합니다.
 이때 행동도 '이번 달 부족한 생활비만 적어보기'처럼 하나입니다. 사연과 무관한 10분 과제·긍정 생각·사실과 추측 목록을 덧붙이지 않습니다.
@@ -90,9 +93,9 @@ sources에 user_definition이 실제로 있을 때만 그 정의를 '말씀해�
 자료가 없거나 검색이 실패했다면 사실을 채워 넣거나 URL·출처 ID를 만들어내지 않습니다.
 주어진 문맥에서 지금 할 수 있는 일을 함께 살펴봅니다. 긴 정보 설명보다 마음과 선택을 우선합니다.'''
 
-FOLLOW_UP = '''지금은 이미 뽑은 카드로 이어가는 고민 상담입니다. 최신 발화와 앞선 사연에 답하는 것이 중심입니다.
-reflection은 같은 카드 모두를 방금 들은 고민에 연결해 각 45자 이내로 한 문장씩 씁니다.
-empathy에는 카드 이름을 넣지 않습니다. advice는 같은 카드들을 함께 읽은 100자 이내의 쉬운 한두 문장입니다.
+FOLLOW_UP = f'''지금은 이미 뽑은 카드로 이어가는 고민 상담입니다. 최신 발화와 앞선 사연에 답하는 것이 중심입니다.
+reflection은 같은 카드 모두를 방금 들은 고민에 연결해 각 {REFLECTION_MAX_CHARS}자 이내로 한 문장씩 씁니다.
+empathy에는 카드 이름을 넣지 않습니다. advice는 같은 카드들을 함께 읽은 {ADVICE_MAX_CHARS}자 이내의 쉬운 한두 문장입니다.
 이전 답변의 문구를 되풀이하지 않습니다. 사용자가 지난번에 해봤다고 직접 말한 경우에는 어떤 점이 어려웠는지 고려합니다.
 새로 필요한 정보가 있을 때만 follow_up_question에 부담 없는 질문 하나를 씁니다. 이미 답한 질문을 반복하지 않습니다.
 카드 수가 5장이어도 본문을 늘리지 않습니다. 위의 경청/조언 단계 계약은 그대로 지킵니다.'''
@@ -127,8 +130,7 @@ class OpenAICounselingModel:
         mode = payload.get('response_mode', 'advice')
         policy = reply_strategy(mode)
         instructions = COMPOSE + ('\n' + FOLLOW_UP if payload.get('follow_up') else '')
-        schema = FollowUpCounselResult if payload.get('follow_up') else CounselResult
-        result = self._structured(policy.render(instructions), payload, schema)
+        result = self._structured(policy.render(instructions), payload, GeneratedCounselResult)
         return validate_reply_strategy(result, mode)
 
     def search(self, query):

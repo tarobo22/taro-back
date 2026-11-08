@@ -36,6 +36,17 @@ class PostgresCounselingRepository:
             'SELECT * FROM counseling_sessions WHERE owner_id=%s ORDER BY updated_at DESC,id DESC LIMIT 50',
             (owner,)).fetchall()
 
+    def sessions_using_definition(self, owner, definition_id):
+        return self.connection.execute('''
+            SELECT * FROM counseling_sessions WHERE owner_id=%s AND (
+                (state->'glossary_ids') @> %s OR
+                (state->'glossary_used') @> %s OR
+                (state->'sources') @> %s OR
+                (state->'history') @> %s
+            )''', (owner, Jsonb([definition_id]), Jsonb([{'id': definition_id}]),
+                   Jsonb([{'id': f'personal:{definition_id}'}]),
+                   Jsonb([{'glossary_ids': [definition_id]}]))).fetchall()
+
     def delete_session(self, owner, session_id):
         self.connection.execute('DELETE FROM counseling_sessions WHERE owner_id=%s AND id=%s', (owner, session_id))
 

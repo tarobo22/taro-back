@@ -4,7 +4,7 @@ import re
 import unicodedata
 import ipaddress
 from urllib.parse import urlsplit
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
@@ -67,13 +67,21 @@ class CounselResult(StrictModel):
     safety_mode:Literal['standard','support']
 
 
-class ShortReflection(Reflection):
-    reflection:str=Field(min_length=1,max_length=60)
+REFLECTION_MAX_CHARS = 45
+ADVICE_MAX_CHARS = 100
+ACTION_MAX_CHARS = 45
 
 
-class FollowUpCounselResult(CounselResult):
-    tarot:list[ShortReflection]=Field(max_length=5)
-    advice:str=Field(min_length=1,max_length=180)
+class GeneratedReflection(Reflection):
+    reflection: str = Field(min_length=1, max_length=REFLECTION_MAX_CHARS)
+
+
+class GeneratedCounselResult(CounselResult):
+    """New model output must fit the UI, while saved replies keep their original contract."""
+
+    tarot: list[GeneratedReflection] = Field(max_length=5)
+    advice: str = Field(min_length=1, max_length=ADVICE_MAX_CHARS)
+    actions: list[Annotated[str, Field(min_length=1, max_length=ACTION_MAX_CHARS)]] = Field(max_length=3)
 
 
 class CounselingCardInsight(CardInsight):
@@ -169,7 +177,7 @@ def strict_schema(model):
 
 def grounded_result(value,cards,sources,mode='advice'):
     try:
-        result = CounselResult.model_validate(value).model_dump()
+        result = GeneratedCounselResult.model_validate(value).model_dump()
         if mode not in ('advice', 'listen'):
             raise ValueError('Unknown response mode')
         if [item['card_id'] for item in result['tarot']] != [item['card_id'] for item in cards]:
@@ -179,7 +187,7 @@ def grounded_result(value,cards,sources,mode='advice'):
             raise ValueError('Unknown factual reference')
         if any(item['kind'] == 'web' and not safe_public_url(item.get('url')) for item in sources):
             raise ValueError('Private reference URL')
-        if any(not action.strip() or len(action) > 120 for action in result['actions']):
+        if any(not action.strip() for action in result['actions']):
             raise ValueError('Invalid action')
         if not result['empathy'].strip() or not result['advice'].strip():
             raise ValueError('Empty response')

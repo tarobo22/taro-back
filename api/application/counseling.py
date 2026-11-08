@@ -27,6 +27,23 @@ def bounded_history(history):
     return list(reversed(selected))
 
 
+def public_history(history):
+    return [dict(role=item['role'], text=item['text']) for item in history]
+
+
+def referenced_definitions(history, definitions):
+    return {key for item in history for key in item.get('glossary_ids', [])} | {
+        str(item['id']) for item in definitions if not str(item['id']).startswith('session:')
+    }
+
+
+def assistant_message(text, definition_ids):
+    message = dict(role='assistant', text=text)
+    if definition_ids:
+        message['glossary_ids'] = sorted(definition_ids)
+    return message
+
+
 def conversation_definitions(state):
     return [dict(id=f'session:{index}', version=1, **item)
             for index, item in enumerate(state.get('session_definitions', []))]
@@ -50,8 +67,9 @@ class CounselingService:
         job = repo.latest_command(row['owner_id'], row['id'])
         view = {key: state.get(key, default) for key, default in {
             'phase': 'listening', 'search_queries': [], 'search_status': 'not_requested',
-            'cards': [], 'draw': None, 'result': None, 'glossary_used': [], 'history': []}.items()}
+            'cards': [], 'draw': None, 'result': None, 'glossary_used': []}.items()}
         view.update(id=str(row['id']), topic=row['topic'], version=row['version'],
+            history=public_history(state.get('history', [])),
             acknowledgement=analysis.get('acknowledgement', ''), understanding=analysis.get('understanding'),
             perspective=analysis.get('perspective'), response_mode=analysis.get('response_mode', 'advice'),
             clarification_question=analysis.get('clarification_question'),
@@ -120,14 +138,27 @@ class CounselingService:
             if entry is None:
                 raise CounselingError('NOT_FOUND', 404)
             repo.delete_definition(owner, definition_id)
-            term = entry['term']
-            for row in repo.sessions(owner):
-                state = row['state']
-                used = any(item['term'] == term for item in state.get('glossary_used', []))
-                mentioned = any(term in item['text'] for item in state.get('history', []))
-                if used or mentioned:
-                    repo.update_session(owner, row['id'], dict(phase='listening',
-                        history=[item for item in state.get('history', []) if term not in item['text']]))
+            key = str(definition_id)
+            for row in repo.sessions_using_definition(owner, key):
+                state = dict(row['state'])
+                history = state.get('history', [])
+                current_uses_definition = (
+                    key in state.get('glossary_ids', [])
+                    or any(item['id'] == key for item in state.get('glossary_used', []))
+                    or any(item['id'] == f'personal:{key}' for item in state.get('sources', []))
+                )
+                if current_uses_definition:
+                    # Older sessions recorded current references, but did not tag each reply.
+                    if 'glossary_ids' not in state and history and history[-1]['role'] == 'assistant':
+                        history = history[:-1]
+                    for field in ('analysis', 'result', 'sources', 'glossary_used', 'glossary_ids',
+                                  'memory_revision', 'search_queries', 'search_status'):
+                        state.pop(field, None)
+                    state['phase'] = 'listening'
+                state['history'] = [
+                    item for item in history if key not in item.get('glossary_ids', [])
+                ]
+                repo.update_session(owner, row['id'], state)
 
     def enqueue(self, owner, session_id, key, kind, payload):
         if kind not in ('message', 'confirm'):
@@ -198,8 +229,10 @@ class CounselingService:
             return self._support(history, text), []
         known = definitions + conversation_definitions(state)
         retrieved = retrieve_definitions(text, known)
+        context = bounded_history(history)
+        definition_ids = referenced_definitions(context, retrieved)
         self._guard(command, revision)
-        analysis = Analysis.model_validate(self.model.analyze(dict(text=text, history=bounded_history(history),
+        analysis = Analysis.model_validate(self.model.analyze(dict(text=text, history=public_history(context),
             dictionary=[public_definition(entry) for entry in retrieved])))
         if analysis.needs_immediate_support:
             return self._support(history, text), []
@@ -218,8 +251,10 @@ class CounselingService:
         question = analysis.clarification_question
         if not question and not command['payload'].get('auto_read'):
             question = '' if analysis.understanding.rstrip().endswith(('?', '？')) else '제가 이해한 내용이 맞을까요?'
-        assistant_history = [] if command['payload'].get('auto_read') and not analysis.clarification_question else [dict(role='assistant',
-            text=' '.join(filter(None, (analysis.acknowledgement, analysis.understanding, question))))]
+        assistant_history = []
+        if not command['payload'].get('auto_read') or analysis.clarification_question:
+            summary = ' '.join(filter(None, (analysis.acknowledgement, analysis.understanding, question)))
+            assistant_history.append(assistant_message(summary, definition_ids))
         following = dict(phase='clarifying' if analysis.clarification_question else 'confirmation',
             source_reading_id=state.get('source_reading_id'), has_prior_advice=state.get('has_prior_advice', False),
             cards=[] if analysis.response_mode == 'listen' else state.get('cards') or state.get('retained_cards', []),
@@ -227,6 +262,7 @@ class CounselingService:
             analysis=analysis.model_dump(), search_queries=queries,
             session_definitions=(state.get('session_definitions', []) + (proposals if temporary else []))[-20:],
             glossary_used=[public_definition(entry) for entry in retrieved],
+            glossary_ids=sorted(definition_ids),
             evidence_cache=state.get('evidence_cache', []),
             history=history + [dict(role='user', text=text)] + assistant_history)
         return following, [] if temporary else proposals
@@ -241,7 +277,10 @@ class CounselingService:
     def _reply(self, command, state, definitions, revision):
         mode = state['analysis'].get('response_mode', 'advice')
         known = definitions + conversation_definitions(state)
-        relevant = retrieve_definitions(' '.join(item['text'] for item in state.get('history', [])), known)
+        history = state.get('history', [])
+        relevant = retrieve_definitions(' '.join(item['text'] for item in history), known)
+        context = bounded_history(history)
+        definition_ids = referenced_definitions(context, relevant) | set(state.get('glossary_ids', []))
         sources = [dict(id='personal:' + str(entry['id']), kind='user_definition',
             title=entry['term'] + ' · 말씀해주신 의미', text=entry['definition'], url=None) for entry in relevant]
         cache, status, changed = list(state.get('evidence_cache', [])), 'not_requested', False
@@ -277,18 +316,18 @@ class CounselingService:
             self._save_cache(command, state, revision)
         self._guard(command, revision)
         result = grounded_result(self.model.compose(dict(
-            latest_user_text=next((item['text'] for item in reversed(state.get('history', []))
+            latest_user_text=next((item['text'] for item in reversed(history)
                                    if item['role'] == 'user'), ''),
             understanding=state['analysis']['understanding'], perspective=state['analysis'].get('perspective'),
-            response_mode=mode, follow_up=bool(state.get('has_prior_advice')), history=bounded_history(state.get('history', [])),
+            response_mode=mode, follow_up=bool(state.get('has_prior_advice')), history=public_history(context),
             cards=cards, sources=sources, search_status=status)), cards, sources, mode)
         # The user already saw this acknowledgement while cards were prepared.
         # Do not let a second generation rewrite its subject or event status.
         if acknowledgement := state['analysis'].get('acknowledgement'):
             result['empathy'] = acknowledgement
+        reply = ' '.join(filter(None, (result['empathy'], result['advice'], *result['actions'], result['follow_up_question'])))
         return dict(state, phase='advice', sources=sources, result=result, search_status=status, has_prior_advice=True,
-            history=state.get('history', []) + [dict(role='assistant',
-                text=' '.join(filter(None, (result['empathy'], result['advice'], *result['actions'], result['follow_up_question']))))])
+            glossary_ids=sorted(definition_ids), history=history + [assistant_message(reply, definition_ids)])
 
     def _draw_if_needed(self, state, payload):
         if state['analysis'].get('response_mode') != 'listen' and not state.get('cards'):
