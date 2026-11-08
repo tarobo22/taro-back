@@ -16,6 +16,7 @@ class CatalogCard(BaseModel):
     message: str
     action: str
     art: str
+    short_meaning: str | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 class DrawnCard(CatalogCard):
@@ -27,8 +28,14 @@ class Spread(BaseModel):
     positions: list[str]
 
 
+class TopicOption(BaseModel):
+    id: Literal['relationship', 'work', 'self', 'daily', 'care', 'start']
+    label: str
+
+
 class ExperienceConfig(BaseModel):
     topics: list[str]
+    topicOptions: list[TopicOption] | None = None
     cards: list[CatalogCard]
     spreads: dict[str, Spread]
     questions: list[str]

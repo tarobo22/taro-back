@@ -8055,6 +8055,17 @@
                 "type": "null"
               }
             ]
+          },
+          "short_meaning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Meaning"
           }
         },
         "additionalProperties": false,
@@ -8162,6 +8173,17 @@
           "art": {
             "type": "string",
             "title": "Art"
+          },
+          "short_meaning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Meaning"
           }
         },
         "type": "object",
@@ -9220,6 +9242,17 @@
             "type": "string",
             "title": "Art"
           },
+          "short_meaning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Meaning"
+          },
           "position": {
             "type": "string",
             "title": "Position"
@@ -9412,6 +9445,20 @@
             },
             "type": "array",
             "title": "Topics"
+          },
+          "topicOptions": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TopicOption"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Topicoptions"
           },
           "cards": {
             "items": {
@@ -12214,6 +12261,32 @@
           "deck_version_id"
         ],
         "title": "ThreeReadingInput"
+      },
+      "TopicOption": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "relationship",
+              "work",
+              "self",
+              "daily",
+              "care",
+              "start"
+            ],
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "TopicOption"
       },
       "Transcription": {
         "properties": {

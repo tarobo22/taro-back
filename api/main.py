@@ -103,6 +103,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
                counseling_model=DEFAULT_PROVIDER):
     settings = settings or Settings.from_env()
     content, rules = read_shared('content.json'), read_shared('journal-policy.json')
+    catalog = read_shared('data-catalog.json')
     experience_rules, identity_rules = read_shared('experience-policy.json'), read_shared('identity-policy.json')
     data_policy, ai_policy = DataPolicy.from_mapping(read_shared('data-policy.json')), load_policy()
     pool = ConnectionPool(settings.database_url, open=False, min_size=1, max_size=6,
@@ -123,7 +124,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
         counseling_model = OpenAICounselingModel(counseling_client, model_name, runtime_key,
             policy=counseling_runtime, reasoning_effort=effort)
     counseling = CounselingService(PostgresCounselingStore(pool), counseling_model,
-                                   read_shared('data-catalog.json')['cards'])
+                                   catalog['cards'])
     if result_provider is DEFAULT_PROVIDER:
         result_provider = OpenAIResultProvider(ai_client, settings.openai_model, runtime_key,
             ai_policy['max_output_tokens'], ai_policy['provider_deadline_seconds'])
@@ -132,8 +133,7 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
             ai_policy['provider_deadline_seconds'])
     ai_available = bool(result_provider and result_provider.available())
 
-    data = DataPrivacyUseCases(lambda: PostgresDataPrivacyUnitOfWork(pool), data_policy,
-        read_shared('data-catalog.json'))
+    data = DataPrivacyUseCases(lambda: PostgresDataPrivacyUnitOfWork(pool), data_policy, catalog)
     auth_client = httpx.Client(timeout=15, transport=httpx.HTTPTransport(retries=0), follow_redirects=False)
     auth = SocialAuthService(lambda: PostgresSocialUnitOfWork(pool), social_provider or runtime_social_provider(auth_client),
         SocialAuthPolicy(tuple(social_return_uris) if social_return_uris is not None else runtime_return_uris()))
@@ -187,14 +187,18 @@ def create_app(settings=None, *, result_provider=DEFAULT_PROVIDER, transcription
 
     policy = JournalPolicy(frozenset(content['moods']), rules['maxBodyLength'])
     journals = JournalUseCases(lambda: PostgresJournalUnitOfWork(pool), policy, uuid4, owner_guard=owner_guard)
-    experience_policy = ExperiencePolicy(tuple(content['topics']), tuple(content['cards']),
+    short_meanings = catalog.get('card_short_meanings', {}).get(catalog.get('legacy_card_copy_deck'), {})
+    legacy_meanings = {card['id']: short_meanings.get(card['code']) for card in catalog['cards']}
+    legacy_cards = [{**card, 'short_meaning': legacy_meanings.get(card['id'])} for card in content['cards']]
+    experience_policy = ExperiencePolicy(tuple(content['topics']), tuple(legacy_cards),
         experience_rules['spreads'], tuple(content['talkQuestions']),
         experience_rules['maxTarotQuestion'], experience_rules['maxCounselQuestion'])
     legacy_ai = OpenAIGuidance(ai_client, settings.openai_model, runtime_key) if settings.openai_model and runtime_key() else None
     experiences = ExperienceUseCases(lambda: PostgresExperienceUnitOfWork(pool), experience_policy,
         LocalGuidance(), legacy_ai, experience_rules['aiDailyLimit'], experience_rules['aiGlobalDailyLimit'],
         experience_rules['aiLeaseSeconds'], ai_guard=ai_jobs.legacy_guard(), owner_guard=owner_guard)
-    configuration = {**experience_rules, 'topics': content['topics'], 'cards': content['cards'],
+    topic_options = [{'id': content['topic_ids'][label], 'label': label} for label in content['topics']]
+    configuration = {**experience_rules, 'topics': content['topics'], 'topicOptions': topic_options, 'cards': legacy_cards,
                      'questions': content['talkQuestions'], 'aiAvailable': ai_available}
 
     async def run_loop(stop, operation, interval):

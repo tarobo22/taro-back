@@ -3,7 +3,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Query, Response
-from pydantic import BaseModel, ConfigDict, StrictBool, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, model_validator
 
 from api.domain.data_privacy import (DataConflict, DataExpired, DataNotFound,
     DataRateLimited, InvalidDataInput, OwnerDeleting)
@@ -71,6 +71,7 @@ class Card(StrictModel):
     suit: Literal['wands', 'cups', 'swords', 'pentacles'] | None
     basic_meaning: str
     image_asset: Asset | None
+    short_meaning: str | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 class DeckList(StrictModel):

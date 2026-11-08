@@ -103,6 +103,19 @@ class DataPrivacyUseCases:
                 return deepcopy(deck)
         raise DataNotFound('deck_not_found')
 
+    @staticmethod
+    def _card_meanings(catalog, deck_id):
+        if deck_id is None:
+            deck_id = next((deck['id'] for deck in catalog['decks'] if deck['status'] == 'published'), None)
+            if deck_id is None and catalog['decks']:
+                deck_id = catalog['decks'][0]['id']
+        return catalog.get('card_short_meanings', {}).get(str(deck_id), {})
+
+    @staticmethod
+    def _card_presentation(card, meanings):
+        meaning = meanings.get(card.get('code'))
+        return {**card, 'short_meaning': meaning} if meaning else card
+
     def list_cards(self, *, deck_id=None, deck_version_id=None, arcana=None, suit=None, cursor=None, limit=None):
         if deck_id is not None and deck_version_id is not None and str(deck_id) != str(deck_version_id):
             raise InvalidDataInput('conflicting_deck_version')
@@ -113,7 +126,8 @@ class DataPrivacyUseCases:
         if arcana not in (None, 'major', 'minor') or suit not in (None, 'wands', 'cups', 'swords', 'pentacles'):
             raise InvalidDataInput('invalid_card_filter')
         source = catalog['cards_by_deck'][str(deck_id)] if deck_id is not None and 'cards_by_deck' in catalog else catalog['cards']
-        cards = [card for card in source
+        meanings = self._card_meanings(catalog, deck_id)
+        cards = [self._card_presentation(card, meanings) for card in source
                           if (arcana is None or card['arcana'] == arcana)
                           and (suit is None or card['suit'] == suit)]
         return self._catalog_page(cards, 'cards', cursor, limit,
@@ -125,9 +139,10 @@ class DataPrivacyUseCases:
         if deck_version_id is not None:
             self._deck(catalog, deck_version_id)
         source = catalog['cards_by_deck'][str(deck_version_id)] if deck_version_id is not None and 'cards_by_deck' in catalog else catalog['cards']
+        meanings = self._card_meanings(catalog, deck_version_id)
         for card in source:
             if card['id'] == card_id:
-                return deepcopy(card)
+                return deepcopy(self._card_presentation(card, meanings))
         raise DataNotFound('card_not_found')
 
     @staticmethod
