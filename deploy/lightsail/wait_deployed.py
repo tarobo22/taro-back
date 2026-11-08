@@ -8,10 +8,16 @@ import urllib.parse
 import urllib.request
 
 base = os.environ.get('YEOUN_PUBLIC_URL', '').strip().rstrip('/')
-origin = urllib.parse.urlsplit(base)
+config_error = 'Set YEOUN_PUBLIC_URL to the public HTTPS origin.'
+try:
+    origin = urllib.parse.urlsplit(base)
+    port = origin.port
+except ValueError:
+    raise SystemExit(config_error) from None
 if (origin.scheme != 'https' or not origin.hostname or origin.username is not None
-        or origin.path or origin.query or origin.fragment):
-    raise SystemExit('Set YEOUN_PUBLIC_URL to the public HTTPS origin.')
+        or origin.path or origin.query or origin.fragment
+        or port == 0 or origin.netloc.endswith(':')):
+    raise SystemExit(config_error)
 if sys.argv[1:] == ['--check-config']:
     raise SystemExit(0)
 component, tag = sys.argv[1:]
