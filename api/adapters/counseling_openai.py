@@ -4,6 +4,7 @@ import json
 import time
 
 import httpx
+from pydantic import Field
 
 from api.domain.counseling import Analysis, CounselResult, FollowUpCounselResult, CounselingError, safe_public_url, strict_schema
 from api.adapters.counseling_strategy import exploration_prompt, reply_strategy, validate_reply_strategy
@@ -47,7 +48,10 @@ understanding은 원문의 핵심 서술어(해야 한다/하고 있다/그만�
 학교 이야기 뒤에 '시험 때문이야'라고 답하면 이전 질문과 합쳐 이해하고 바로 진행합니다.
 일반적인 취업·시험·운세 표현은 unknown_terms에 넣지 않습니다. 알고 있는 단어를 사전이나 웹으로 확인하지 않습니다.
 말이 짧다는 이유만으로 감정을 진단하거나 없던 사건을 추가하지 않습니다. 성공·합격을 보장하지 않습니다.
-조언 없이 듣기만 원하면 response_mode=listen입니다.
+response_mode는 기본 advice입니다. 힘들다·걱정된다·부담된다는 감정 표현만으로 listen을 고르지 않습니다.
+사용자가 조언 없이 들어 달라고 명시한 경우에만 response_mode=listen으로 둡니다.
+그 요청의 사용자 원문을 listening_request_quote에 그대로 인용하고, 요청이 없으면 null로 둡니다.
+학교가 모호해서 질문하는 경우에도 response_mode는 advice이며 clarification_question으로만 분기합니다.
 explicit_definitions는 이번 text에서 사용자가 명시적으로 설명한 뜻만 포함합니다.
 evidence_quote는 이번 text의 실제 부분 문자열이며 term과 definition도 그 인용 안에 있어야 합니다.
 사전이나 과거 대화에서 가져온 인용을 이번 발화로 표시하지 않습니다. 감정·비난은 용어 정의가 아닙니다.
@@ -65,8 +69,11 @@ latest_user_text는 사용자의 최신 원문입니다. understanding은 AI가 
 latest_user_text가 없으면 history의 마지막 user 발화를 기준으로 삼고 assistant 발화를 사용자 사실처럼 인용하지 않습니다.
 empathy는 1문장, 카드 reflection은 각 60자 이내 1문장, advice는 120자 이내 최대 2문장입니다.
 카드 reflection은 짧은 관점만, advice는 고민에 직접 연결된 선택만 담습니다. 카드별 과제를 늘어놓지 않습니다.
+카드 자료의 일반적인 행동 예시를 그대로 조언으로 복사하지 않습니다. 카드마다 행동을 지시하지 않습니다.
 actions는 60자 이내의 부담 적은 행동 정확히 하나입니다. 한 항목 안에 '먼저 A, 다음 B, 동시에 C'를 넣지 않습니다.
 생계 부담을 단순한 생각 정리 문제로 돌리지 않습니다. '걱정과 사실을 나누세요' 같은 일반론 대신 지금 말한 어려움에 답합니다.
+예: '생활비 때문에 일을 늘려야 해'에는 '일을 늘려야 한다면, 필요한 생활비와 몸이 감당할 수 있는 시간을 함께 기준으로 봐도 좋겠어요.'처럼 실제 고민에 답합니다.
+이때 행동도 '이번 달 부족한 생활비만 적어보기'처럼 하나입니다. 사연과 무관한 10분 과제·긍정 생각·사실과 추측 목록을 덧붙이지 않습니다.
 답을 내기 전 각 문장이 원문의 주체·시점·실행 여부를 바꾸지 않았는지 점검하고, 근거 없는 단정은 고쳐 씁니다.
 facts는 기본 빈 배열이며 필요한 공개 상담 표현을 설명할 때만 주어진 source_ids로 최대 하나 작성합니다.
 sources에 user_definition이 실제로 있을 때만 그 정의를 '말씀해주신 의미로는'이라고 구분합니다. 일반 카드 해석에는 이 표현을 쓰지 않습니다.
@@ -83,6 +90,11 @@ advice는 쉬운 말로 최대 2개의 짧은 문장, 120자 이내입니다. �
 카드 수가 5장이어도 본문을 늘리지 않습니다. 위의 경청/조언 단계 계약은 그대로 지킵니다.'''
 
 
+class StoryAnalysis(Analysis):
+    """Internal evidence for a user-requested listening mode; not a public API field."""
+    listening_request_quote: str | None = Field(default=None, max_length=160)
+
+
 class OpenAICounselingModel:
     def __init__(self, client, model, key_provider, deadline=60, policy=None, reasoning_effort=None):
         self.client, self.model, self.key_provider = client, model, key_provider
@@ -94,7 +106,14 @@ class OpenAICounselingModel:
         return bool(self.model and self.key_provider())
 
     def analyze(self, payload):
-        return self._structured(ANALYZE, payload, Analysis)
+        result = self._structured(ANALYZE, payload, StoryAnalysis)
+        quote = result.pop('listening_request_quote')
+        user_words = [payload.get('text', '')] + [item['text'] for item in payload.get('history', [])
+                                                if item['role'] == 'user']
+        if result['response_mode'] == 'listen' and not (
+                quote and quote.strip() and any(quote in text for text in user_words)):
+            result['response_mode'] = 'advice'
+        return result
 
     def compose(self, payload):
         mode = payload.get('response_mode', 'advice')
@@ -123,7 +142,7 @@ class OpenAICounselingModel:
         return list(references.values())[:6]
 
     def _structured(self, instructions, payload, schema):
-        limit = ('analysis_max_output_tokens', 2000) if schema is Analysis else ('reply_max_output_tokens', 2500)
+        limit = ('analysis_max_output_tokens', 2000) if issubclass(schema, Analysis) else ('reply_max_output_tokens', 2500)
         _, parts = self._request(dict(instructions=instructions,
             max_output_tokens=self.policy.get(*limit),
             input=[{'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],

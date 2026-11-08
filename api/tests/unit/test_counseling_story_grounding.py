@@ -3,8 +3,12 @@
 These are context-delivery regressions; real model correctness is checked separately.
 """
 import pytest
+import httpx
+import json
 
 from api.application.counseling import CounselingService, memory_revision
+from api.adapters.counseling_openai import OpenAICounselingModel
+from api.domain.counseling import Analysis
 
 
 @pytest.mark.parametrize('text', [
@@ -59,3 +63,28 @@ def test_user_evidence_survives_bounded_history_without_using_assistant_as_sourc
     assert model.payload['latest_user_text'] == original
     assert len(model.payload['history']) == 10
     assert all(item['role'] == 'assistant' for item in model.payload['history'])
+
+
+@pytest.mark.parametrize('text,quote,expected', [
+    ('요즘 시험 때문에 힘들어요', None, 'advice'),
+    ('동생이 쓰리잡을 뛰어야 한대. 동생이 걱정돼', '조언 없이 들어 주세요', 'advice'),
+    ('쓰리잡을 해야 해. 오늘은 조언 말고 들어만 줘', '조언 말고 들어만 줘', 'listen'),
+])
+def test_listening_needs_an_actual_user_request_not_an_inferred_emotion(text, quote, expected):
+    answer = Analysis(understanding='부담을 느끼신다.', response_mode='listen',
+                      clarification_question=None, explicit_definitions=[], unknown_terms=[]).model_dump()
+    answer['listening_request_quote'] = quote
+    requests = []
+
+    def respond(request):
+        requests.append(request)
+        return httpx.Response(200, json={'status': 'completed', 'output': [
+            {'type': 'message', 'content': [{'type': 'output_text', 'text': json.dumps(answer)}]}
+        ]})
+
+    with httpx.Client(transport=httpx.MockTransport(respond)) as client:
+        model = OpenAICounselingModel(client, 'configured-model', lambda: 'test-boundary-only')
+        result = model.analyze({'text': text, 'history': [], 'dictionary': []})
+    assert result['response_mode'] == expected
+    assert 'listening_request_quote' not in result
+    assert len(requests) == 1
