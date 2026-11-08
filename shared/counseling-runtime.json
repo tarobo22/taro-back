@@ -1,6 +1,6 @@
 {
   "model": "gpt-5-mini",
-  "reasoning_effort": "minimal",
+  "reasoning_effort": "low",
   "analysis_max_output_tokens": 2000,
   "reply_max_output_tokens": 2500,
   "search_max_output_tokens": 900
