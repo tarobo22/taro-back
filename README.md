@@ -1,14 +1,19 @@
-# taro-back · 여운
+# 여운 · FastAPI 서버
 
-## 현재 구현 현황 - 2026-11-06
+여운의 카드·상담·기록 API입니다. FastAPI가 요청을 접수하고, 애플리케이션 계층이 상담 흐름을 관리합니다. PostgreSQL에 상태를 저장하고 OpenAI 어댑터에서 응답을 생성합니다. [공개 데모](https://yeoun-43-201-209-249.sslip.io/) · [공개 API 상태](https://yeoun-43-201-209-249.sslip.io/api/health)
 
-기획 대비 남은 통계·달력·즐겨찾기·선택 기록 AI 요약·Android 기기 알림을 연결했다. [현재 구현 현황](docs/planning/implementation-status-20261106.md), [68개 요구사항 추적표](docs/planning/requirements-traceability-20261106.csv), [남은 결정안](docs/planning/remaining-decisions-20261106.md)을 기준으로 확인한다. RN/웹 1.3.0이며, 운영 배포·실제 GPT 품질·계정/관리/결제/스토리 정책은 구분한다.
+## 핵심 흐름
 
-FastAPI·DDD 도메인·PostgreSQL·OpenAI 어댑터. 저장소 이름은 사용자가 지정한 철자를 유지했다.
+1. 상담 요청을 접수하고 버전·요청 키를 확인합니다.
+2. 사용자 원문을 바탕으로 필요한 정보를 확인합니다. 사연이 충분하면 서버가 카드를 정합니다.
+3. 확정한 카드의 ID와 순서를 응답에 대조합니다. 생성이 실패하면 같은 카드로 이어갈 수 있습니다.
+4. 카드마다 짧게 풀이하고, 카드를 함께 본 결론과 해 볼 일 하나를 반환합니다.
 
-## 실행
+[API 계약](docs/contracts/openapi.json) · [상담 설계와 검증 자료](docs/portfolio/AI-COUNSELING.md)
 
-Node 24.22.2 / Python 3.12 / PostgreSQL 17 / RN 0.85.3 / React 19.2.3.
+## 로컬 실행
+
+Python 3.12, Docker Compose, PostgreSQL 17을 사용합니다.
 
 ```powershell
 python -m venv .venv
@@ -17,37 +22,18 @@ Copy-Item .env.example .env.local
 docker compose up -d --wait db
 .venv/Scripts/python.exe -m api.migrate
 .venv/Scripts/python.exe -m uvicorn api.main:app --host 127.0.0.1 --port 8808 --reload --no-access-log
-# 격리 DB 포함 검사: ./tools/test.ps1
+# 격리 DB 포함 검사
+./tools/test.ps1
 ```
 
-웹: http://127.0.0.1:8807 · API: http://127.0.0.1:8808/docs.
-Android 에뮬레이터 API: 10.0.2.2:8808. 개발 OTA: 127.0.0.1:8806.
-제품 API는 FastAPI이며 Node는 빌드·OTA 도구에만 사용한다.
+API 문서는 `http://127.0.0.1:8808/docs`에서 열립니다. 로컬에서 실제 GPT 응답을 확인하려면 서버 환경에 모델과 API 연결을 설정합니다.
 
-## 현재 기능
+## 배포·평가
 
-마음기록 CRUD·임시 글 보관, 1·3·5장 타로·일일 카드·78장 외부 에셋,
-좌 아니요/우 예·수동 전송·음성 입력·이어지는 대화, 다정/기가차드 모드,
-표정·카드 뒤집기·다이얼·효과음·배경음·지원 기기의 햅틱 설정을 연결했다.
-웹은 기존 화면을 React Native Web으로 렌더링한다.
+2026-11-08 기준 공개 API `3646de3`에서 PostgreSQL 연결과 실제 GPT 상담을 확인했습니다. 기존 API 테스트 629개와 별도 배포 검사 12개가 통과했습니다. [CI 실행](https://github.com/tarobo22/taro-back/actions/runs/42470540941) · [운영 버전](https://yeoun-43-201-209-249.sslip.io/deployment-status.json) · [배포 흐름](docs/deployment/ci-cd.md)
 
-GPT는 서버 전용 연결 코드와 계약 검사가 준비돼 있다. 실제 키·모델이 없으므로 기본 가이드를 사용한다.
-운영 HTTPS·앱 서명·운영 OTA·iOS 프로젝트·실기기 성능은 별도 작업이다.
-개발 APK는 배포용 운영 서명을 대신하지 않는다.
+이전 A/B 실험은 합성 사연 12건과 실제 API 호출 48회의 비교입니다. 최종 답변 평균 점수는 66.67에서 74.58로 변했습니다. 최종 응답의 모델 호출 평균은 7.15초에서 8.29초로 늘었습니다. 공개 데모의 실제 상담 1건은 해당 흐름의 동작 검증입니다. [평가 원문과 조건](docs/counseling/ab-20261107/README.md)
 
-## Git와 검증
+## 설계 기록
 
-기존 이력은 로컬에 백업하고 원격이 비어 있을 때 main을 다시 구성했다.
-각 기능 commit 뒤 push와 원격 SHA를 대조했다. 이후 기능은 codex/ 브랜치에서 작업한다.
-검사 범위와 한계는 [TDD·테스트 평가](docs/quality/tdd-audit.md)에 명시했다.
-
-- [API 계약](docs/contracts/openapi.json)
-- [기획 PDF](docs/planning/타로기획1안.pdf)
-- [검사 기록](docs/quality/verification.json)
-- [기능별 커밋 기록](docs/quality/commits.json)
-
-GitHub Actions 자동 등록은 사용자의 추가 인증 중단 요청에 따라 보류했다. [CI 설정 템플릿](docs/ci/checks.yml)은 준비돼 있으며 실제 원격 CI가 실행됐다고 표시하지 않는다.
-
-## P0 구현 완료 기록
-
-[기능·TDD·검증 결과와 남은 범위](docs/quality/p0-completion.md)를 확인할 수 있다.
+[기획 PDF](docs/planning/타로기획1안.pdf) · [2026-11-06 구현 현황](docs/planning/implementation-status-20261106.md) · [요구사항 추적표](docs/planning/requirements-traceability-20261106.csv) · [남은 결정안](docs/planning/remaining-decisions-20261106.md) · [P0 완료 기록](docs/quality/p0-completion.md) · [TDD 평가](docs/quality/tdd-audit.md)
